@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/altoros/century-link-cli/base"
 	"github.com/asaskevich/govalidator"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 )
 
 func ValidateModel(model interface{}) error {

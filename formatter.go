@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/altoros/century-link-cli/formatters"
+	"github.com/centurylinkcloud/clc-go-cli/formatters"
 )
 
 type Formatter interface {

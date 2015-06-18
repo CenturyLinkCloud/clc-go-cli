@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/altoros/century-link-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"io/ioutil"
 	"log"
 )

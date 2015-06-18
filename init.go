@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/altoros/century-link-cli/commands"
-	"github.com/altoros/century-link-cli/models/server"
+	"github.com/centurylinkcloud/clc-go-cli/commands"
+	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
 var AllCommands []Command = make([]Command, 0)

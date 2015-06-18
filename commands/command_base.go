@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/altoros/century-link-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 )
 
 type CommandBase struct {

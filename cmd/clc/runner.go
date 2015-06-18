@@ -1,7 +1,7 @@
 package main
 
 import (
-	cli "github.com/altoros/century-link-cli"
+	cli "github.com/centurylinkcloud/clc-go-cli"
 )
 
 func run(args []string) string {

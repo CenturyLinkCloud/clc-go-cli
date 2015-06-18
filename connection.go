@@ -9,8 +9,8 @@ import (
 	"net/http/httputil"
 	"strings"
 
-	"github.com/altoros/century-link-cli/errors"
-	"github.com/altoros/century-link-cli/models/authentication"
+	"github.com/centurylinkcloud/clc-go-cli/errors"
+	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
 
 //this made a variable instead of a constant for testing purpoises
