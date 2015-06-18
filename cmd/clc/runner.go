@@ -1,42 +1,56 @@
 package main
 
 import (
-	"github.com/altoros/century-link-cli/base"
-	"github.com/altoros/century-link-cli/base/parser"
+	cli "github.com/altoros/century-link-cli"
 )
 
 func run(args []string) string {
-	if len(args) < 2 {
+	if len(args) == 0 {
 		return ussage()
 	}
-	cmd, err := base.LoadCommand(args[0], args[1])
+	cmdArg := ""
+	if len(args) >= 2 {
+		cmdArg = args[1]
+	}
+	cmd, err := cli.LoadCommand(args[0], cmdArg)
 	if err != nil {
-		return ussage(err)
+		return err.Error()
 	}
-	options, err := base.ParseArguments(cmd.InputModel(), args[2:])
+	parsedArgs, err := cli.ParseArguments(args[2:])
 	if err != nil {
-		return ussage(err)
+		return err.Error()
 	}
-	options, err := base.LoadOptions(cmd.InputModel(), args[2:])
+	options, err := cli.LoadOptions(parsedArgs)
 	if err != nil {
-		return ussage(err)
-	}
-	err := base.ApplyDefaults(cmd.InputModel())
-	if err != "" {
 		return err.Error()
 	}
-	err := base.ValidateInputModel(inputModel)
-	if err != "" {
+	err = cli.LoadModel(parsedArgs, cmd.InputModel())
+	if err != nil {
 		return err.Error()
 	}
-	outputModel, err := cmd.Execute(inputModel)
-	if err != "" {
+	err = cli.ValidateModel(cmd.InputModel())
+	if err != nil {
 		return err.Error()
 	}
-	formatter := base.GetOutputFormatter()
-	output, err := formatter.FormatOutput(outputModel)
-	if err != "" {
+	err = cli.ApplyDefaultBehaviour(cmd.InputModel())
+	if err != nil {
 		return err.Error()
 	}
-	return err.Error()
+	cn, err := cli.AuthenticateCommand(options)
+	err = cmd.Execute(cn)
+	if err != nil {
+		return err.Error()
+	}
+	formatter := cli.GetOutputFormatter(options)
+	output, err := formatter.FormatOutput(cmd.OutputModel())
+	if err != nil {
+		return err.Error()
+	}
+	return output
+}
+
+func ussage() string {
+	res := "Ussage: clc <resource> <command> [options and parameters], for example 'clc server create --name my-server ...'\n"
+	res += "To get help and list all avaliable resources or commands, you can use 'clc --help' or 'clc <resource> --help' or 'clc <resource> <command> --help'\n"
+	return res
 }

@@ -1,4 +1,4 @@
-package base
+package cli
 
 type Options struct {
 	Output   int
@@ -7,7 +7,6 @@ type Options struct {
 	User     string
 	Password string
 	Profile  string
-	Key      string
 }
 
 type FilterOption struct {

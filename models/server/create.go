@@ -1,17 +1,17 @@
 package server
 
 import (
+	"fmt"
 	"time"
 )
 
 type CreateReq struct {
-	Name                   string
+	Name                   string `valid:required`
 	Description            string
 	GroupId                string
 	GroupName              string
 	SourceServerId         string
-	SourceServerName       string
-	TemplateId             string
+	TemplateId             string `json:"-"`
 	TemplateName           string
 	IsManagedOS            bool
 	PrimaryDns             string
@@ -47,4 +47,27 @@ type AdditionalDiskDef struct {
 type PackageDef struct {
 	PackageId  string
 	Parameters map[string]string
+}
+
+func (c *CreateReq) Validate() error {
+	serverIdValues := []string{c.SourceServerId, c.TemplateId, c.TemplateName}
+	numNonEmpty := 0
+	for _, item := range serverIdValues {
+		if item != "" {
+			numNonEmpty++
+		}
+	}
+	if numNonEmpty > 1 || numNonEmpty == 0 {
+		return fmt.Errorf("Exactly one parameter from the following: source-server-id, source-server-name, template-id, template-name must be specified.")
+	}
+
+	return nil
+}
+
+func (c *CreateReq) ApplyDefaultBehaviour() error {
+	if c.TemplateId != "" {
+		c.SourceServerId = c.TemplateId
+	}
+	return nil
+	//TODO: implement searching templates by name
 }
