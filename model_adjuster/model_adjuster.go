@@ -1,4 +1,4 @@
-package cli
+package model_adjuster
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"

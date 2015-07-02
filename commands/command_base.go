@@ -29,6 +29,10 @@ func (c *CommandBase) Command() string {
 	return c.ExcInfo.Command
 }
 
+func (c *CommandBase) ShowHelp() string {
+	return ""
+}
+
 func (c *CommandBase) InputModel() interface{} {
 	return c.InputModel
 }

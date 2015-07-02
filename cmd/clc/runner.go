@@ -1,7 +1,15 @@
 package main
 
 import (
-	cli "github.com/centurylinkcloud/clc-go-cli"
+	"github.com/centurylinkcloud/clc-go-cli/auth"
+	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/config"
+	"github.com/centurylinkcloud/clc-go-cli/formatter_provider"
+	"github.com/centurylinkcloud/clc-go-cli/model_adjuster"
+	"github.com/centurylinkcloud/clc-go-cli/model_loader"
+	"github.com/centurylinkcloud/clc-go-cli/model_validator"
+	"github.com/centurylinkcloud/clc-go-cli/options"
+	"github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 func run(args []string) string {
@@ -9,40 +17,49 @@ func run(args []string) string {
 		return ussage()
 	}
 	cmdArg := ""
+	optionArgs := args[1:]
 	if len(args) >= 2 {
 		cmdArg = args[1]
+		optionArgs = args[2:]
 	}
-	cmd, err := cli.LoadCommand(args[0], cmdArg)
+	cmd, err := command_loader.LoadCommand(args[0], cmdArg)
 	if err != nil {
 		return err.Error()
 	}
-	parsedArgs, err := cli.ParseArguments(args[2:])
+	parsedArgs, err := parser.ParseArguments(optionArgs)
 	if err != nil {
 		return err.Error()
 	}
-	options, err := cli.LoadOptions(parsedArgs)
+	options, err := options.LoadOptions(parsedArgs)
 	if err != nil {
 		return err.Error()
 	}
-	err = cli.LoadModel(parsedArgs, cmd.InputModel())
+	if options.Help {
+		return cmd.ShowHelp()
+	}
+	err = model_loader.LoadModel(parsedArgs, cmd.InputModel())
 	if err != nil {
 		return err.Error()
 	}
-	err = cli.ValidateModel(cmd.InputModel())
+	err = model_validator.ValidateModel(cmd.InputModel())
 	if err != nil {
 		return err.Error()
 	}
-	err = cli.ApplyDefaultBehaviour(cmd.InputModel())
+	err = model_adjuster.ApplyDefaultBehaviour(cmd.InputModel())
 	if err != nil {
 		return err.Error()
 	}
-	cn, err := cli.AuthenticateCommand(options)
+	config, err := config.LoadConfig()
+	if err != nil {
+		return err.Error()
+	}
+	cn, err := auth.AuthenticateCommand(options, config)
 	err = cmd.Execute(cn)
 	if err != nil {
 		return err.Error()
 	}
-	formatter := cli.GetOutputFormatter(options)
-	output, err := formatter.FormatOutput(cmd.OutputModel())
+	f := formatter_provider.GetOutputFormatter(options)
+	output, err := f.FormatOutput(cmd.OutputModel())
 	if err != nil {
 		return err.Error()
 	}

@@ -1,4 +1,4 @@
-package cli
+package model_validator
 
 import (
 	"github.com/asaskevich/govalidator"

@@ -1,16 +1,17 @@
-package cli
+package options
 
 type Options struct {
-	Output   int
+	Output   string
 	Filter   []FilterOption
 	Query    []string
 	User     string
 	Password string
 	Profile  string
+	Help     bool
 }
 
 type FilterOption struct {
 	PropertyName string
-	Operation    int
+	Operation    string
 	Value        string
 }

@@ -1,4 +1,4 @@
-package cli
+package options
 
 func LoadOptions(parsedArgs map[string]interface{}) (*Options, error) {
 	res := &Options{}

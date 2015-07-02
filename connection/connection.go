@@ -1,4 +1,4 @@
-package cli
+package connection
 
 import (
 	"bytes"
@@ -9,6 +9,7 @@ import (
 	"net/http/httputil"
 	"strings"
 
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/errors"
 	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
@@ -22,29 +23,21 @@ type connection struct {
 	logger       *log.Logger
 }
 
-func newConnection(username string, password string, logger *log.Logger) (cn *connection, err error) {
-	cn = &connection{
+var NewConnection = func(username string, password string, logger *log.Logger) (base.Connection, error) {
+	cn := &connection{
 		logger: logger,
 	}
 	cn.logger.Printf("Creating new connection. Username: %s", username)
 	loginReq := &authentication.LoginReq{username, password}
 	loginRes := &authentication.LoginRes{}
-	err = cn.ExecuteRequest("POST", "authentication/login", loginReq, loginRes)
+	err := cn.ExecuteRequest("POST", "authentication/login", loginReq, loginRes)
 	if err != nil {
-		return
+		return nil, err
 	}
 	cn.bearerToken = loginRes.BearerToken
 	cn.accountAlias = loginRes.AccountAlias
-	cn.logger.Printf("Updateing connection. Bearer: %s, Alias: %s", cn.bearerToken, cn.accountAlias)
-	return
-}
-
-func newConnectionRaw(accountAlias string, bearerToken string, logger *log.Logger) (cn *connection) {
-	return &connection{
-		bearerToken:  bearerToken,
-		accountAlias: accountAlias,
-		logger:       logger,
-	}
+	cn.logger.Printf("Updating connection. Bearer: %s, Alias: %s", cn.bearerToken, cn.accountAlias)
+	return cn, nil
 }
 
 func (cn *connection) ExecuteRequest(verb string, url string, reqModel interface{}, resModel interface{}) (err error) {

@@ -1,4 +1,4 @@
-package cli
+package model_loader
 
 import (
 	"encoding/json"

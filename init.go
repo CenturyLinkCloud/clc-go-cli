@@ -1,11 +1,12 @@
 package cli
 
 import (
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
-var AllCommands []Command = make([]Command, 0)
+var AllCommands []base.Command = make([]base.Command, 0)
 
 func init() {
 	registerCommandBase(&server.CreateReq{}, &server.ServerRes{}, commands.CommandExcInfo{

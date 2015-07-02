@@ -1,13 +1,10 @@
-package cli
-
-import (
-	"github.com/centurylinkcloud/clc-go-cli/base"
-)
+package base
 
 type Command interface {
-	Execute(cn base.Connection) error
+	Execute(cn Connection) error
 	Resource() string
 	Command() string
+	ShowHelp() string
 	InputModel() interface{}
 	OutputModel() interface{}
 }
