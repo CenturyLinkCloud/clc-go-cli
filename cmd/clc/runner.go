@@ -58,7 +58,7 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	f := formatter_provider.GetOutputFormatter(options)
+	f, err := formatter_provider.GetOutputFormatter(options)
 	output, err := f.FormatOutput(cmd.OutputModel())
 	if err != nil {
 		return err.Error()
