@@ -34,9 +34,9 @@ func (c *CommandBase) ShowHelp() string {
 }
 
 func (c *CommandBase) InputModel() interface{} {
-	return c.InputModel
+	return c.Input
 }
 
 func (c *CommandBase) OutputModel() interface{} {
-	return c.OutputModel
+	return c.Output
 }
