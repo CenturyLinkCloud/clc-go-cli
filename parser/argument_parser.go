@@ -92,12 +92,12 @@ func parseObject(obj string) interface{} {
 	for _, c := range obj {
 		err := curState(c)
 		if err != nil {
-			return obj
+			return normalizeValue(obj)
 		}
 	}
 	curState('\000')
 	if len(items) <= 1 {
-		return obj
+		return normalizeValue(obj)
 	}
 	res := make(map[string]interface{}, 0)
 	for i := 0; i < len(items); i += 2 {
