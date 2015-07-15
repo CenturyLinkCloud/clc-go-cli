@@ -54,6 +54,9 @@ func run(args []string) string {
 		return err.Error()
 	}
 	cn, err := auth.AuthenticateCommand(options, config)
+	if err != nil {
+		return err.Error()
+	}
 	err = cmd.Execute(cn)
 	if err != nil {
 		return err.Error()
