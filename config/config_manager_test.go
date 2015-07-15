@@ -38,7 +38,7 @@ func initTest(confPath string, content []byte, err error) {
 				return "", err
 			}
 		}
-		return configPath, err
+		return configDir, err
 	})
 }
 
@@ -67,12 +67,16 @@ func TestErrorConfigPath(t *testing.T) {
 	}
 }
 
-func TestCantCreteConfigDir(t *testing.T) {
-	initTest("\000_incorrect_path", nil, nil)
+func TestCreatesConfigDir(t *testing.T) {
+	configDir = "/tmp/non-existent_path"
+	initTest(configDir, nil, nil)
 	defer finishTest()
-	_, err := config.LoadConfig()
-	if err == nil || err.Error() != "Failed to load config file, error: open \000_incorrect_path: invalid argument" {
-		t.Errorf("Unexpected error: %s", err)
+	c, err := config.LoadConfig()
+	if err != nil {
+		t.Error(err.Error())
+	}
+	if !reflect.DeepEqual(c, &config.Config{}) {
+		t.Errorf("Incorrect config obtained: %#v", c)
 	}
 }
 

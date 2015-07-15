@@ -24,16 +24,29 @@ func loadConfigInner() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	f, err := os.Open(p)
+	if _, err := os.Stat(p); os.IsNotExist(err) {
+		err := os.MkdirAll(p, 0777)
+		if err != nil {
+			return nil, err
+		}
+	}
+	var f *os.File
+	filepath := path.Join(p, "config.yml")
 	exist := true
-	if os.IsNotExist(err) {
-		f, err = os.Create(p)
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		f, err = os.Create(filepath)
+		defer f.Close()
+		if err != nil {
+			return nil, err
+		}
 		exist = false
+	} else {
+		f, err = os.Open(filepath)
+		defer f.Close()
+		if err != nil {
+			return nil, err
+		}
 	}
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
 	if !exist {
 		content, err := yaml.Marshal(c)
 		if err != nil {
@@ -62,19 +75,5 @@ var getConfigPath = func() (string, error) {
 		return "", err
 	}
 
-	return path.Join(u.HomeDir, ".clc", "config.yml"), nil
+	return path.Join(u.HomeDir, ".clc"), nil
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
