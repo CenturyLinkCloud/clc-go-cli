@@ -1,6 +1,6 @@
 package options
 
-func LoadOptions(parsedArgs map[string]interface{}) (*Options, error) {
+func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 	res := &Options{}
 	if val, ok := parsedArgs["User"]; ok {
 		delete(parsedArgs, "User")

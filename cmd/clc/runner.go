@@ -30,7 +30,7 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	options, err := options.LoadOptions(parsedArgs)
+	options, err := options.ExtractFrom(parsedArgs)
 	if err != nil {
 		return err.Error()
 	}
