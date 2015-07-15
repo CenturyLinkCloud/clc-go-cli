@@ -6,31 +6,31 @@ import (
 )
 
 type CreateReq struct {
-	Name                   string `valid:required`
-	Description            string
+	Name                   string `valid:"required"`
+	Description            string `json:"omitempty"`
 	GroupId                string
-	GroupName              string
+	GroupName              string `json:"omitempty"`
 	SourceServerId         string
-	TemplateId             string `json:"-"`
-	TemplateName           string
-	IsManagedOS            bool
-	PrimaryDns             string
-	SecondaryDns           string
-	NetworkId              string
-	IpAddress              string
-	Password               string
-	SourceServerPassword   string
-	Cpu                    int
-	CpuAutoscalePolicyId   string
-	MemoryGB               int
-	Type                   string
-	StorageType            string
-	AntiAffinityPolicyId   string
-	AntiAffinityPolicyName string
-	CustomFields           []CustomFieldDef
-	AdditionalDisks        []AdditionalDiskDef
-	Ttl                    time.Time
-	Packages               []PackageDef
+	TemplateId             string
+	TemplateName           string              `json:"omitempty"`
+	IsManagedOS            bool                `json:"omitempty"`
+	PrimaryDns             string              `json:"omitempty"`
+	SecondaryDns           string              `json:"omitempty"`
+	NetworkId              string              `json:"omitempty"`
+	IpAddress              string              `json:"omitempty"`
+	Password               string              `json:"omitempty"`
+	SourceServerPassword   string              `json:"omitempty"`
+	Cpu                    int                 `valid:"required"`
+	CpuAutoscalePolicyId   string              `json:"omitempty"`
+	MemoryGB               int                 `valid:"required"`
+	Type                   string              `valid:"required"`
+	StorageType            string              `json:"omitempty"`
+	AntiAffinityPolicyId   string              `json:"omitempty"`
+	AntiAffinityPolicyName string              `json:"omitempty"`
+	CustomFields           []CustomFieldDef    `json:"omitempty"`
+	AdditionalDisks        []AdditionalDiskDef `json:"omitempty"`
+	Ttl                    time.Time           `json:"omitempty"`
+	Packages               []PackageDef        `json:"omitempty"`
 }
 
 type CustomFieldDef struct {
