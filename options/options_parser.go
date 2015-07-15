@@ -8,7 +8,7 @@ func LoadOptions(parsedArgs map[string]interface{}) (*Options, error) {
 	}
 	if val, ok := parsedArgs["Password"]; ok {
 		delete(parsedArgs, "Password")
-		res.User = val.(string)
+		res.Password = val.(string)
 	}
 	return res, nil
 }
