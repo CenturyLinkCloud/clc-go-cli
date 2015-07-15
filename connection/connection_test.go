@@ -86,7 +86,7 @@ func TestNewConnection(t *testing.T) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(""))
 	})
-	err = cn.ExecuteRequest("GET", "some-url/{accountAlias}", nil, nil)
+	err = cn.ExecuteRequest("GET", connection.BaseUrl+"some-url/{accountAlias}", nil, nil)
 	if err != nil {
 		t.Error(err)
 	}

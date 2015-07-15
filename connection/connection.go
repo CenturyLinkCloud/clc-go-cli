@@ -30,7 +30,7 @@ var NewConnection = func(username string, password string, logger *log.Logger) (
 	cn.logger.Printf("Creating new connection. Username: %s", username)
 	loginReq := &authentication.LoginReq{username, password}
 	loginRes := &authentication.LoginRes{}
-	err := cn.ExecuteRequest("POST", "authentication/login", loginReq, loginRes)
+	err := cn.ExecuteRequest("POST", BaseUrl+"authentication/login", loginReq, loginRes)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 		inputData = bytes.NewReader(b)
 		cn.logger.Printf("Input model converted to json: %s", b)
 	}
-	url = BaseUrl + strings.Replace(url, "{accountAlias}", cn.accountAlias, 1)
+	url = strings.Replace(url, "{accountAlias}", cn.accountAlias, 1)
 	req, err = http.NewRequest(verb, url, inputData)
 	req.Header.Add("Content-Type", "application/json")
 	if err != nil {
