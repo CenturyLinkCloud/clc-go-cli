@@ -33,7 +33,7 @@ var testCases = []parserTestParam{
 	{input: []string{"--some-key", "value1", "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
 	{input: []string{`{"some-key": "value"}`, "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
 	// Does not parse root values not in JSON format.
-	{input: []string{"value", "value2"}, err: "Invalid option format, options without keys must be in JSON format."},
+	{input: []string{"value", "value2"}, err: "Invalid JSON: value."},
 	// Parses keys without values.
 	{input: []string{"--some-key"}, res: map[string]interface{}{"SomeKey": nil}},
 	// Does not parse key values from JSON or key1=value1,key2=value2,.. notation.
