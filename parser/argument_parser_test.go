@@ -10,6 +10,7 @@ type parserTestParam struct {
 	input []string
 	err   string
 	res   map[string]interface{}
+	skip  bool
 }
 
 var testCases = []parserTestParam{
@@ -75,6 +76,10 @@ var testCases = []parserTestParam{
 
 func TestArgumentParser(t *testing.T) {
 	for i, testCase := range testCases {
+		if testCase.skip {
+			t.Logf("Skipping %d test case.", i+1)
+			continue
+		}
 		t.Logf("Executing %d test case.", i+1)
 		res, err := parser.ParseArguments(testCase.input)
 		if testCase.err != "" && err.Error() != testCase.err {
