@@ -49,6 +49,16 @@ var testCases = []parserTestParam{
 	{input: []string{"--some-key", `{"key":"value"}`, "value2", "--another-key"}, res: map[string]interface{}{
 		"SomeKey": []interface{}{`{"key":"value"}`, "value2"}, "AnotherKey": nil,
 	}},
+	// Fails with -- argument.
+	{input: []string{"--"}, err: "-- is an invalid argument."},
+	// Parses nested JSON objects and arrays properly.
+	{input: []string{`{"k1":{"k2":{"k3":[1,2,3]}}}`}, res: map[string]interface{}{
+		"K1": map[string]interface{}{
+			"K2": map[string]interface{}{
+				"K3": []interface{}{1., 2., 3.},
+			},
+		},
+	}},
 	// Parses a complex case.
 	{
 		input: []string{`{"a":{"b":"c"}}`, "--some-long-key", "--another-key", `{"a":"b"}`, "a=b?,c=d", "--yet-another-key"},
