@@ -23,19 +23,44 @@ var testCases = []parserTestParam{
 			"P4": map[string]interface{}{"P41": "val41", "P42": []interface{}{"str"}},
 		},
 	},
+	// Parses root values without keys from JSON.
 	{input: []string{`{"some-key": "value"}`}, res: map[string]interface{}{"SomeKey": "value"}},
+	// Does not allow duplicate keys.
 	{input: []string{`{"some-key": "value2"}`, `{"some-key": "value1"}`}, err: "Option 'SomeKey' is specified twice."},
+	// Parses --some-key=value.
 	{input: []string{"--some-key", "value"}, res: map[string]interface{}{"SomeKey": "value"}},
+	// Does not allow duplicate keys.
 	{input: []string{"--some-key", "value1", "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
-	{input: []string{"some-key", "value"}, err: "Invalid option format, option 'some-key' should start with '--'."},
+	{input: []string{`{"some-key": "value"}`, "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
+	// Does not parse root values not in JSON format.
+	{input: []string{"value", "value2"}, err: "Invalid option format, options without keys must be in JSON format."},
+	// Parses keys without values.
 	{input: []string{"--some-key"}, res: map[string]interface{}{"SomeKey": nil}},
+	// Does not parse key values from JSON or key1=value1,key2=value2,.. notation.
+	{input: []string{"--some-key", `{"key": "value"}`}, res: map[string]interface{}{"SomeKey": `{"key": "value"}`}},
 	{input: []string{"--some-key", "p1-key=10,p2-key=true,p3=',=!@=$ ,%^ &\"%<,.=\"'"}, res: map[string]interface{}{
-		"SomeKey": map[string]interface{}{"P1Key": 10., "P2Key": true, "P3": ",=!@=$ ,%^ &\"%<,.=\""},
+		"SomeKey": "p1-key=10,p2-key=true,p3=',=!@=$ ,%^ &\"%<,.=\"'",
 	}},
-	{input: []string{"--some-key", "'unfinished-key"}, res: map[string]interface{}{"SomeKey": "'unfinished-key"}},
-	{input: []string{"--some-key", "p1=v1,'p2'v2"}, res: map[string]interface{}{"SomeKey": "p1=v1,'p2'v2"}},
-	{input: []string{"--some-key", "p1='unfinished value"}, res: map[string]interface{}{"SomeKey": "p1='unfinished value"}},
-	{input: []string{"--some-key", "p1='v1'p2=v2"}, res: map[string]interface{}{"SomeKey": "p1='v1'p2=v2"}},
+	// Parses --key element1 element2 element3.
+	{input: []string{"--some-key", "value1", "value2", `{"value1":[1,2,3]}`, "a=b"}, res: map[string]interface{}{
+		"SomeKey": []interface{}{"value1", "value2", `{"value1":[1,2,3]}`, "a=b"},
+	}},
+	// Parses --key element1 element2 --another-key.
+	{input: []string{"--some-key", `{"key":"value"}`, "value2", "--another-key"}, res: map[string]interface{}{
+		"SomeKey": []interface{}{`{"key":"value"}`, "value2"}, "AnotherKey": nil,
+	}},
+	// Parses a complex case.
+	{
+		input: []string{`{"a":{"b":"c"}}`, "--some-long-key", "--another-key", `{"a":"b"}`, "a=b?,c=d", "--yet-another-key"},
+		res: map[string]interface{}{
+			"A": map[string]interface{}{
+				"B": "C",
+			},
+			"SomeLongKey": nil,
+			"AnotherKey": []interface{}{`{"a":"b"}`, "a=b?,c=d"},
+			"YetAnotherKey": nil,
+		},
+	},
 }
 
 func TestArgumentParser(t *testing.T) {
