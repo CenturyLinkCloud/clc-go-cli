@@ -54,7 +54,7 @@ var testCases = []parserTestParam{
 		input: []string{`{"a":{"b":"c"}}`, "--some-long-key", "--another-key", `{"a":"b"}`, "a=b?,c=d", "--yet-another-key"},
 		res: map[string]interface{}{
 			"A": map[string]interface{}{
-				"B": "C",
+				"B": "c",
 			},
 			"SomeLongKey": nil,
 			"AnotherKey": []interface{}{`{"a":"b"}`, "a=b?,c=d"},
