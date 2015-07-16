@@ -72,6 +72,12 @@ var testCases = []parserTestParam{
 			"YetAnotherKey": nil,
 		},
 	},
+	// Parses JSON arrays of objects properly.
+	{
+		input: []string{`{"k":[{"knested":"value"}]}`},
+		res: map[string]interface{}{"K": []interface{}{map[string]interface{}{"Knested": "value"}}},
+		skip: true,
+	},
 }
 
 func TestArgumentParser(t *testing.T) {
