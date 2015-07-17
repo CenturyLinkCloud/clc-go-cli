@@ -50,9 +50,12 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 			if err != nil {
 				return nil, fmt.Errorf("Invalid JSON: %s.", args[i])
 			}
-			err = parseJSONArg(jsonArg, res)
-			if err != nil {
-				return nil, err
+			normalizeKeys(jsonArg)
+			for k, v := range jsonArg {
+				if _, ok := res[k]; ok {
+					return nil, fmt.Errorf("Option '%s' is specified twice.", k)
+				}
+				res[k] = v
 			}
 			continue
 		}
@@ -60,23 +63,19 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 	return res, nil
 }
 
-func parseJSONArg(arg, res map[string]interface{}) (err error) {
-	for k, v := range arg {
-		key := normalizePropertyName(k)
-		if _, ok := res[key]; ok {
-			return fmt.Errorf("Option '%s' is specified twice.", key)
+func normalizeKeys(arg interface{}) {
+	if argObj, isObj := arg.(map[string]interface{}); isObj {
+		for k, v := range argObj {
+			n := normalizePropertyName(k)
+			delete(argObj, k)
+			(argObj)[n] = v
+			normalizeKeys(v)
 		}
-		if _, ok := v.(map[string]interface{}); ok {
-			res[key] = make(map[string]interface{}, 0)
-			err := parseJSONArg(v.(map[string]interface{}), res[key].(map[string]interface{}))
-			if err != nil {
-				return err
-			}
-		} else {
-			res[key] = v
+	} else if argArray, isArray := arg.([]interface{}); isArray {
+		for _, v := range argArray {
+			normalizeKeys(v)
 		}
 	}
-	return nil
 }
 
 func normalizePropertyName(prName string) string {
