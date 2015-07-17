@@ -76,7 +76,6 @@ var testCases = []parserTestParam{
 	{
 		input: []string{`{"k":[{"knested":"value"}]}`},
 		res: map[string]interface{}{"K": []interface{}{map[string]interface{}{"Knested": "value"}}},
-		skip: true,
 	},
 }
 
