@@ -67,15 +67,15 @@ var testCases = []parserTestParam{
 			"A": map[string]interface{}{
 				"B": "c",
 			},
-			"SomeLongKey": nil,
-			"AnotherKey": []interface{}{`{"a":"b"}`, "a=b?,c=d"},
+			"SomeLongKey":   nil,
+			"AnotherKey":    []interface{}{`{"a":"b"}`, "a=b?,c=d"},
 			"YetAnotherKey": nil,
 		},
 	},
 	// Parses JSON arrays of objects properly.
 	{
 		input: []string{`{"k":[{"knested":"value"}]}`},
-		res: map[string]interface{}{"K": []interface{}{map[string]interface{}{"Knested": "value"}}},
+		res:   map[string]interface{}{"K": []interface{}{map[string]interface{}{"Knested": "value"}}},
 	},
 }
 
