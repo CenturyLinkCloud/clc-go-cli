@@ -1,8 +1,8 @@
 package formatters
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 type JsonFormatter struct{}
