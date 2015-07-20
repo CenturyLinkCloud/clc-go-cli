@@ -34,7 +34,7 @@ type testFieldInnerObject struct {
 }
 
 var testCases = []modelLoaderTestCase{
-	// Loads one string.
+	// Loads string field.
 	{
 		args: map[string]interface{}{
 			"FieldString": "some string",
