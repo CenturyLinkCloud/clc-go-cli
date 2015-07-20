@@ -107,7 +107,7 @@ var curQuote rune
 var curItem []rune
 var items []string
 
-func parseObject(obj string) interface{} {
+func ParseObject(obj string) (map[string]interface{}, error) {
 	curState = startParseKey
 	curQuote = '\000'
 	curItem = []rune{}
@@ -115,12 +115,12 @@ func parseObject(obj string) interface{} {
 	for _, c := range obj {
 		err := curState(c)
 		if err != nil {
-			return normalizeValue(obj)
+			return nil, err
 		}
 	}
 	curState('\000')
 	if len(items) <= 1 {
-		return normalizeValue(obj)
+		return nil, errors.New("Object is not in a=b,c=d,.. notation.")
 	}
 	res := make(map[string]interface{}, 0)
 	for i := 0; i < len(items); i += 2 {
@@ -131,7 +131,7 @@ func parseObject(obj string) interface{} {
 			res[key] = normalizeValue(items[i+1])
 		}
 	}
-	return res
+	return res, nil
 }
 
 func saveCurItem() {
