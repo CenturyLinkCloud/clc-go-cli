@@ -140,7 +140,7 @@ func TestModelLoader(t *testing.T) {
 		}
 		t.Logf("Executing %d test case.", i+1)
 		res := testModel{}
-		err := model_loader.LoadModel(testCase.args, res)
+		err := model_loader.LoadModel(testCase.args, &res)
 		if testCase.err != "" && err.Error() != testCase.err {
 			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
 		}
