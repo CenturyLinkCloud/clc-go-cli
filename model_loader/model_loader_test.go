@@ -142,10 +142,10 @@ func TestModelLoader(t *testing.T) {
 		res := testModel{}
 		err := model_loader.LoadModel(testCase.args, res)
 		if testCase.err != "" && err.Error() != testCase.err {
-			t.Errorf("Invalid error. Expected: %s, obtained %s", testCase.err, err.Error())
+			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
 		}
 		if testCase.res != nil && !reflect.DeepEqual(testCase.res, res) {
-			t.Errorf("Invalid result. expected %#v, obtained %#v", testCase.res, res)
+			t.Errorf("Invalid result.\n expected %#v,\n obtained %#v", testCase.res, res)
 		}
 	}
 }
