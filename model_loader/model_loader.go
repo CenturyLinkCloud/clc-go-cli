@@ -1,6 +1,7 @@
 package model_loader
 
 import (
+	valid "github.com/asaskevich/govalidator"
 	"encoding/json"
 	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
@@ -33,16 +34,18 @@ func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error 
 func loadValue(key string, arg interface{}, field reflect.Value) error {
 	switch field.Interface().(type) {
 	case int64:
-		if argInt, isInt := arg.(int64); !isInt {
+		if !valid.IsInt(arg.(string)) {
 			return fmt.Errorf("Type mismatch: %s value must be integer.", key)
 		} else {
+			argInt, _ := valid.ToInt(arg.(string))
 			field.SetInt(argInt)
 			return nil
 		}
 	case float64:
-		if argFloat, isFloat := arg.(float64); !isFloat {
+		if !valid.IsFloat(arg.(string)) {
 			return fmt.Errorf("Type mismatch: %s value must be float.", key)
 		} else {
+			argFloat, _ := valid.ToFloat(arg.(string))
 			field.SetFloat(argFloat)
 			return nil
 		}
