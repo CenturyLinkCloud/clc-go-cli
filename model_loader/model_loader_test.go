@@ -43,6 +43,15 @@ var testCases = []modelLoaderTestCase{
 			FieldString: "some string",
 		},
 	},
+	// Loads time.Time field.
+	{
+		args: map[string]interface{}{
+			"FieldDateTime": "2012-02-13T15:40:00",
+		},
+		res: testModel{
+			FieldDateTime: time.Date(2012, time.February, 13, 15, 40, 0, 0, time.UTC),
+		},
+	},
 	// Parses JSON and loads it into object field.
 	{
 		args: map[string]interface{}{
