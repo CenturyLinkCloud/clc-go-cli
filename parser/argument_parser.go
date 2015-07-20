@@ -50,7 +50,7 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 			if err != nil {
 				return nil, fmt.Errorf("Invalid JSON: %s.", args[i])
 			}
-			normalizeKeys(jsonArg)
+			NormalizeKeys(jsonArg)
 			for k, v := range jsonArg {
 				if _, ok := res[k]; ok {
 					return nil, fmt.Errorf("Option '%s' is specified twice.", k)
@@ -63,17 +63,17 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 	return res, nil
 }
 
-func normalizeKeys(arg interface{}) {
+func NormalizeKeys(arg interface{}) {
 	if argObj, isObj := arg.(map[string]interface{}); isObj {
 		for k, v := range argObj {
 			n := normalizePropertyName(k)
 			delete(argObj, k)
 			(argObj)[n] = v
-			normalizeKeys(v)
+			NormalizeKeys(v)
 		}
 	} else if argArray, isArray := arg.([]interface{}); isArray {
 		for _, v := range argArray {
-			normalizeKeys(v)
+			NormalizeKeys(v)
 		}
 	}
 }
