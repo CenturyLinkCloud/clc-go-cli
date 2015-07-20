@@ -128,7 +128,9 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	// TODO parse a=b,c=d,.. notation
+	if parsed, err := parser.ParseObject(arg.(string)); err == nil {
+		return parsed, nil
+	}
 	return nil, fmt.Errorf("`%s` is neither in JSON nor in key=value,.. format.", arg.(string))
 }
 
