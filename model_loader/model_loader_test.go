@@ -16,7 +16,7 @@ type modelLoaderTestCase struct {
 
 type testModel struct {
 	FieldString   string
-	FieldInt      int
+	FieldInt      int64
 	FieldFloat    float64
 	FieldBool     bool
 	FieldDateTime time.Time
