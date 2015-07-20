@@ -132,7 +132,7 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 	return nil, fmt.Errorf("`%s` is neither in JSON nor in key=value,.. format.", arg.(string))
 }
 
-// Parses an object of type []interface{} either from JSON or from a=b,c=d,.. notation.
+// Parses an object of type []interface{} either from JSON.
 // Also, calls NormalizeKeys with the parsed object.
 // If arg is already of type []interface{} returns it as is.
 func parseSlice(arg interface{}) ([]interface{}, error) {
@@ -144,7 +144,6 @@ func parseSlice(arg interface{}) ([]interface{}, error) {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	// TODO parse a=b,c=d,.. notation.
 	return nil, fmt.Errorf("`%s` is neither in JSON nor in key=value,.. format.", arg.(string))
 }
 
