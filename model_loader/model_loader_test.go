@@ -34,13 +34,19 @@ type testFieldInnerObject struct {
 }
 
 var testCases = []modelLoaderTestCase{
-	// Loads string field.
+	// Loads simple fields.
 	{
 		args: map[string]interface{}{
 			"FieldString": "some string",
+			"FieldInt": "4",
+			"FieldFloat": "0.0234",
+			"FieldBool": "true",
 		},
 		res: testModel{
 			FieldString: "some string",
+			FieldInt: 4,
+			FieldFloat: 0.0234,
+			FieldBool: true,
 		},
 	},
 	// Loads time.Time field.
@@ -130,6 +136,18 @@ var testCases = []modelLoaderTestCase{
 	{
 		args: map[string]interface{}{
 			"FieldBool": "Fal",
+		},
+		err: "Type mismatch: FieldBool value must be either true or false.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldFloat": "Fal",
+		},
+		err: "Type mismatch: FieldFloat value must be float.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldBool": "False",
 		},
 		err: "Type mismatch: FieldBool value must be either true or false.",
 	},
