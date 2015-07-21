@@ -58,6 +58,19 @@ var testCases = []modelLoaderTestCase{
 			FieldDateTime: time.Date(2012, time.February, 13, 15, 40, 0, 0, time.UTC),
 		},
 	},
+	// Handles nil values.
+	{
+		args: map[string]interface{}{
+			"FieldString": nil,
+			"FieldInt": nil,
+			"FieldFloat": nil,
+			"FieldBool": nil,
+			"FieldDateTime": nil,
+			"FieldObject": nil,
+			"FieldArray": nil,
+		},
+		res: testModel{},
+	},
 	// Parses JSON and loads it into object field.
 	{
 		args: map[string]interface{}{
