@@ -32,6 +32,9 @@ func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error 
 }
 
 func loadValue(key string, arg interface{}, field reflect.Value) error {
+	if arg == nil {
+		return nil
+	}
 	switch field.Interface().(type) {
 	case int64:
 		if !valid.IsInt(arg.(string)) {
