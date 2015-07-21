@@ -9,5 +9,5 @@ func main() {
 	args := os.Args[1:]
 
 	output := run(args)
-	fmt.Print(output)
+	fmt.Printf("%s\n", output)
 }
