@@ -15,6 +15,12 @@ func init() {
 		Resource: "server",
 		Command:  "create",
 	})
+	registerCommandBase(&server.DeleteReq{}, &server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
+		Resource: "server",
+		Command:  "delete",
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
