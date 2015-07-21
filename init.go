@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
+	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
@@ -20,6 +21,13 @@ func init() {
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
 		Resource: "server",
 		Command:  "delete",
+	})
+
+	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}",
+		Resource: "data-center",
+		Command:  "list",
 	})
 }
 
