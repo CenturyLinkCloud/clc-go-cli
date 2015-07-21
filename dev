@@ -1,4 +1,4 @@
 #!/bin/bash
 
-go run cmd/clc/* $@
+go run cmd/clc/* "$@"
 
