@@ -61,6 +61,10 @@ func (c *CreateReq) Validate() error {
 		return fmt.Errorf("Exactly one parameter from the following: source-server-id, source-server-name, template-id, template-name must be specified.")
 	}
 
+	if (c.GroupName == "") == (c.GroupId == "") {
+		return fmt.Errorf("Exactly one parameter from the following: group-id, group-name must be specified.")
+	}
+
 	return nil
 }
 
@@ -70,4 +74,5 @@ func (c *CreateReq) ApplyDefaultBehaviour() error {
 	}
 	return nil
 	//TODO: implement searching templates by name
+	//TODO: implement searching groups by names
 }
