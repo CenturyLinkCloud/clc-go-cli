@@ -3,10 +3,12 @@ package connection
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"reflect"
 	"strings"
 
 	"github.com/centurylinkcloud/clc-go-cli/base"
@@ -57,15 +59,44 @@ func (cn *connection) ExecuteRequest(verb string, url string, reqModel interface
 	return
 }
 
+func ExtractURIParams(uri string, model interface{}) string {
+	meta := reflect.TypeOf(model)
+	var value reflect.Value
+	if meta.Kind() == reflect.Ptr {
+		meta = meta.Elem()
+		value = reflect.ValueOf(model).Elem()
+	}
+	if meta.Kind() != reflect.Struct {
+		panic("ExtractURIParams was called with the model not being a struct.")
+	}
+
+	var newURI = uri
+	for i := 0; i < meta.NumField(); i++ {
+		fieldMeta := meta.Field(i)
+		stub := fmt.Sprintf("{%s}", fieldMeta.Name)
+		if fieldMeta.Tag.Get("URIParam") != "" && strings.Contains(uri, stub) {
+			field := value.FieldByName(fieldMeta.Name)
+			if field.Kind() != reflect.String {
+				panic("Fields marked by URIParam tag must be strings.")
+			}
+			newURI = strings.Replace(uri, stub, field.String(), 1)
+		}
+	}
+	return newURI
+}
+
 func (cn *connection) prepareRequest(verb string, url string, reqModel interface{}) (req *http.Request, err error) {
 	var inputData io.Reader
 	if reqModel != nil {
-		b, err := json.Marshal(reqModel)
-		if err != nil {
-			return nil, err
+		if verb == "POST" || verb == "PUT" {
+			b, err := json.Marshal(reqModel)
+			if err != nil {
+				return nil, err
+			}
+			inputData = bytes.NewReader(b)
+			cn.logger.Printf("Input model converted to json: %s", b)
 		}
-		inputData = bytes.NewReader(b)
-		cn.logger.Printf("Input model converted to json: %s", b)
+		url = ExtractURIParams(url, reqModel)
 	}
 	url = strings.Replace(url, "{accountAlias}", cn.accountAlias, 1)
 	req, err = http.NewRequest(verb, url, inputData)
