@@ -20,9 +20,9 @@ type CreateReq struct {
 	IpAddress              string              `json:"omitempty"`
 	Password               string              `json:"omitempty"`
 	SourceServerPassword   string              `json:"omitempty"`
-	Cpu                    int                 `valid:"required"`
+	Cpu                    int64               `valid:"required"`
 	CpuAutoscalePolicyId   string              `json:"omitempty"`
-	MemoryGB               int                 `valid:"required"`
+	MemoryGB               int64               `valid:"required"`
 	Type                   string              `valid:"required"`
 	StorageType            string              `json:"omitempty"`
 	AntiAffinityPolicyId   string              `json:"omitempty"`
