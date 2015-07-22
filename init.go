@@ -29,6 +29,12 @@ func init() {
 		Resource: "data-center",
 		Command:  "list",
 	})
+	registerCommandBase(&datacenter.GetReq{}, &datacenter.GetRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}?groupLinks={GroupLinks}",
+		Resource: "data-center",
+		Command:  "get",
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
