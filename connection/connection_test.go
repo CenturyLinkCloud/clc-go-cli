@@ -96,7 +96,7 @@ func TestNewConnectionError(t *testing.T) {
 	initTest()
 	defer finishTest()
 	_, err := newConnection(t, false)
-	if err == nil || err.Error() != "Error occured while sending request to API. Status code: 404" {
+	if err == nil || err.Error() != "Error occured while sending request to API. Status code: 404." {
 		t.Errorf("Unexpected error: %s", err)
 	}
 }
