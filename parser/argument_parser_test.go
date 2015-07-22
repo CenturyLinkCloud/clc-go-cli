@@ -33,8 +33,14 @@ var testCases = []parserTestParam{
 	// Does not allow duplicate keys.
 	{input: []string{"--some-key", "value1", "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
 	{input: []string{`{"some-key": "value"}`, "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
-	// Does not parse root values not in JSON format.
-	{input: []string{"value", "value2"}, err: "Invalid JSON: value."},
+	// Does not parse root values not in JSON or a=b,c=d,.. format.
+	{input: []string{"value", "value2"}, err: "value is neither in JSON nor in a=b,c=d.. format."},
+	// Parses top-level objects in JSON and a=b,c=d,.. format.
+	{input: []string{"key-one=value1,key-two=value2", `{"key-three":"value3"}`}, res: map[string]interface{}{
+		"KeyOne":   "value1",
+		"KeyTwo":   "value2",
+		"KeyThree": "value3",
+	}},
 	// Parses keys without values.
 	{input: []string{"--some-key"}, res: map[string]interface{}{"SomeKey": nil}},
 	// Does not parse key values from JSON or key1=value1,key2=value2,.. notation.
