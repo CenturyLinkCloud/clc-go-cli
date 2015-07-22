@@ -38,15 +38,15 @@ var testCases = []modelLoaderTestCase{
 	{
 		args: map[string]interface{}{
 			"FieldString": "some string",
-			"FieldInt": "4",
-			"FieldFloat": "0.0234",
-			"FieldBool": "true",
+			"FieldInt":    "4",
+			"FieldFloat":  "0.0234",
+			"FieldBool":   "true",
 		},
 		res: testModel{
 			FieldString: "some string",
-			FieldInt: 4,
-			FieldFloat: 0.0234,
-			FieldBool: true,
+			FieldInt:    4,
+			FieldFloat:  0.0234,
+			FieldBool:   true,
 		},
 	},
 	// Loads time.Time field.
@@ -61,13 +61,13 @@ var testCases = []modelLoaderTestCase{
 	// Handles nil values.
 	{
 		args: map[string]interface{}{
-			"FieldString": nil,
-			"FieldInt": nil,
-			"FieldFloat": nil,
-			"FieldBool": nil,
+			"FieldString":   nil,
+			"FieldInt":      nil,
+			"FieldFloat":    nil,
+			"FieldBool":     nil,
 			"FieldDateTime": nil,
-			"FieldObject": nil,
-			"FieldArray": nil,
+			"FieldObject":   nil,
+			"FieldArray":    nil,
 		},
 		res: testModel{},
 	},

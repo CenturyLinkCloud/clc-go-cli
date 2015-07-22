@@ -1,9 +1,9 @@
 package model_loader
 
 import (
-	valid "github.com/asaskevich/govalidator"
 	"encoding/json"
 	"fmt"
+	valid "github.com/asaskevich/govalidator"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
 	"time"
