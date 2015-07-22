@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 	"unicode"
 )
@@ -90,16 +89,6 @@ func normalizePropertyName(prName string) string {
 	return string(res)
 }
 
-func normalizeValue(value string) interface{} {
-	var obj interface{} = value
-	if val, err := strconv.ParseFloat(value, 64); err == nil {
-		obj = val
-	} else if val, err := strconv.ParseBool(value); err == nil {
-		obj = val
-	}
-	return obj
-}
-
 type state func(r rune) error
 
 var curState state
@@ -128,7 +117,7 @@ func ParseObject(obj string) (map[string]interface{}, error) {
 		if i == len(items)-1 {
 			res[key] = nil
 		} else {
-			res[key] = normalizeValue(items[i+1])
+			res[key] = items[i+1]
 		}
 	}
 	return res, nil
