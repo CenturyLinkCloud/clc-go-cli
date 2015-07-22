@@ -35,9 +35,10 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 	if arg == nil {
 		return nil
 	}
+	isArgSlice := reflect.ValueOf(arg).Kind() == reflect.Slice
 	switch field.Interface().(type) {
 	case int64:
-		if !valid.IsInt(arg.(string)) {
+		if isArgSlice || !valid.IsInt(arg.(string)) {
 			return fmt.Errorf("Type mismatch: %s value must be integer.", key)
 		} else {
 			argInt, _ := valid.ToInt(arg.(string))
@@ -45,7 +46,7 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 			return nil
 		}
 	case float64:
-		if !valid.IsFloat(arg.(string)) {
+		if isArgSlice || !valid.IsFloat(arg.(string)) {
 			return fmt.Errorf("Type mismatch: %s value must be float.", key)
 		} else {
 			argFloat, _ := valid.ToFloat(arg.(string))
@@ -53,7 +54,15 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 			return nil
 		}
 	case time.Time:
-		if argTime, err := time.Parse(timeFormat, arg.(string)); err != nil {
+		mismatch := isArgSlice
+		var argTime time.Time
+		var err error
+		if !mismatch {
+			if argTime, err = time.Parse(timeFormat, arg.(string)); err != nil {
+				mismatch = true
+			}
+		}
+		if mismatch {
 			return fmt.Errorf("Type mismatch: %s value must be datetime in `YYYY-MM-DD hh:mm:ss` format.", key)
 		} else {
 			field.Set(reflect.ValueOf(argTime))
@@ -69,6 +78,9 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 		}
 		return nil
 	case string:
+		if isArgSlice {
+			return fmt.Errorf("Type mismatch: %s value must be string.", key)
+		}
 		field.SetString(arg.(string))
 		return nil
 	}
