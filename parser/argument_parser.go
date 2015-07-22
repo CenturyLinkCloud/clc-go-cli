@@ -44,13 +44,17 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 			}
 			continue
 		} else {
-			jsonArg := map[string]interface{}{}
-			err = json.Unmarshal([]byte(args[i]), &jsonArg)
+			parsedArg := map[string]interface{}{}
+			err = json.Unmarshal([]byte(args[i]), &parsedArg)
 			if err != nil {
-				return nil, fmt.Errorf("Invalid JSON: %s.", args[i])
+				parsedArg, err = ParseObject(args[i])
+				if err != nil {
+					return nil, fmt.Errorf("%s is neither in JSON nor in a=b,c=d.. format.", args[i])
+				}
+			} else {
+				NormalizeKeys(parsedArg)
 			}
-			NormalizeKeys(jsonArg)
-			for k, v := range jsonArg {
+			for k, v := range parsedArg {
 				if _, ok := res[k]; ok {
 					return nil, fmt.Errorf("Option '%s' is specified twice.", k)
 				}
