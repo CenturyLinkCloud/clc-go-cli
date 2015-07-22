@@ -79,7 +79,7 @@ func ExtractURIParams(uri string, model interface{}) string {
 			if field.Kind() != reflect.String {
 				panic("Fields marked by URIParam tag must be strings.")
 			}
-			newURI = strings.Replace(uri, stub, field.String(), 1)
+			newURI = strings.Replace(newURI, stub, field.String(), 1)
 		}
 	}
 	return newURI
