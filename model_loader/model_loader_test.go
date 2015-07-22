@@ -114,6 +114,25 @@ var testCases = []modelLoaderTestCase{
 		},
 		err: "`can not be parsed into object` is neither in JSON nor in key=value,.. format.",
 	},
+	// Fails to load slices into fields of simple type.
+	{
+		args: map[string]interface{}{
+			"FieldInt": []int{1, 2, 3},
+		},
+		err: "Type mismatch: FieldInt value must be integer.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldString": []string{"one", "two", "three"},
+		},
+		err: "Type mismatch: FieldString value must be string.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldDateTime": []float64{.1, .2},
+		},
+		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DD hh:mm:ss` format.",
+	},
 	// Loads JSON into string field as string.
 	{
 		args: map[string]interface{}{
