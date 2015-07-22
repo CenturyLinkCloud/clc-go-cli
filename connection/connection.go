@@ -89,7 +89,7 @@ func ExtractURIParams(uri string, model interface{}) string {
 func (cn *connection) prepareRequest(verb string, url string, reqModel interface{}) (req *http.Request, err error) {
 	var inputData io.Reader
 	if reqModel != nil {
-		if verb == "POST" || verb == "PUT" {
+		if verb == "POST" || verb == "PUT" || verb == "PATCH" {
 			b, err := json.Marshal(reqModel)
 			if err != nil {
 				return nil, err
