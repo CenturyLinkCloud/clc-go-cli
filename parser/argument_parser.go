@@ -52,6 +52,12 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 					return nil, fmt.Errorf("%s is neither in JSON nor in a=b,c=d.. format.", args[i])
 				}
 			} else {
+				for k, v := range parsedArg {
+					if _, ok := v.(string); !ok {
+						bytes, _ := json.Marshal(v)
+						parsedArg[k] = string(bytes)
+					}
+				}
 				NormalizeKeys(parsedArg)
 			}
 			for k, v := range parsedArg {
