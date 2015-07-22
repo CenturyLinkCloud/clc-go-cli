@@ -62,6 +62,9 @@ func run(args []string) string {
 		return err.Error()
 	}
 	f, err := formatter_provider.GetOutputFormatter(options)
+	if err != nil {
+		return err.Error()
+	}
 	output, err := f.FormatOutput(cmd.OutputModel())
 	if err != nil {
 		return err.Error()
