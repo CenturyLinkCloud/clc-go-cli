@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -114,13 +115,22 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 	switch res.StatusCode {
 	case 200, 201, 202, 204:
 	default:
-		err := cn.decodeResponse(res, resModel)
-		if err != nil {
-			cn.logger.Printf(err.Error())
+		reason := ""
+		if resBody, err := ioutil.ReadAll(res.Body); err == nil {
+			var payload map[string]interface{}
+			if err := json.Unmarshal(resBody, &payload); err == nil {
+				if errors, ok := payload["modelState"]; ok {
+					bytes, err := json.Marshal(errors)
+					if err == nil {
+						reason = string(bytes)
+					}
+				}
+			}
 		}
 		return &errors.ApiError{
 			StatusCode:  res.StatusCode,
 			ApiResponse: resModel,
+			Reason:      reason,
 		}
 	}
 	if resModel == nil {
