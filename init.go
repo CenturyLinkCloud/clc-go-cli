@@ -29,6 +29,12 @@ func init() {
 		Resource: "server",
 		Command:  "update",
 	})
+	registerCommandBase(&server.GetReq{}, &server.GetRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
+		Resource: "server",
+		Command:  "get",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
