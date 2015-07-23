@@ -35,6 +35,12 @@ func init() {
 		Resource: "server",
 		Command:  "get",
 	})
+	registerCommandBase(&server.GetCredentialsReq{}, &server.GetCredentialsRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/credentials",
+		Resource: "server",
+		Command:  "get-credentials",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
