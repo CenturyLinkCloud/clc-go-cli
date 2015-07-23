@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
+	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
@@ -22,7 +23,7 @@ func init() {
 		Resource: "server",
 		Command:  "delete",
 	})
-	registerCommandBase(&server.UpdateReq{}, &server.UpdateRes{}, commands.CommandExcInfo{
+	registerCommandBase(&server.UpdateReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "PATCH",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
 		Resource: "server",

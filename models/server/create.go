@@ -12,41 +12,25 @@ type CreateReq struct {
 	GroupName              string `json:"omitempty"`
 	SourceServerId         string
 	TemplateId             string
-	TemplateName           string              `json:"omitempty"`
-	IsManagedOS            bool                `json:"omitempty"`
-	PrimaryDns             string              `json:"omitempty"`
-	SecondaryDns           string              `json:"omitempty"`
-	NetworkId              string              `json:"omitempty"`
-	IpAddress              string              `json:"omitempty"`
-	Password               string              `json:"omitempty"`
-	SourceServerPassword   string              `json:"omitempty"`
-	Cpu                    int64               `valid:"required"`
-	CpuAutoscalePolicyId   string              `json:"omitempty"`
-	MemoryGB               int64               `valid:"required"`
-	Type                   string              `valid:"required"`
-	StorageType            string              `json:"omitempty"`
-	AntiAffinityPolicyId   string              `json:"omitempty"`
-	AntiAffinityPolicyName string              `json:"omitempty"`
-	CustomFields           []CustomFieldDef    `json:"omitempty"`
-	AdditionalDisks        []AdditionalDiskDef `json:"omitempty"`
-	Ttl                    time.Time           `json:"omitempty"`
-	Packages               []PackageDef        `json:"omitempty"`
-}
-
-type CustomFieldDef struct {
-	Id    string
-	Value string
-}
-
-type AdditionalDiskDef struct {
-	Path   string
-	SizeGB int
-	Type   string
-}
-
-type PackageDef struct {
-	PackageId  string
-	Parameters map[string]string
+	TemplateName           string           `json:"omitempty"`
+	IsManagedOS            bool             `json:"omitempty"`
+	PrimaryDns             string           `json:"omitempty"`
+	SecondaryDns           string           `json:"omitempty"`
+	NetworkId              string           `json:"omitempty"`
+	IpAddress              string           `json:"omitempty"`
+	Password               string           `json:"omitempty"`
+	SourceServerPassword   string           `json:"omitempty"`
+	Cpu                    int64            `valid:"required"`
+	CpuAutoscalePolicyId   string           `json:"omitempty"`
+	MemoryGB               int64            `valid:"required"`
+	Type                   string           `valid:"required"`
+	StorageType            string           `json:"omitempty"`
+	AntiAffinityPolicyId   string           `json:"omitempty"`
+	AntiAffinityPolicyName string           `json:"omitempty"`
+	CustomFields           []CustomFieldDef `json:"omitempty"`
+	AdditionalDisks        []DiskRequest    `json:"omitempty"`
+	Ttl                    time.Time        `json:"omitempty"`
+	Packages               []PackageDef     `json:"omitempty"`
 }
 
 func (c *CreateReq) Validate() error {

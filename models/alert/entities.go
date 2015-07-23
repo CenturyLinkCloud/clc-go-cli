@@ -1,12 +1,10 @@
-package datacenter
+package alert
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 )
 
-type ListReq struct{}
-
-type ListRes struct {
+type AlertPolicy struct {
 	Id    string
 	Name  string
 	Links []models.LinkEntity

@@ -2,6 +2,7 @@ package datacenter
 
 import (
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/models"
 )
 
 type GetReq struct {
@@ -12,7 +13,7 @@ type GetReq struct {
 type GetRes struct {
 	Id    string
 	Name  string
-	Links []map[string]interface{}
+	Links []models.LinkEntity
 }
 
 func (r *GetReq) Validate() error {

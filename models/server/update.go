@@ -15,7 +15,7 @@ type UpdateReq struct {
 	CustomFields []CustomFieldDef
 	Description  string
 	GroupId      string
-	Disks        []AdditionalDiskDef
+	Disks        []DiskRequest
 }
 
 type ServerPatchOperation struct {
@@ -118,10 +118,4 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
 	return nil
-}
-
-type UpdateRes struct {
-	Rel  string
-	Href string
-	Id   string
 }
