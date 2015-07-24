@@ -101,6 +101,12 @@ func init() {
 		Resource: "server",
 		Command:  "shut-down",
 	})
+	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/archive",
+		Resource: "server",
+		Command:  "archive",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
