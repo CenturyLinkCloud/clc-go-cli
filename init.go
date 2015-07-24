@@ -107,6 +107,12 @@ func init() {
 		Resource: "server",
 		Command:  "archive",
 	})
+	registerCommandBase(&server.RestoreReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/restore",
+		Resource: "server",
+		Command:  "restore",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
