@@ -113,6 +113,24 @@ func init() {
 		Resource: "server",
 		Command:  "restore",
 	})
+	registerCommandBase(&server.CreateSnapshotReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/createSnapshot",
+		Resource: "server",
+		Command:  "create-snapshot",
+	})
+	registerCommandBase(&server.RevertToSnapshotReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/snapshots/{SnapshotId}/restore",
+		Resource: "server",
+		Command:  "revert-to-snapshot",
+	})
+	registerCommandBase(&server.DeleteSnapshotReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/snapshots/{SnapshotId}",
+		Resource: "server",
+		Command:  "delete-snapshot",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
