@@ -42,7 +42,7 @@ var testCases = []modelValidatorTestCase{
 		model: testModel{
 			FieldRequired: "",
 		},
-		err: "FieldRequired: non zero value required\n",
+		err: "FieldRequired: non zero value required",
 	},
 	{
 		model: testModel{
