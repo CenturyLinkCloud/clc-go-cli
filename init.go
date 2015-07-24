@@ -65,6 +65,12 @@ func init() {
 		Resource: "server",
 		Command:  "remove-ip-address",
 	})
+	registerCommandBase(&server.UpdateIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
+		Resource: "server",
+		Command:  "update-ip-address",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
