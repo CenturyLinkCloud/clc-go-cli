@@ -19,9 +19,12 @@ var testCases = []parserTestParam{
 		input: []string{`{"P1":"val1","P2":[1,2],"P3":true,"P4":{"P41":"val41","P42":["str"]}}`},
 		res: map[string]interface{}{
 			"P1": "val1",
-			"P2": "[1,2]",
-			"P3": "true",
-			"P4": `{"P41":"val41","P42":["str"]}`,
+			"P2": []interface{}{1.0, 2.0},
+			"P3": true,
+			"P4": map[string]interface{}{
+				"P41": "val41",
+				"P42": []interface{}{"str"},
+			},
 		},
 	},
 	// Parses root values without keys from JSON.
@@ -60,13 +63,17 @@ var testCases = []parserTestParam{
 	{input: []string{"--"}, err: "-- is an invalid argument."},
 	// Parses nested JSON objects and arrays properly.
 	{input: []string{`{"k1":{"k2":{"k3":[1,2,3]}}}`}, res: map[string]interface{}{
-		"K1": `{"k2":{"k3":[1,2,3]}}`,
+		"K1": map[string]interface{}{
+			"K2": map[string]interface{}{
+				"K3": []interface{}{1.0, 2.0, 3.0},
+			},
+		},
 	}},
 	// Parses a complex case.
 	{
 		input: []string{`{"a":{"b":"c"}}`, "--some-long-key", "--another-key", `{"a":"b"}`, "a=b?,c=d", "--yet-another-key"},
 		res: map[string]interface{}{
-			"A":             `{"b":"c"}`,
+			"A":             map[string]interface{}{"B": "c"},
 			"SomeLongKey":   nil,
 			"AnotherKey":    []interface{}{`{"a":"b"}`, "a=b?,c=d"},
 			"YetAnotherKey": nil,
@@ -75,7 +82,7 @@ var testCases = []parserTestParam{
 	// Parses JSON arrays of objects properly.
 	{
 		input: []string{`{"k":[{"knested":"value"}]}`},
-		res:   map[string]interface{}{"K": `[{"knested":"value"}]`},
+		res:   map[string]interface{}{"K": []interface{}{map[string]interface{}{"Knested": "value"}}},
 	},
 }
 
