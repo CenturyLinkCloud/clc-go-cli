@@ -35,31 +35,55 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 	if arg == nil {
 		return nil
 	}
-	isArgSlice := reflect.ValueOf(arg).Kind() == reflect.Slice
 	switch field.Interface().(type) {
 	case int64:
-		if isArgSlice || !valid.IsInt(arg.(string)) {
+		var argInt int64
+		var mismatch = true
+		if reflect.ValueOf(arg).Kind() == reflect.Int {
+			argInt = arg.(int64)
+			mismatch = false
+		} else if reflect.ValueOf(arg).Kind() == reflect.Float64 {
+			if valid.IsWhole(arg.(float64)) {
+				argInt = int64(arg.(float64))
+				mismatch = false
+			}
+		} else if reflect.ValueOf(arg).Kind() == reflect.String {
+			if valid.IsInt(arg.(string)) {
+				argInt, _ = valid.ToInt(arg.(string))
+				mismatch = false
+			}
+		}
+		if mismatch {
 			return fmt.Errorf("Type mismatch: %s value must be integer.", key)
 		} else {
-			argInt, _ := valid.ToInt(arg.(string))
 			field.SetInt(argInt)
 			return nil
 		}
 	case float64:
-		if isArgSlice || !valid.IsFloat(arg.(string)) {
+		var argFloat64 float64
+		var mismatch = true
+		if reflect.ValueOf(arg).Kind() == reflect.Float64 {
+			argFloat64 = arg.(float64)
+			mismatch = false
+		} else if reflect.ValueOf(arg).Kind() == reflect.String {
+			if valid.IsFloat(arg.(string)) {
+				argFloat64, _ = valid.ToFloat(arg.(string))
+				mismatch = false
+			}
+		}
+		if mismatch {
 			return fmt.Errorf("Type mismatch: %s value must be float.", key)
 		} else {
-			argFloat, _ := valid.ToFloat(arg.(string))
-			field.SetFloat(argFloat)
+			field.SetFloat(argFloat64)
 			return nil
 		}
 	case time.Time:
-		mismatch := isArgSlice
 		var argTime time.Time
 		var err error
-		if !mismatch {
-			if argTime, err = time.Parse(timeFormat, arg.(string)); err != nil {
-				mismatch = true
+		var mismatch = true
+		if reflect.ValueOf(arg).Kind() == reflect.String {
+			if argTime, err = time.Parse(timeFormat, arg.(string)); err == nil {
+				mismatch = false
 			}
 		}
 		if mismatch {
@@ -69,16 +93,28 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 			return nil
 		}
 	case bool:
-		if arg == "true" {
-			field.SetBool(true)
-		} else if arg == "false" {
-			field.SetBool(false)
-		} else {
+		var argBool bool
+		var mismatch = true
+		if reflect.ValueOf(arg).Kind() == reflect.Bool {
+			argBool = arg.(bool)
+			mismatch = false
+		} else if reflect.ValueOf(arg).Kind() == reflect.String {
+			if arg == "true" {
+				argBool = true
+				mismatch = false
+			} else if arg == "false" {
+				argBool = false
+				mismatch = false
+			}
+		}
+		if mismatch {
 			return fmt.Errorf("Type mismatch: %s value must be either true or false.", key)
+		} else {
+			field.SetBool(argBool)
 		}
 		return nil
 	case string:
-		if isArgSlice {
+		if reflect.ValueOf(arg).Kind() != reflect.String {
 			return fmt.Errorf("Type mismatch: %s value must be string.", key)
 		}
 		field.SetString(arg.(string))
