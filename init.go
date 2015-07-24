@@ -71,6 +71,18 @@ func init() {
 		Resource: "server",
 		Command:  "update-ip-address",
 	})
+	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/powerOn",
+		Resource: "server",
+		Command:  "power-on",
+	})
+	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/powerOff",
+		Resource: "server",
+		Command:  "power-off",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
