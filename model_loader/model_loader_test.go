@@ -97,6 +97,19 @@ var testCases = []modelLoaderTestCase{
 			},
 		},
 	},
+	// Normalizes keys in parsed JSON.
+	{
+		args: map[string]interface{}{
+			"FieldObject": `{"field-inner-object":{"field-string":"some string"}}`,
+		},
+		res: testModel{
+			FieldObject: testFieldObject{
+				FieldInnerObject: testFieldInnerObject{
+					FieldString: "some string",
+				},
+			},
+		},
+	},
 	{
 		args: map[string]interface{}{
 			"FieldArray": `[{"FieldString": "string 1"},{"FieldString": "string 2"}]`,
