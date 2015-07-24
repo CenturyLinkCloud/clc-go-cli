@@ -49,6 +49,18 @@ var testCases = []modelLoaderTestCase{
 			FieldBool:   true,
 		},
 	},
+	{
+		args: map[string]interface{}{
+			"FieldInt":   5.0,
+			"FieldFloat": 5.5,
+			"FieldBool":  true,
+		},
+		res: testModel{
+			FieldInt:   5,
+			FieldFloat: 5.5,
+			FieldBool:  true,
+		},
+	},
 	// Loads time.Time field.
 	{
 		args: map[string]interface{}{
