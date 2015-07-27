@@ -28,7 +28,7 @@ type CreateReq struct {
 	AntiAffinityPolicyId   string           `json:"omitempty"`
 	AntiAffinityPolicyName string           `json:"omitempty"`
 	CustomFields           []CustomFieldDef `json:"omitempty"`
-	AdditionalDisks        []DiskRequest    `json:"omitempty"`
+	AdditionalDisks        []AddDiskRequest `json:"omitempty"`
 	Ttl                    time.Time        `json:"omitempty"`
 	Packages               []PackageDef     `json:"omitempty"`
 }

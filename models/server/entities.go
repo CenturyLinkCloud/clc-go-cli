@@ -24,10 +24,15 @@ type Partition struct {
 	Path   string
 }
 
-type DiskRequest struct {
+type AddDiskRequest struct {
 	Path   string
 	SizeGB int64
 	Type   string
+}
+
+type KeepDiskRequest struct {
+	DiskId string
+	SizeGB int64
 }
 
 type PackageDef struct {

@@ -15,7 +15,26 @@ type UpdateReq struct {
 	CustomFields []CustomFieldDef
 	Description  string
 	GroupId      string
-	Disks        []DiskRequest
+	Disks        UpdateDisksDescription
+}
+
+type UpdateDisksDescription struct {
+	Add  []AddDiskRequest
+	Keep []KeepDiskRequest
+}
+
+func (udd *UpdateDisksDescription) Flatten() []interface{} {
+	array := make([]interface{}, 0)
+	add := func(el interface{}) {
+		array = append(array, el)
+	}
+	for _, a := range udd.Add {
+		add(a)
+	}
+	for _, k := range udd.Keep {
+		add(k)
+	}
+	return array
 }
 
 type ServerPatchOperation struct {
@@ -46,7 +65,8 @@ func (ur *UpdateReq) Validate() error {
 		int64(len(ur.CustomFields)),
 		int64(len(ur.Description)),
 		int64(len(ur.GroupId)),
-		int64(len(ur.Disks)),
+		int64(len(ur.Disks.Add)),
+		int64(len(ur.Disks.Keep)),
 	}
 	for _, v := range values {
 		any += v
@@ -109,11 +129,11 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if len(ur.Disks) != 0 {
+	if len(ur.Disks.Add) != 0 && len(ur.Disks.Keep) != 0 {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "disks",
-			Value:  ur.Disks,
+			Value:  ur.Disks.Flatten(),
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
