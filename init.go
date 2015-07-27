@@ -51,25 +51,25 @@ func init() {
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
 		Resource: "server",
-		Command:  "get-ip-address",
+		Command:  "get-public-ip-address",
 	})
 	registerCommandBase(&server.AddIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses",
 		Resource: "server",
-		Command:  "add-ip-address",
+		Command:  "add-public-ip-address",
 	})
 	registerCommandBase(&server.RemoveIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
 		Resource: "server",
-		Command:  "remove-ip-address",
+		Command:  "remove-public-ip-address",
 	})
 	registerCommandBase(&server.UpdateIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
 		Resource: "server",
-		Command:  "update-ip-address",
+		Command:  "update-public-ip-address",
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
