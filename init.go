@@ -152,6 +152,11 @@ func init() {
 		Resource: "data-center",
 		Command:  "get",
 	})
+
+	registerCustomCommand(commands.NewGroupList(commands.CommandExcInfo{
+		Resource: "group",
+		Command:  "list",
+	}))
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
