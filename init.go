@@ -157,6 +157,10 @@ func init() {
 		Resource: "group",
 		Command:  "list",
 	}))
+	registerCustomCommand(commands.NewServerList(commands.CommandExcInfo{
+		Resource: "server",
+		Command:  "list",
+	}))
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
