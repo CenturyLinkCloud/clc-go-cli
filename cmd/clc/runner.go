@@ -10,6 +10,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/model_validator"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
+	"github.com/centurylinkcloud/clc-go-cli/state"
 
 	"io"
 )
@@ -64,6 +65,10 @@ func run(args []string) string {
 		if err == io.EOF {
 			return ""
 		}
+		return err.Error()
+	}
+	err = state.SaveLastResult(cmd.OutputModel())
+	if err != nil {
 		return err.Error()
 	}
 	f, err := formatter_provider.GetOutputFormatter(options)
