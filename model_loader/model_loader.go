@@ -15,6 +15,9 @@ const (
 
 func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error {
 	metaModel := reflect.ValueOf(inputModel)
+	if !metaModel.IsValid() {
+		return nil
+	}
 	if metaModel.Kind() != reflect.Ptr {
 		return fmt.Errorf("Input model must be passed by pointer.")
 	}
