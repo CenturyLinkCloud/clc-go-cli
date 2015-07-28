@@ -162,3 +162,7 @@ func registerCommandBase(inputModel interface{}, outputModel interface{}, info c
 	}
 	AllCommands = append(AllCommands, cmd)
 }
+
+func registerCustomCommand(cmd base.Command) {
+	AllCommands = append(AllCommands, cmd)
+}
