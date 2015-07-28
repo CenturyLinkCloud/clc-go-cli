@@ -179,6 +179,9 @@ func init() {
 		Resource: "server",
 		Command:  "list",
 	}))
+	registerCustomCommand(commands.NewWait(commands.CommandExcInfo{
+		Resource: "wait",
+	}))
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
