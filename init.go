@@ -139,6 +139,12 @@ func init() {
 		Resource: "group",
 		Command:  "get",
 	})
+	registerCommandBase(&group.CreateReq{}, &group.Entity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}",
+		Resource: "group",
+		Command:  "create",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
