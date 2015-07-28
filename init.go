@@ -145,6 +145,12 @@ func init() {
 		Resource: "group",
 		Command:  "create",
 	})
+	registerCommandBase(&group.DeleteReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}",
+		Resource: "group",
+		Command:  "delete",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
