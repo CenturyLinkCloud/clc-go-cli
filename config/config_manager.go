@@ -24,12 +24,7 @@ func loadConfigInner() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, err := os.Stat(p); os.IsNotExist(err) {
-		err := os.MkdirAll(p, 0777)
-		if err != nil {
-			return nil, err
-		}
-	}
+	CreateIfNotExists()
 	var f *os.File
 	filepath := path.Join(p, "config.yml")
 	exist := true
@@ -76,4 +71,18 @@ var GetPath = func() (string, error) {
 	}
 
 	return path.Join(u.HomeDir, ".clc"), nil
+}
+
+func CreateIfNotExists() error {
+	p, err := GetPath()
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(p); os.IsNotExist(err) {
+		err := os.MkdirAll(p, 0777)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
