@@ -25,14 +25,14 @@ func NewGroupList(info CommandExcInfo) *GroupList {
 func (g *GroupList) Execute(cn base.Connection) error {
 	var err error
 
-	g.Output, err = Get(cn)
+	g.Output, err = GetGroups(cn)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func Get(cn base.Connection) ([]group.Entity, error) {
+func GetGroups(cn base.Connection) ([]group.Entity, error) {
 	var err error
 	var groups []group.Entity
 
