@@ -20,7 +20,7 @@ func LoadConfig() (*Config, error) {
 func loadConfigInner() (*Config, error) {
 	c := &Config{}
 
-	p, err := getConfigPath()
+	p, err := GetPath()
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func loadConfigInner() (*Config, error) {
 	return c, nil
 }
 
-var getConfigPath = func() (string, error) {
+var GetPath = func() (string, error) {
 	u, err := user.Current()
 	if err != nil {
 		return "", err
