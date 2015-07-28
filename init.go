@@ -164,6 +164,12 @@ func init() {
 		Resource: "data-center",
 		Command:  "get",
 	})
+	registerCommandBase(&datacenter.GetDCReq{}, &datacenter.GetDCRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}/deploymentCapabilities",
+		Resource: "data-center",
+		Command:  "get-deployment-capabilities",
+	})
 
 	registerCustomCommand(commands.NewGroupList(commands.CommandExcInfo{
 		Resource: "group",
