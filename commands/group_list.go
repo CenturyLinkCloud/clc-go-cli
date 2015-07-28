@@ -46,14 +46,14 @@ func GetGroups(cn base.Connection) ([]group.Entity, error) {
 	for _, ref := range datacenters {
 		// Get detailed DC info.
 		d := datacenter.GetRes{}
-		dcURL = fmt.Sprintf("%s/%s?groupLinks=true", BaseURL, GetLink(ref.Links, "self"))
+		dcURL = fmt.Sprintf("%s%s?groupLinks=true", BaseURL, GetLink(ref.Links, "self"))
 		err = cn.ExecuteRequest("GET", dcURL, nil, &d)
 		if err != nil {
 			return nil, err
 		}
 		// Get the root group of the given DC.
 		g := group.Entity{}
-		gURL := fmt.Sprintf("%s/%s", BaseURL, GetLink(d.Links, "group"))
+		gURL := fmt.Sprintf("%s%s", BaseURL, GetLink(d.Links, "group"))
 		err = cn.ExecuteRequest("GET", gURL, nil, &g)
 		if err != nil {
 			return nil, err
