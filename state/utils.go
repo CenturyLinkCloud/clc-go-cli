@@ -3,8 +3,8 @@ package state
 import (
 	"github.com/centurylinkcloud/clc-go-cli/config"
 	"io/ioutil"
-	"path"
 	"os"
+	"path"
 )
 
 func readFromFile(name string) ([]byte, error) {
