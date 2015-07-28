@@ -5,6 +5,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
+	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
@@ -130,6 +131,13 @@ func init() {
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/snapshots/{SnapshotId}",
 		Resource: "server",
 		Command:  "delete-snapshot",
+	})
+
+	registerCommandBase(&group.GetReq{}, &group.Entity{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}",
+		Resource: "group",
+		Command:  "get",
 	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
