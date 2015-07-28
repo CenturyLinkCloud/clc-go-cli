@@ -151,6 +151,12 @@ func init() {
 		Resource: "group",
 		Command:  "delete",
 	})
+	registerCommandBase(&group.GetBillingReq{}, &group.GetBillingRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/billing",
+		Resource: "group",
+		Command:  "get-billing-details",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
