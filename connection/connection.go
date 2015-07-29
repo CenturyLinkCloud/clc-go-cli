@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"reflect"
 	"strings"
 
@@ -86,6 +87,24 @@ func ExtractURIParams(uri string, model interface{}) string {
 	return newURI
 }
 
+func FilterQuery(raw string) string {
+	uri, err := url.Parse(raw)
+	if err != nil {
+		return raw
+	}
+	query, err := url.ParseQuery(uri.RawQuery)
+	if err != nil {
+		return raw
+	}
+	for k, v := range query {
+		if len(v) == 1 && v[0] == "" {
+			query.Del(k)
+		}
+	}
+	uri.RawQuery = query.Encode()
+	return uri.String()
+}
+
 func (cn *connection) prepareRequest(verb string, url string, reqModel interface{}) (req *http.Request, err error) {
 	var inputData io.Reader
 	if reqModel != nil {
@@ -100,6 +119,7 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 		url = ExtractURIParams(url, reqModel)
 	}
 	url = strings.Replace(url, "{accountAlias}", cn.accountAlias, 1)
+	url = FilterQuery(url)
 	req, err = http.NewRequest(verb, url, inputData)
 	req.Header.Add("Content-Type", "application/json")
 	if err != nil {
