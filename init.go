@@ -164,6 +164,18 @@ func init() {
 		Resource: "group",
 		Command:  "update",
 	})
+	registerCommandBase(&group.GetReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/archive",
+		Resource: "group",
+		Command:  "archive",
+	})
+	registerCommandBase(&group.RestoreReq{}, &group.RestoreRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/restore",
+		Resource: "group",
+		Command:  "restore",
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
