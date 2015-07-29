@@ -158,6 +158,12 @@ func init() {
 		Resource: "group",
 		Command:  "get-billing-details",
 	})
+	registerCommandBase(&group.GetStatsReq{}, &[]group.GetStatsRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/statistics?start={Start}&end={End}&sampleInterval={SampleInterval}&type={Type}",
+		Resource: "group",
+		Command:  "get-monitoring-statistics",
+	})
 	registerCommandBase(&group.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PATCH",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}",
