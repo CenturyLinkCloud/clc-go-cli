@@ -4,6 +4,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/models"
+	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
@@ -181,6 +182,13 @@ func init() {
 		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}/deploymentCapabilities",
 		Resource: "data-center",
 		Command:  "get-deployment-capabilities",
+	})
+
+	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/accounts/{accountAlias}/customFields",
+		Resource: "custom-fields",
+		Command:  "get",
 	})
 
 	registerCustomCommand(commands.NewGroupList(commands.CommandExcInfo{
