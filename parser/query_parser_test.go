@@ -24,6 +24,9 @@ var testStruct = testStructType{
 		"FieldString": "inner string",
 		"FieldInt":    1,
 	},
+	"FieldStruct2": testStructType{
+		"FieldAnotherString": "another inner string",
+	},
 	"FieldSlice": testSliceType{
 		testStructType{
 			"FieldString": "inner slice string 1",
@@ -121,6 +124,21 @@ var testQueryCases = []testParam{
 			},
 		},
 	},
+	// Queries several inner fields.
+	{
+		input: testSlice,
+		query: "FieldStruct.FieldString,FieldStruct.FieldInt",
+		res: testSliceType{
+			testStructType{
+				"FieldString": "inner string 1",
+				"FieldInt":    1,
+			},
+			testStructType{
+				"FieldString": "inner string 2",
+				"FieldInt":    2,
+			},
+		},
+	},
 	// Queries inner slices.
 	{
 		input: testStruct,
@@ -163,6 +181,18 @@ var testQueryCases = []testParam{
 				"MyInt":    2,
 			},
 		},
+	},
+	// Does not query several params with different levels of nesting.
+	{
+		input: testStruct,
+		query: "FieldSlice.FieldString,FieldBool",
+		err:   "Queries Field.Slice.FieldString and FieldBool have different levels of nesting.",
+	},
+	// Does not query nested fields with different paths.
+	{
+		input: testStruct,
+		query: "FieldStruct.FieldString,FieldStruct2.FieldAnotherString",
+		err:   "The paths to FieldString and FieldAnotherString are different.",
 	},
 }
 
