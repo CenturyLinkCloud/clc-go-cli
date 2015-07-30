@@ -174,8 +174,14 @@ func TestQueryParser(t *testing.T) {
 		}
 		t.Logf("Executing %d test case.", i+1)
 		res, err := parser.ParseQuery(testCase.input, testCase.query)
-		if testCase.err != "" && err.Error() != testCase.err {
-			t.Errorf("Invalid error. \nExpected: %s, \nobtained %s", testCase.err, err.Error())
+		var errMsg string
+		if err == nil {
+			errMsg = ""
+		} else {
+			errMsg = err.Error()
+		}
+		if testCase.err != "" && errMsg != testCase.err {
+			t.Errorf("Invalid error. \nExpected: %s, \nobtained %s", testCase.err, errMsg)
 		}
 		if testCase.res != nil && !reflect.DeepEqual(testCase.res, res) {
 			t.Errorf("Invalid result. \nexpected %#v, \nobtained %#v", testCase.res, res)
