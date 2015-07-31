@@ -205,12 +205,12 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldSlice.{MyInt:FieldInt}.SomeField",
-		err:   "Invalid query: the alias close must end with } and no symbols are allowed to follow it.",
+		err:   "Invalid query: the alias clause must end with } and no symbols are allowed to follow it.",
 	},
 	{
 		input: testStruct,
 		query: "FieldSlice.{MyInt:FieldInt,SomeField",
-		err:   "Invalid query: the alias close must end with } and no symbols are allowed to follow it.",
+		err:   "Invalid query: the alias clause must end with } and no symbols are allowed to follow it.",
 	},
 	{
 		input: testStruct,
