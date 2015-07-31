@@ -127,7 +127,7 @@ var testQueryCases = []testParam{
 	// Queries several inner fields.
 	{
 		input: testSlice,
-		query: "FieldStruct.FieldString,FieldStruct.FieldInt",
+		query: "FieldStruct.{FieldString,FieldInt}",
 		res: testSliceType{
 			testStructType{
 				"FieldString": "inner string 1",
