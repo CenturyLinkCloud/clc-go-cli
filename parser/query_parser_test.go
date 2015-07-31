@@ -182,17 +182,26 @@ var testQueryCases = []testParam{
 			},
 		},
 	},
-	// Does not query several params with different levels of nesting.
+	// Reports if queries are invalid.
 	{
 		input: testStruct,
-		query: "FieldSlice.FieldString,FieldBool",
-		err:   "Queries Field.Slice.FieldString and FieldBool have different levels of nesting.",
+		query: "FieldSlice.{MyInt:FieldInt}.SomeField",
+		err:   "Invalid query: the alias close must end with } and no symbols are allowed to follow it.",
 	},
-	// Does not query nested fields with different paths.
 	{
 		input: testStruct,
-		query: "FieldStruct.FieldString,FieldStruct2.FieldAnotherString",
-		err:   "The paths to FieldString and FieldAnotherString are different.",
+		query: "FieldSlice.{MyInt:FieldInt,SomeField",
+		err:   "Invalid query: the alias close must end with } and no symbols are allowed to follow it.",
+	},
+	{
+		input: testStruct,
+		query: "FieldInt.{FieldString.{",
+		err:   "Invalid query: .{ was encountered more than once.",
+	},
+	{
+		input: testStruct,
+		query: "FieldSlice.{MyInt:FieldInt:}",
+		err:   "Invalid query: more than one semicolon was encountered within the alias expression.",
 	},
 }
 
