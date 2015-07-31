@@ -13,48 +13,46 @@ type testParam struct {
 	res   interface{}
 	skip  bool
 }
-type testStructType map[string]interface{}
-type testSliceType []testStructType
 
-var testStruct = testStructType{
+var testStruct = map[string]interface{}{
 	"FieldString": "some string",
-	"FieldInt":    1,
+	"FieldInt":    1.,
 	"FieldBool":   true,
-	"FieldStruct": testStructType{
+	"FieldStruct": map[string]interface{}{
 		"FieldString": "inner string",
-		"FieldInt":    1,
+		"FieldInt":    1.,
 	},
-	"FieldStruct2": testStructType{
+	"FieldStruct2": map[string]interface{}{
 		"FieldAnotherString": "another inner string",
 	},
-	"FieldSlice": testSliceType{
-		testStructType{
+	"FieldSlice": []interface{}{
+		map[string]interface{}{
 			"FieldString": "inner slice string 1",
-			"FieldInt":    1,
+			"FieldInt":    1.,
 		},
-		testStructType{
+		map[string]interface{}{
 			"FieldString": "inner slice string 2",
-			"FieldInt":    2,
+			"FieldInt":    2.,
 		},
 	},
 }
-var testSlice = testSliceType{
-	testStructType{
+var testSlice = []interface{}{
+	map[string]interface{}{
 		"FieldString": "string 1",
-		"FieldInt":    1,
+		"FieldInt":    1.,
 		"FieldBool":   true,
-		"FieldStruct": testStructType{
+		"FieldStruct": map[string]interface{}{
 			"FieldString": "inner string 1",
-			"FieldInt":    1,
+			"FieldInt":    1.,
 		},
 	},
-	testStructType{
+	map[string]interface{}{
 		"FieldString": "string 2",
-		"FieldInt":    2,
+		"FieldInt":    2.,
 		"FieldBool":   false,
-		"FieldStruct": testStructType{
+		"FieldStruct": map[string]interface{}{
 			"FieldString": "inner string 2",
-			"FieldInt":    2,
+			"FieldInt":    2.,
 		},
 	},
 }
@@ -63,7 +61,7 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldString",
-		res: testStructType{
+		res: map[string]interface{}{
 			"FieldString": "some string",
 		},
 	},
@@ -71,11 +69,11 @@ var testQueryCases = []testParam{
 	{
 		input: testSlice,
 		query: "FieldString",
-		res: testSliceType{
-			testStructType{
+		res: []interface{}{
+			map[string]interface{}{
 				"FieldString": "string 1",
 			},
-			testStructType{
+			map[string]interface{}{
 				"FieldString": "string 2",
 			},
 		},
@@ -84,16 +82,16 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldString,FieldInt",
-		res: testStructType{
+		res: map[string]interface{}{
 			"FieldString": "some string",
-			"FieldInt":    1,
+			"FieldInt":    1.,
 		},
 	},
 	// Applies a query with non-existent params.
 	{
 		input: testStruct,
 		query: "FieldString,FieldUnknown",
-		res: testStructType{
+		res: map[string]interface{}{
 			"FieldString": "some string",
 		},
 	},
@@ -107,7 +105,7 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldStruct.FieldString",
-		res: testStructType{
+		res: map[string]interface{}{
 			"FieldString": "inner string",
 		},
 	},
@@ -115,11 +113,11 @@ var testQueryCases = []testParam{
 	{
 		input: testSlice,
 		query: "FieldStruct.FieldString",
-		res: testSliceType{
-			testStructType{
+		res: []interface{}{
+			map[string]interface{}{
 				"FieldString": "inner string 1",
 			},
-			testStructType{
+			map[string]interface{}{
 				"FieldString": "inner string 2",
 			},
 		},
@@ -128,14 +126,14 @@ var testQueryCases = []testParam{
 	{
 		input: testSlice,
 		query: "FieldStruct.{FieldString,FieldInt}",
-		res: testSliceType{
-			testStructType{
+		res: []interface{}{
+			map[string]interface{}{
 				"FieldString": "inner string 1",
-				"FieldInt":    1,
+				"FieldInt":    1.,
 			},
-			testStructType{
+			map[string]interface{}{
 				"FieldString": "inner string 2",
-				"FieldInt":    2,
+				"FieldInt":    2.,
 			},
 		},
 	},
@@ -143,11 +141,11 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldSlice.FieldString",
-		res: testSliceType{
-			testStructType{
+		res: []interface{}{
+			map[string]interface{}{
 				"FieldString": "inner slice string 1",
 			},
-			testStructType{
+			map[string]interface{}{
 				"FieldString": "inner slice string 2",
 			},
 		},
@@ -156,14 +154,14 @@ var testQueryCases = []testParam{
 	{
 		input: testSlice,
 		query: "FieldStruct.{MyString:FieldString,MyInt:FieldInt}",
-		res: testSliceType{
-			testStructType{
+		res: []interface{}{
+			map[string]interface{}{
 				"MyString": "inner string 1",
-				"MyInt":    1,
+				"MyInt":    1.,
 			},
-			testStructType{
+			map[string]interface{}{
 				"MyString": "inner string 2",
-				"MyInt":    2,
+				"MyInt":    2.,
 			},
 		},
 	},
@@ -171,14 +169,14 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldSlice.{MyString:FieldString,MyInt:FieldInt}",
-		res: testSliceType{
-			testStructType{
+		res: []interface{}{
+			map[string]interface{}{
 				"MyString": "inner slice string 1",
-				"MyInt":    1,
+				"MyInt":    1.,
 			},
-			testStructType{
+			map[string]interface{}{
 				"MyString": "inner slice string 2",
-				"MyInt":    2,
+				"MyInt":    2.,
 			},
 		},
 	},
