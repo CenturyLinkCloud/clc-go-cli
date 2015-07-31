@@ -78,6 +78,14 @@ var testQueryCases = []testParam{
 			},
 		},
 	},
+	// Apply a query by slice.
+	{
+		input: testStruct,
+		query: "FieldSlice",
+		res: map[string]interface{}{
+			"FieldSlice": testStruct["FieldSlice"],
+		},
+	},
 	// Applies a query with several params.
 	{
 		input: testStruct,
