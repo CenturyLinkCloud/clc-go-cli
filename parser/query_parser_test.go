@@ -101,7 +101,7 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldUnknown,FieldYetUnknown",
-		res:   testStructType{},
+		res:   nil,
 	},
 	// Queries inner fields in structs.
 	{
