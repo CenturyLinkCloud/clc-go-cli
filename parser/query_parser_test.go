@@ -145,6 +145,19 @@ var testQueryCases = []testParam{
 			},
 		},
 	},
+	// Queries several inner fields with some of them being non-existent.
+	{
+		input: testSlice,
+		query: "FieldStruct.{FieldNonExistent,FieldString}",
+		res: []interface{}{
+			map[string]interface{}{
+				"FieldString": "inner string 1",
+			},
+			map[string]interface{}{
+				"FieldString": "inner string 2",
+			},
+		},
+	},
 	// Queries inner slices.
 	{
 		input: testStruct,
