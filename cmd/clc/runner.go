@@ -55,11 +55,17 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	config, err := config.LoadConfig()
+	conf, err := config.LoadConfig()
 	if err != nil {
 		return err.Error()
 	}
-	cn, err := auth.AuthenticateCommand(options, config)
+	if cmd.Resource() == "login" {
+		conf.User = options.User
+		conf.Password = options.Password
+		config.Save(conf)
+		return ""
+	}
+	cn, err := auth.AuthenticateCommand(options, conf)
 	if err != nil {
 		return err.Error()
 	}

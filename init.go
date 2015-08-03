@@ -220,6 +220,9 @@ func init() {
 	registerCustomCommand(commands.NewWait(commands.CommandExcInfo{
 		Resource: "wait",
 	}))
+	registerCustomCommand(commands.NewLogin(commands.CommandExcInfo{
+		Resource: "login",
+	}))
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
