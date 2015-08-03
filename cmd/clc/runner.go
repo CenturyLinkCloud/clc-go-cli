@@ -75,7 +75,18 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	output, err := f.FormatOutput(cmd.OutputModel())
+	outputModel := cmd.OutputModel()
+	if options.Query != "" {
+		queried, err := parser.ParseQuery(outputModel, options.Query)
+		if err != nil {
+			return err.Error()
+		} else if queried == nil {
+			return "No results found for the given query."
+		} else {
+			outputModel = queried
+		}
+	}
+	output, err := f.FormatOutput(outputModel)
 	if err != nil {
 		return err.Error()
 	}
