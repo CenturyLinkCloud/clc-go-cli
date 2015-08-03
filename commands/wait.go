@@ -61,3 +61,7 @@ func (w *Wait) Execute(cn base.Connection) error {
 	}
 	return nil
 }
+
+func (w *Wait) InputModel() interface{} {
+	return &inputStub{}
+}
