@@ -65,7 +65,9 @@ func run(args []string) string {
 		}
 		conf.User = options.User
 		conf.Password = options.Password
-		config.Save(conf)
+		if err = config.Save(conf); err != nil {
+			return err.Error()
+		}
 		return ""
 	}
 	cn, err := auth.AuthenticateCommand(options, conf)
