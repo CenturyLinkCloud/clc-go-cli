@@ -7,6 +7,7 @@ type Options struct {
 	User     string
 	Password string
 	Profile  string
+	Trace    bool
 	Help     bool
 }
 

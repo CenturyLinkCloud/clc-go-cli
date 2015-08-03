@@ -2,6 +2,7 @@ package options
 
 import (
 	"fmt"
+	"reflect"
 )
 
 func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
@@ -20,6 +21,13 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 		}
 		delete(parsedArgs, "Profile")
 		res.Profile = val.(string)
+	}
+	if val, ok := parsedArgs["Trace"]; ok {
+		if reflect.ValueOf(val).Kind() != reflect.Invalid {
+			return nil, fmt.Errorf("trace option must not have a value")
+		}
+		delete(parsedArgs, "Trace")
+		res.Trace = true
 	}
 	if val, ok := parsedArgs["Format"]; ok {
 		delete(parsedArgs, "Format")
