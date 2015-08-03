@@ -17,7 +17,6 @@ type credentials struct {
 }
 
 func AuthenticateCommand(opt *options.Options, conf *config.Config) (cn base.Connection, err error) {
-	logger := log.New(ioutil.Discard, "", log.LstdFlags)
 	creds := make([]credentials, 0)
 	creds = append(creds, credentials{opt.User, opt.Password, "Both --user and --password options should be specified."})
 	creds = append(creds, credentials{os.Getenv("CLC_USER"), os.Getenv("CLC_PASSWORD"), "Both CLC_USER and CLC_PASSWORD environment variables should be specified."})
@@ -33,6 +32,16 @@ func AuthenticateCommand(opt *options.Options, conf *config.Config) (cn base.Con
 		}
 	}
 	creds = append(creds, credentials{conf.User, conf.Password, "Incorrect config. Both User and Password should be specified."})
+
+	loggerDestination := ioutil.Discard
+	trace := opt.Trace
+	if !trace {
+		trace = os.Getenv("CLC_TRACE") == "true"
+	}
+	if trace {
+		loggerDestination = os.Stdout
+	}
+	logger := log.New(loggerDestination, "", log.LstdFlags)
 
 	for _, c := range creds {
 		if c.user != "" || c.password != "" {
