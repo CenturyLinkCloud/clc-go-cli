@@ -12,7 +12,7 @@ func LoadCommand(resource, command string) (base.Command, error) {
 		if cmd.Resource() == resource {
 			resourceFound = true
 		}
-		if cmd.Resource() == resource && cmd.Command() == command {
+		if cmd.Resource() == resource && (cmd.Command() == "" || cmd.Command() == command) {
 			return cmd, nil
 		}
 	}

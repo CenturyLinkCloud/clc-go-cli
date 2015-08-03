@@ -29,6 +29,9 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
+	if cmd.Command() == "" {
+		optionArgs = args[1:]
+	}
 	parsedArgs, err := parser.ParseArguments(optionArgs)
 	if err != nil {
 		return err.Error()
