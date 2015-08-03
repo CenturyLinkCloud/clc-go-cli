@@ -60,6 +60,9 @@ func run(args []string) string {
 		return err.Error()
 	}
 	if cmd.Resource() == "login" {
+		if options.User == "" || options.Password == "" {
+			return "Both --user and --password options must be specified."
+		}
 		conf.User = options.User
 		conf.Password = options.Password
 		config.Save(conf)
