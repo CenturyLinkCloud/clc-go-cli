@@ -8,10 +8,16 @@ import (
 func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 	res := &Options{}
 	if val, ok := parsedArgs["User"]; ok {
+		if _, ok := val.(string); !ok {
+			return nil, fmt.Errorf("User must be string.")
+		}
 		delete(parsedArgs, "User")
 		res.User = val.(string)
 	}
 	if val, ok := parsedArgs["Password"]; ok {
+		if _, ok := val.(string); !ok {
+			return nil, fmt.Errorf("Password must be string")
+		}
 		delete(parsedArgs, "Password")
 		res.Password = val.(string)
 	}
