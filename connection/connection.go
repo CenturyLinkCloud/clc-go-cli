@@ -114,7 +114,6 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 				return nil, err
 			}
 			inputData = bytes.NewReader(b)
-			cn.logger.Printf("Input model converted to json: %s", b)
 		}
 		url = ExtractURIParams(url, reqModel)
 	}
