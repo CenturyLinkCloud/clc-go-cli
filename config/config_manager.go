@@ -17,6 +17,20 @@ func LoadConfig() (*Config, error) {
 	return c, nil
 }
 
+func Save(c *Config) error {
+	p, err := GetPath()
+	if err != nil {
+		return err
+	}
+	file := path.Join(p, "config.yml")
+	data, err := yaml.Marshal(c)
+	if err != nil {
+		return err
+	}
+	ioutil.WriteFile(file, data, 0777)
+	return nil
+}
+
 func loadConfigInner() (*Config, error) {
 	c := &Config{}
 
