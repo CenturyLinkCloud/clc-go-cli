@@ -3,7 +3,7 @@ package options
 type Options struct {
 	Output   string
 	Filter   []FilterOption
-	Query    []string
+	Query    string
 	User     string
 	Password string
 	Profile  string
