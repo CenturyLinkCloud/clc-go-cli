@@ -14,6 +14,13 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 		delete(parsedArgs, "Password")
 		res.Password = val.(string)
 	}
+	if val, ok := parsedArgs["Profile"]; ok {
+		if _, ok := val.(string); !ok {
+			return nil, fmt.Errorf("Profile must be string.")
+		}
+		delete(parsedArgs, "Profile")
+		res.Profile = val.(string)
+	}
 	if val, ok := parsedArgs["Format"]; ok {
 		delete(parsedArgs, "Format")
 		res.Output = val.(string)
