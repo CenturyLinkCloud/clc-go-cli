@@ -15,3 +15,10 @@ type Entity struct {
 	Vlan        int64
 	Links       []models.LinkEntity
 }
+
+type IpAddress struct {
+	Address string
+	Claimed bool
+	Server  string
+	Type    string
+}
