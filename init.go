@@ -215,6 +215,12 @@ func init() {
 		Resource: "network",
 		Command:  "get",
 	})
+	registerCommandBase(&network.CreateReq{}, &network.Entity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/claim",
+		Resource: "network",
+		Command:  "create",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
