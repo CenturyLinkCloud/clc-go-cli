@@ -203,7 +203,7 @@ func init() {
 		Command:  "get-deployment-capabilities",
 	})
 
-	registerCommandBase(&network.GetReq{}, &[]network.Entity{}, commands.CommandExcInfo{
+	registerCommandBase(&network.ListReq{}, &[]network.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}",
 		Resource: "network",

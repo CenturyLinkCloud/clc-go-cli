@@ -1,5 +1,5 @@
 package network
 
-type GetReq struct {
+type ListReq struct {
 	DataCenter string `valid:"required" URIParam:"yes"`
 }
