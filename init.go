@@ -4,6 +4,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/models"
+	"github.com/centurylinkcloud/clc-go-cli/models/alert"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
@@ -238,6 +239,13 @@ func init() {
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/release",
 		Resource: "network",
 		Command:  "release",
+	})
+
+	registerCommandBase(&alert.CreateReq{}, &alert.Entity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}",
+		Resource: "alert-policy",
+		Command:  "create",
 	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
