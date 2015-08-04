@@ -143,6 +143,10 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 					if err == nil {
 						reason = string(bytes)
 					}
+				} else if errors, ok := payload["message"]; ok {
+					if errMsg, ok := errors.(string); ok {
+						reason = errMsg
+					}
 				}
 			}
 		}
