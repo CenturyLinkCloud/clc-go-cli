@@ -259,6 +259,12 @@ func init() {
 		Resource: "alert-policy",
 		Command:  "get",
 	})
+	registerCommandBase(&alert.UpdateReq{}, &alert.Entity{}, commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}/{PolicyId}",
+		Resource: "alert-policy",
+		Command:  "update",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
