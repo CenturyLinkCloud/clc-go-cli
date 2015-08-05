@@ -30,5 +30,5 @@ type Settings struct {
 type Trigger struct {
 	Metric    string
 	Duration  string
-	Threshold int64
+	Threshold float64
 }
