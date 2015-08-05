@@ -8,6 +8,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
+	"github.com/centurylinkcloud/clc-go-cli/models/firewall"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
@@ -302,6 +303,13 @@ func init() {
 		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}/{PolicyId}",
 		Resource: "anti-affinity-policy",
 		Command:  "delete",
+	})
+
+	registerCommandBase(&firewall.CreateReq{}, &firewall.CreateRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}",
+		Resource: "firewall-policy",
+		Command:  "create",
 	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
