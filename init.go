@@ -279,6 +279,12 @@ func init() {
 		Resource: "anti-affinity-policy",
 		Command:  "create",
 	})
+	registerCommandBase(nil, &affinity.ListRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}",
+		Resource: "anti-affinity-policy",
+		Command:  "list",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
