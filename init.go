@@ -247,6 +247,12 @@ func init() {
 		Resource: "alert-policy",
 		Command:  "create",
 	})
+	registerCommandBase(nil, &alert.ListRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}",
+		Resource: "alert-policy",
+		Command:  "list",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
