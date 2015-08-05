@@ -385,6 +385,12 @@ func init() {
 		Resource: "load-balancer",
 		Command:  "update",
 	})
+	registerCommandBase(&balancer.GetNodes{}, &[]balancer.Node{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}/nodes",
+		Resource: "load-balancer",
+		Command:  "get-nodes",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
