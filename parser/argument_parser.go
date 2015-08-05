@@ -49,7 +49,7 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 			if err != nil {
 				parsedArg, err = ParseObject(args[i])
 				if err != nil {
-					return nil, fmt.Errorf("%s is neither in JSON nor in a=b,c=d.. format.", args[i])
+					return nil, fmt.Errorf("%s is neither a JSON object nor an object in a=b,c=d.. format.", args[i])
 				}
 			} else {
 				NormalizeKeys(parsedArg)
