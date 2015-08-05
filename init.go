@@ -297,6 +297,12 @@ func init() {
 		Resource: "anti-affinity-policy",
 		Command:  "update",
 	})
+	registerCommandBase(&affinity.DeleteReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}/{PolicyId}",
+		Resource: "anti-affinity-policy",
+		Command:  "delete",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
