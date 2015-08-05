@@ -1,9 +1,16 @@
 package commands
 
 import (
+	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
+	"github.com/centurylinkcloud/clc-go-cli/models/server"
+	"time"
+)
+
+const (
+	ServerListTimeout = 200
 )
 
 type ServerList struct {
@@ -17,20 +24,41 @@ func NewServerList(info CommandExcInfo) *ServerList {
 }
 
 func (sl *ServerList) Execute(cn base.Connection) error {
-	var servers []models.LinkEntity
+	var links []models.LinkEntity
 
 	groups, err := GetGroups(cn)
 	if err != nil {
 		return err
 	}
 	for _, g := range groups {
-		err := extractServers(g, &servers)
+		err := extractServers(g, &links)
 		if err != nil {
 			return err
 		}
 	}
-	sl.Output = servers
-	return nil
+
+	servers := make([]server.GetRes, len(links))
+	done := make(chan error)
+	for i, link := range links {
+		go loadServer(link, servers, i, done, cn)
+	}
+
+	serversLoaded := 0
+	for {
+		select {
+		case err := <-done:
+			if err != nil {
+				return err
+			}
+			serversLoaded += 1
+			if serversLoaded == len(servers) {
+				sl.Output = servers
+				return nil
+			}
+		case <-time.After(time.Second * ServerListTimeout):
+			return fmt.Errorf("Request timeout error")
+		}
+	}
 }
 
 func extractServers(g group.Entity, servers *[]models.LinkEntity) error {
@@ -51,4 +79,16 @@ func extractServers(g group.Entity, servers *[]models.LinkEntity) error {
 		}
 	}
 	return nil
+}
+
+func loadServer(link models.LinkEntity, servers []server.GetRes, index int, done chan<- error, cn base.Connection) {
+	serverURL := fmt.Sprintf("%s%s", BaseURL, GetLink([]models.LinkEntity{link}, "server"))
+	d := server.GetRes{}
+	err := cn.ExecuteRequest("GET", serverURL, nil, &d)
+	if err != nil {
+		done <- err
+		return
+	}
+	servers[index] = d
+	done <- nil
 }
