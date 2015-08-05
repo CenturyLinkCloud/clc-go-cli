@@ -397,6 +397,12 @@ func init() {
 		Resource: "load-balancer",
 		Command:  "update-nodes",
 	})
+	registerCommandBase(&balancer.DeletePool{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}",
+		Resource: "load-balancer-pool",
+		Command:  "delete",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
