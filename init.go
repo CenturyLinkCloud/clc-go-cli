@@ -323,6 +323,12 @@ func init() {
 		Resource: "firewall-policy",
 		Command:  "get",
 	})
+	registerCommandBase(&firewall.UpdateReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
+		Resource: "firewall-policy",
+		Command:  "update",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
