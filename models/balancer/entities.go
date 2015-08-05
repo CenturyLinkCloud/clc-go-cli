@@ -4,6 +4,16 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 )
 
+type Entity struct {
+	Id          string
+	Name        string
+	Description string
+	IpAddress   string
+	Status      string
+	Pools       []Pool
+	Links       []models.LinkEntity
+}
+
 type Pool struct {
 	Id          string
 	Port        int64
