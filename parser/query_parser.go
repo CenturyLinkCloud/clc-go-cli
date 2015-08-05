@@ -87,11 +87,11 @@ func parseQueryAliases(raw string) (fields []string, aliases map[string]string, 
 			if len(m) != 2 {
 				return nil, nil, fmt.Errorf("Invalid query: more than one semicolon was encountered within the alias expression.")
 			}
-			alias, field := m[0], normalizePropertyName(m[1])
+			alias, field := m[0], m[1]
 			aliases[field] = alias
 			fields = append(fields, field)
 		} else {
-			fields = append(fields, normalizePropertyName(strings.Trim(part, "\t ")))
+			fields = append(fields, strings.Trim(part, "\t "))
 		}
 	}
 	return
@@ -118,10 +118,15 @@ func parseModelByQuery(path, fields []string, model interface{}, current, next s
 			}
 			return hash
 		} else {
-			if _, ok := hash[current]; !ok {
+			var sub interface{}
+			if val, ok := hash[current]; ok {
+				sub = val
+			} else if val, ok := hash[normalizePropertyName(current)]; ok {
+				sub = val
+			} else {
 				return nil
 			}
-			return parseModelByQuery(path, fields, hash[current], next, getNextStep(path, next), aliases)
+			return parseModelByQuery(path, fields, sub, next, getNextStep(path, next), aliases)
 		}
 	}
 	return nil
@@ -140,7 +145,7 @@ func filterFields(m map[string]interface{}, fields []string, aliases map[string]
 
 func contains(where []string, what string) bool {
 	for _, s := range where {
-		if s == what {
+		if s == what || s == normalizePropertyName(what) {
 			return true
 		}
 	}
@@ -162,7 +167,7 @@ func getNextStep(path []string, next string) string {
 func splitAndTrim(s string, sym string) []string {
 	parts := strings.Split(s, sym)
 	for i, p := range parts {
-		parts[i] = normalizePropertyName(strings.Trim(p, "\t "))
+		parts[i] = strings.Trim(p, "\t ")
 	}
 	return parts
 }
