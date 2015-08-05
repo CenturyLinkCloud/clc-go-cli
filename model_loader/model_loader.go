@@ -188,7 +188,7 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 	if parsed, err := parser.ParseObject(arg.(string)); err == nil {
 		return parsed, nil
 	}
-	return nil, fmt.Errorf("`%s` is neither in JSON nor in key=value,.. format.", arg.(string))
+	return nil, fmt.Errorf("`%s` must be object specified either in JSON or in key=value,.. format.", arg.(string))
 }
 
 // Parses an object of type []interface{} either from JSON.
@@ -203,7 +203,7 @@ func parseSlice(arg interface{}) ([]interface{}, error) {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	return nil, fmt.Errorf("`%s` is neither in JSON nor in key=value,.. format.", arg.(string))
+	return nil, fmt.Errorf("`%s` must be array specified either in JSON or in key=value,.. format.", arg.(string))
 }
 
 func getEmplySliceType(slice reflect.Value) reflect.Value {

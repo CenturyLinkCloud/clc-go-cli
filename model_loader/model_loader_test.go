@@ -1,6 +1,7 @@
 package model_loader_test
 
 import (
+	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 	"reflect"
 	"testing"
@@ -132,12 +133,19 @@ var testCases = []modelLoaderTestCase{
 			},
 		},
 	},
-	// Fails to load string into object field if it is neither JSON nor k1=v1,.. notation.
+	// Fails to load string into object field if it is neither valid JSON nor k1=v1,.. notation.
 	{
 		args: map[string]interface{}{
 			"FieldObject": `can not be parsed into object`,
 		},
-		err: "`can not be parsed into object` is neither in JSON nor in key=value,.. format.",
+		err: "`can not be parsed into object` must be object specified either in JSON or in key=value,.. format.",
+	},
+	// Fails to load a JSON object into an array field.
+	{
+		args: map[string]interface{}{
+			"FieldArray": `{"FieldString":"some string"}`,
+		},
+		err: fmt.Sprintf("`{%s:%s}` must be array specified either in JSON or in key=value,.. format.", `"FieldString"`, `"some string"`),
 	},
 	// Fails to load slices into fields of simple type.
 	{
