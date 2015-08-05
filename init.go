@@ -265,6 +265,12 @@ func init() {
 		Resource: "alert-policy",
 		Command:  "update",
 	})
+	registerCommandBase(&alert.DeleteReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}/{PolicyId}",
+		Resource: "alert-policy",
+		Command:  "delete",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
