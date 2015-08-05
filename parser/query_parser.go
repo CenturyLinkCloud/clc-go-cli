@@ -87,11 +87,11 @@ func parseQueryAliases(raw string) (fields []string, aliases map[string]string, 
 			if len(m) != 2 {
 				return nil, nil, fmt.Errorf("Invalid query: more than one semicolon was encountered within the alias expression.")
 			}
-			alias, field := m[0], m[1]
+			alias, field := m[0], normalizePropertyName(m[1])
 			aliases[field] = alias
 			fields = append(fields, field)
 		} else {
-			fields = append(fields, strings.Trim(part, "\t "))
+			fields = append(fields, normalizePropertyName(strings.Trim(part, "\t ")))
 		}
 	}
 	return
@@ -162,7 +162,7 @@ func getNextStep(path []string, next string) string {
 func splitAndTrim(s string, sym string) []string {
 	parts := strings.Split(s, sym)
 	for i, p := range parts {
-		parts[i] = strings.Trim(p, "\t ")
+		parts[i] = normalizePropertyName(strings.Trim(p, "\t "))
 	}
 	return parts
 }
