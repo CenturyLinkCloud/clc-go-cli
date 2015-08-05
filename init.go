@@ -373,6 +373,12 @@ func init() {
 		Resource: "load-balancer",
 		Command:  "get",
 	})
+	registerCommandBase(&balancer.UpdatePool{}, new(string), commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}",
+		Resource: "load-balancer-pool",
+		Command:  "update",
+	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
