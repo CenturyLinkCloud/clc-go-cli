@@ -6,6 +6,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
+	"github.com/centurylinkcloud/clc-go-cli/models/balancer"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/firewall"
@@ -334,6 +335,13 @@ func init() {
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "delete",
+	})
+
+	registerCommandBase(&balancer.CreatePool{}, &balancer.Pool{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools",
+		Resource: "load-balancer-pool",
+		Command:  "create",
 	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
