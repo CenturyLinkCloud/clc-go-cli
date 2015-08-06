@@ -7,6 +7,13 @@ import (
 
 func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 	res := &Options{}
+	if val, ok := parsedArgs["Help"]; ok {
+		if reflect.ValueOf(val).Kind() != reflect.Invalid {
+			return nil, fmt.Errorf("help option must not have a value")
+		}
+		delete(parsedArgs, "Help")
+		res.Help = true
+	}
 	if val, ok := parsedArgs["User"]; ok {
 		if _, ok := val.(string); !ok {
 			return nil, fmt.Errorf("User must be string.")
