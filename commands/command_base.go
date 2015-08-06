@@ -15,6 +15,7 @@ type CommandExcInfo struct {
 	Url      string
 	Resource string
 	Command  string
+	Help     string
 }
 
 func (c *CommandBase) Execute(cn base.Connection) error {
@@ -30,7 +31,7 @@ func (c *CommandBase) Command() string {
 }
 
 func (c *CommandBase) ShowHelp() string {
-	return ""
+	return c.ExcInfo.Help
 }
 
 func (c *CommandBase) InputModel() interface{} {
