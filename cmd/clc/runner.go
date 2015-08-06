@@ -85,6 +85,9 @@ func run(args []string) string {
 		return err.Error()
 	}
 	outputModel := cmd.OutputModel()
+	if messagePtr, ok := outputModel.(*string); ok {
+		return *messagePtr
+	}
 	if options.Query != "" {
 		queried, err := parser.ParseQuery(outputModel, options.Query)
 		if err != nil {
