@@ -18,7 +18,7 @@ func run(args []string) string {
 		return usage()
 	}
 	if len(args) == 1 && args[0] == "--help" {
-		return command_loader.GetResources()
+		return help()
 	}
 	cmdArg := ""
 	optionArgs := args[1:]
@@ -113,5 +113,11 @@ func usage() string {
 	res += "To get a list of all avaliable resources, use 'clc --help'.\n"
 	res += "To get a list of all available commands for the given resource use 'clc <resource> --help'.\n"
 	res += "To get a command description and a list of all available parameters for the given command use 'clc <resource> <command> --help'."
+	return res
+}
+
+func help() string {
+	res := "To get full usage information run clc without arguments. Available resources:\n"
+	res += command_loader.GetResources()
 	return res
 }
