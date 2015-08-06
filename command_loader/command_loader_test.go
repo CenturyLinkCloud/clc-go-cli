@@ -53,7 +53,11 @@ func init() {
 }
 
 func TestLoadExistingCommand(t *testing.T) {
-	cmd, err := command_loader.LoadCommand("resource2", "command2")
+	resource, err := command_loader.LoadResource("resource2")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	cmd, err := command_loader.LoadCommand(resource, "command2")
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -63,14 +67,18 @@ func TestLoadExistingCommand(t *testing.T) {
 }
 
 func TestResourceNotFound(t *testing.T) {
-	_, err := command_loader.LoadCommand("resource3", "")
+	_, err := command_loader.LoadResource("resource3")
 	if err == nil || err.Error() != "Resource not found: 'resource3'. Use 'clc --help' to list all available resources." {
 		t.Errorf("Incorrect error %s", err)
 	}
 }
 
 func TestCommandNotFound(t *testing.T) {
-	_, err := command_loader.LoadCommand("resource2", "")
+	resource, err := command_loader.LoadResource("resource2")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	_, err = command_loader.LoadCommand(resource, "")
 	if err == nil || err.Error() != "Command should be specified. Use 'clc resource2 --help' to list all avaliable commands." {
 		t.Errorf("Incorrect error %s", err)
 	}

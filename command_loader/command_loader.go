@@ -7,21 +7,21 @@ import (
 	"strings"
 )
 
-func LoadCommand(resource, command string) (base.Command, error) {
-	resourceFound := false
+func LoadResource(resource string) (string, error) {
 	for _, cmd := range cli.AllCommands {
 		if cmd.Resource() == resource {
-			resourceFound = true
+			return resource, nil
 		}
+	}
+	return "", fmt.Errorf("Resource not found: '%s'. Use 'clc --help' to list all available resources.", resource)
+}
+
+func LoadCommand(resource, command string) (base.Command, error) {
+	for _, cmd := range cli.AllCommands {
 		if cmd.Resource() == resource && (cmd.Command() == "" || cmd.Command() == command) {
 			return cmd, nil
 		}
 	}
-
-	if !resourceFound {
-		return nil, fmt.Errorf("Resource not found: '%s'. Use 'clc --help' to list all available resources.", resource)
-	}
-
 	if command == "" {
 		return nil, fmt.Errorf("Command should be specified. Use 'clc %s --help' to list all avaliable commands.", resource)
 	}
