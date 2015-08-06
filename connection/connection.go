@@ -160,10 +160,7 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 		return err
 	}
 	err = cn.decodeResponse(res, resModel)
-	if err != nil {
-		return err
-	}
-	return err
+	return
 }
 
 func (cn *connection) decodeResponse(res *http.Response, resModel interface{}) (err error) {
