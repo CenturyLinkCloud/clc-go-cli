@@ -26,7 +26,11 @@ func run(args []string) string {
 		cmdArg = args[1]
 		optionArgs = args[2:]
 	}
-	cmd, err := command_loader.LoadCommand(args[0], cmdArg)
+	resource, err := command_loader.LoadResource(args[0])
+	if err != nil {
+		return err.Error()
+	}
+	cmd, err := command_loader.LoadCommand(resource, cmdArg)
 	if err != nil {
 		return err.Error()
 	}
