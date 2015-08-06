@@ -106,7 +106,9 @@ func run(args []string) string {
 }
 
 func ussage() string {
-	res := "Ussage: clc <resource> <command> [options and parameters], for example 'clc server create --name my-server ...'\n"
-	res += "To get help and list all avaliable resources or commands, you can use 'clc --help' or 'clc <resource> --help' or 'clc <resource> <command> --help'\n"
+	res := "Ussage: clc <resource> <command> [options and parameters].\n"
+	res += "To get a list of all avaliable resources, use 'clc --help'.\n"
+	res += "To get a list of all available commands for the given resource use 'clc <resource> --help'.\n"
+	res += "To get a list of all available parameters for the given command use 'clc <resource> <command> --help'."
 	return res
 }
