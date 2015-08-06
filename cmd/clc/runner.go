@@ -11,8 +11,6 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"github.com/centurylinkcloud/clc-go-cli/state"
-
-	"io"
 )
 
 func run(args []string) string {
@@ -76,9 +74,6 @@ func run(args []string) string {
 	}
 	err = cmd.Execute(cn)
 	if err != nil {
-		if err == io.EOF {
-			return ""
-		}
 		return err.Error()
 	}
 	err = state.SaveLastResult(cmd.OutputModel())
