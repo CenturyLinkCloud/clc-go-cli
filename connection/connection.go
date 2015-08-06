@@ -156,8 +156,9 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 			Reason:      reason,
 		}
 	}
-	if resModel == nil {
-		return err
+	if stringPtr, ok := resModel.(*string); ok {
+		*stringPtr = fmt.Sprintf("API request completed successfully. Status code: %d.", res.StatusCode)
+		return
 	}
 	err = cn.decodeResponse(res, resModel)
 	return
