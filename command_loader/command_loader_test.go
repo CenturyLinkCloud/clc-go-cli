@@ -64,7 +64,7 @@ func TestLoadExistingCommand(t *testing.T) {
 
 func TestResourceNotFound(t *testing.T) {
 	_, err := command_loader.LoadCommand("resource3", "")
-	if err == nil || err.Error() != "Command not found: 'resource3'." {
+	if err == nil || err.Error() != "Resource not found: 'resource3'. Use 'clc --help' to list all available resources." {
 		t.Errorf("Incorrect error %s", err)
 	}
 }

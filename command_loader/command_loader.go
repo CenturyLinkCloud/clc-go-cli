@@ -19,7 +19,7 @@ func LoadCommand(resource, command string) (base.Command, error) {
 	}
 
 	if !resourceFound {
-		return nil, fmt.Errorf("Command not found: '%s'.", resource)
+		return nil, fmt.Errorf("Resource not found: '%s'. Use 'clc --help' to list all available resources.", resource)
 	}
 
 	if command == "" {
