@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 	"github.com/centurylinkcloud/clc-go-cli/config"
@@ -29,6 +30,12 @@ func run(args []string) string {
 	resource, err := command_loader.LoadResource(args[0])
 	if err != nil {
 		return err.Error()
+	}
+	if cmdArg == "--help" {
+		available := command_loader.GetCommands(resource)
+		if available != "" {
+			return fmt.Sprintf("Available commands:\n%s", available)
+		}
 	}
 	cmd, err := command_loader.LoadCommand(resource, cmdArg)
 	if err != nil {
