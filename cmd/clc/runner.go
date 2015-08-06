@@ -15,7 +15,7 @@ import (
 
 func run(args []string) string {
 	if len(args) == 0 {
-		return ussage()
+		return usage()
 	}
 	cmdArg := ""
 	optionArgs := args[1:]
@@ -105,8 +105,8 @@ func run(args []string) string {
 	return output
 }
 
-func ussage() string {
-	res := "Ussage: clc <resource> <command> [options and parameters].\n"
+func usage() string {
+	res := "Usage: clc <resource> <command> [options and parameters].\n"
 	res += "To get a list of all avaliable resources, use 'clc --help'.\n"
 	res += "To get a list of all available commands for the given resource use 'clc <resource> --help'.\n"
 	res += "To get a list of all available parameters for the given command use 'clc <resource> <command> --help'."
