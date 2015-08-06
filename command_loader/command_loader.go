@@ -25,7 +25,7 @@ func LoadCommand(resource, command string) (base.Command, error) {
 	if command == "" {
 		return nil, fmt.Errorf("Command should be specified. Use 'clc %s --help' to list all avaliable commands.", resource)
 	}
-	return nil, fmt.Errorf("Command %s %s not found. Use 'clc %s --help' to list all avaliable commands.", resource, command)
+	return nil, fmt.Errorf("Command %s %s not found. Use 'clc %s --help' to list all avaliable commands.", resource, command, resource)
 }
 
 func GetResources() string {
