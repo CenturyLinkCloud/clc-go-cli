@@ -39,3 +39,20 @@ func GetResources() string {
 	}
 	return strings.Join(resources, "\n")
 }
+
+func GetCommands(resource string) string {
+	commands := []string{}
+	m := map[string]bool{}
+	for _, cmd := range cli.AllCommands {
+		if cmd.Resource() == resource {
+			if cmd.Command() == "" {
+				return ""
+			}
+			m[cmd.Command()] = true
+		}
+	}
+	for k, _ := range m {
+		commands = append(commands, k)
+	}
+	return strings.Join(commands, "\n")
+}
