@@ -17,6 +17,9 @@ func run(args []string) string {
 	if len(args) == 0 {
 		return usage()
 	}
+	if len(args) == 1 && args[0] == "--help" {
+		return command_loader.GetResources()
+	}
 	cmdArg := ""
 	optionArgs := args[1:]
 	if len(args) >= 2 {
