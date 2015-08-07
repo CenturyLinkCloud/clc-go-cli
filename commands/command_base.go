@@ -36,7 +36,7 @@ func (c *CommandBase) ShowBrief() string {
 }
 
 func (c *CommandBase) ShowHelp() string {
-	return c.ExcInfo.Help
+	return c.ExcInfo.Brief + c.ExcInfo.Help
 }
 
 func (c *CommandBase) InputModel() interface{} {
