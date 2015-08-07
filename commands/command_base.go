@@ -15,6 +15,7 @@ type CommandExcInfo struct {
 	Url      string
 	Resource string
 	Command  string
+	Brief    string
 	Help     string
 }
 
@@ -28,6 +29,10 @@ func (c *CommandBase) Resource() string {
 
 func (c *CommandBase) Command() string {
 	return c.ExcInfo.Command
+}
+
+func (c *CommandBase) ShowBrief() string {
+	return c.ExcInfo.Brief
 }
 
 func (c *CommandBase) ShowHelp() string {

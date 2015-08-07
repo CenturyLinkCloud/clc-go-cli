@@ -24,6 +24,10 @@ func (c *command) Command() string {
 	return c.command
 }
 
+func (c *command) ShowBrief() string {
+	return ""
+}
+
 func (c *command) ShowHelp() string {
 	return ""
 }
