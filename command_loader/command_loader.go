@@ -42,17 +42,17 @@ func GetResources() string {
 
 func GetCommands(resource string) string {
 	commands := []string{}
-	m := map[string]bool{}
+	m := map[string]base.Command{}
 	for _, cmd := range cli.AllCommands {
 		if cmd.Resource() == resource {
 			if cmd.Command() == "" {
 				return ""
 			}
-			m[cmd.Command()] = true
+			m[cmd.Command()] = cmd
 		}
 	}
-	for k, _ := range m {
-		commands = append(commands, k)
+	for k, cmd := range m {
+		commands = append(commands, fmt.Sprintf("  %s  %s", k, cmd.ShowBrief()))
 	}
 	return strings.Join(commands, "\n")
 }
