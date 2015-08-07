@@ -23,6 +23,76 @@ func init() {
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}",
 		Resource: "server",
 		Command:  "create",
+		Brief:    `Creates a new server. Use this API operation when you want to create a new server from a standard or custom template, or clone an existing server.`,
+		Help: `
+
+Parameters:
+	--name
+			Name of the server to create. Alphanumeric characters and dashes only.
+			Must be between 1-8 characters depending on the length of the account alias.
+			The combination of account alias and server name here must be no more than 10 characters in length.
+			This name will be appended with a two digit number and prepended with the datacenter code
+			and account alias to make up the final server name.
+	--description
+			User-defined description of this server
+	--group-id
+			ID of the parent group.
+	--source-server-id
+			ID of the server to use a source.
+	--is-managed-os
+			Whether to create the server as managed or not. Default is false.
+			Ignored for bare metal servers.
+	--is-managed-backup
+			Whether to add managed backup to the server. Must be a managed OS server.
+			Ignored for bare metal servers.
+	--primary-dns
+			Primary DNS to set on the server. If not supplied the default value set on the account will be used.
+	--secondary-dns
+			Secondary DNS to set on the server. If not supplied the default value set on the account will be used.
+	--network-id
+			ID of the network to which to deploy the server. If not provided, a network will be chosen automatically.
+			If your account has not yet been assigned a network, leave this blank and one will be assigned automatically.
+	--ip-address
+			IP address to assign to the server. If not provided, one will be assigned automatically.
+			Ignored for bare metal servers.
+	--password
+			Password of administrator or root user on server. If not provided, one will be generated automatically.
+	--source-server-password
+			Password of the source server, used only when creating a clone from an existing server.
+			Ignored for bare metal servers.
+	--cpu
+			Number of processors to configure the server with (1-16). Ignored for bare metal servers.
+	--cpu-autoscale-policy-id
+			ID of the vertical CPU Autoscale policy to associate the server with.
+			Ignored for bare metal servers.
+	--memory-gb
+			Number of GB of memory to configure the server with (1-128).
+			Ignored for bare metal servers.
+	--type
+			Whether to create a standard, hyperscale, or bareMetal server.
+	--storage-type
+			For standard servers, whether to use standard or premium storage.
+			If not provided, will default to premium storage.
+			For hyperscale servers, storage type must be hyperscale.
+			Ignored for bare metal servers.
+	--anti-affinity-policy-id
+			For standard servers, whether to use standard or premium storage. If not provided, will default to premium storage.
+			For hyperscale servers, storage type must be hyperscale. Ignored for bare metal servers.
+	--custom-fields
+			Collection of custom field ID-value pairs to set for the server.
+	--additional-disks
+			Collection of disk parameters. Ignored for bare metal servers.
+	--ttl
+			Date/time that the server should be deleted. Ignored for bare metal servers.
+	--packages
+			Collection of packages to run on the server after it has been built. Ignored for bare metal servers.
+	--configuration-id
+			Specifies the identifier for the specific configuration type of bare metal server to deploy.
+			Ignored for standard and hyperscale servers.
+	--os-type
+			Specifies the OS to provision with the bare metal server. Currently, the only supported OS types
+			are redHat6_64Bit, centOS6_64Bit, windows2012R2Standard_64Bit.
+			Ignored for standard and hyperscale servers.`,
 	})
 	registerCommandBase(&server.DeleteReq{}, &server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "DELETE",
