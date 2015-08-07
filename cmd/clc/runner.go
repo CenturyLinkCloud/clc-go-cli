@@ -120,7 +120,7 @@ func run(args []string) string {
 }
 
 func usage() string {
-	res := "Usage: clc <resource> [<command>] [options and parameters].\n"
+	res := "Usage: clc <resource> [<command>] [options and parameters].\n\n"
 	res += "To get a list of all avaliable resources, use 'clc --help'.\n"
 	res += "To get a list of all available commands for the given resource if any or to get a direct resource description use 'clc <resource> --help'.\n"
 	res += "To get a command description and a list of all available parameters for the given command use 'clc <resource> <command> --help'."
