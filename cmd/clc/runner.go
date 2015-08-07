@@ -128,7 +128,7 @@ func usage() string {
 }
 
 func help() string {
-	res := "To get full usage information run clc without arguments. Available resources:\n"
+	res := "To get full usage information run clc without arguments.\n\nAvailable resources:\n\n"
 	res += command_loader.GetResources()
 	return res
 }

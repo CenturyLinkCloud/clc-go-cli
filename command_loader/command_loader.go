@@ -35,7 +35,7 @@ func GetResources() string {
 		m[cmd.Resource()] = true
 	}
 	for k, _ := range m {
-		resources = append(resources, k)
+		resources = append(resources, fmt.Sprintf("  %s", k))
 	}
 	return strings.Join(resources, "\n")
 }
