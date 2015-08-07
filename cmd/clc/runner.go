@@ -34,7 +34,7 @@ func run(args []string) string {
 	if cmdArg == "--help" {
 		available := command_loader.GetCommands(resource)
 		if available != "" {
-			return fmt.Sprintf("Available commands:\n%s", available)
+			return fmt.Sprintf("Available commands:\n\n%s", available)
 		}
 	}
 	cmd, err := command_loader.LoadCommand(resource, cmdArg)
