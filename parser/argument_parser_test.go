@@ -44,6 +44,11 @@ var testCases = []parserTestParam{
 		"KeyTwo":   "value2",
 		"KeyThree": "value3",
 	}},
+	// Parses nested objects with symbols `,= ` inside keys and values.
+	{input: []string{`"key"="string with , and =","key with = and ,"="=?,==,,"`}, res: map[string]interface{}{
+		"Key":              "string with , and =",
+		"Key with = and ,": "=?,==,,",
+	}},
 	// Parses keys without values.
 	{input: []string{"--some-key"}, res: map[string]interface{}{"SomeKey": nil}},
 	// Does not parse key values from JSON or key1=value1,key2=value2,.. notation.
@@ -51,6 +56,21 @@ var testCases = []parserTestParam{
 	{input: []string{"--some-key", "p1-key=10,p2-key=true,p3=',=!@=$ ,%^ &\"%<,.=\"'"}, res: map[string]interface{}{
 		"SomeKey": "p1-key=10,p2-key=true,p3=',=!@=$ ,%^ &\"%<,.=\"'",
 	}},
+	// Parses nested notations, several in a row.
+	{input: []string{"key1=value1,key2=value2", "key3=value3,key4=value4"}, res: map[string]interface{}{
+		"Key1": "value1",
+		"Key2": "value2",
+		"Key3": "value3",
+		"Key4": "value4",
+	}},
+	// Parses nested notations with empty keys.
+	{
+		input: []string{`key1="",key2=value`},
+		res: map[string]interface{}{
+			"Key1": "",
+			"Key2": "value",
+		},
+	},
 	// Parses --key element1 element2 element3.
 	{input: []string{"--some-key", "value1", "value2", `{"value1":[1,2,3]}`, "a=b"}, res: map[string]interface{}{
 		"SomeKey": []interface{}{"value1", "value2", `{"value1":[1,2,3]}`, "a=b"},
