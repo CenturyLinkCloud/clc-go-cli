@@ -53,5 +53,12 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 		}
 		res.Query = val.(string)
 	}
+	if val, ok := parsedArgs["Filter"]; ok {
+		delete(parsedArgs, "Filter")
+		if _, ok := val.(string); !ok {
+			return nil, fmt.Errorf("Filter must be string.")
+		}
+		res.Filter = val.(string)
+	}
 	return res, nil
 }
