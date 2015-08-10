@@ -32,7 +32,7 @@ var NewConnection = func(username string, password string, logger *log.Logger) (
 		logger: logger,
 	}
 	cn.logger.Printf("Creating new connection. Username: %s", username)
-	loginReq := &authentication.LoginReq{username, password}
+	loginReq := &authentication.LoginReq{Username: username, Password: password}
 	loginRes := &authentication.LoginRes{}
 	err := cn.ExecuteRequest("POST", BaseUrl+"authentication/login", loginReq, loginRes)
 	if err != nil {
