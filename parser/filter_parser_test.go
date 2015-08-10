@@ -69,12 +69,7 @@ var filterTestCases = []filterTestParam{
 	},
 	{
 		input:  filterTestStruct,
-		filter: `bool="true"`,
-		res:    filterTestStruct,
-	},
-	{
-		input:  filterTestStruct,
-		filter: `bool="false"`,
+		filter: `bool=false`,
 		res:    nil,
 	},
 	// Applies valid filters to slices.
