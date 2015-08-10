@@ -91,7 +91,7 @@ var filterTestCases = []filterTestParam{
 	{
 		input:  filterTestSlice,
 		filter: `str>z`,
-		res:    []interface{}{},
+		res:    nil,
 	},
 	{
 		input:  filterTestSlice,
