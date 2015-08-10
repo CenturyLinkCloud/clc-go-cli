@@ -2,17 +2,11 @@ package options
 
 type Options struct {
 	Output   string
-	Filter   []FilterOption
+	Filter   string
 	Query    string
 	User     string
 	Password string
 	Profile  string
 	Trace    bool
 	Help     bool
-}
-
-type FilterOption struct {
-	PropertyName string
-	Operation    string
-	Value        string
 }
