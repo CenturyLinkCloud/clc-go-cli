@@ -145,7 +145,7 @@ func filterFields(m map[string]interface{}, fields []string, aliases map[string]
 
 func contains(where []string, what string) bool {
 	for _, s := range where {
-		if s == what || s == normalizePropertyName(what) {
+		if normalizePropertyName(s) == normalizePropertyName(what) {
 			return true
 		}
 	}
