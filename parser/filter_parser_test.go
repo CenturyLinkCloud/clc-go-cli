@@ -131,85 +131,85 @@ var filterTestCases = []filterTestParam{
 	},
 	// Complains about incompatibilies between the certain operations and certain field types.
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `num~=1`,
 		err:    "Operations ~=, ^= and $= can only be used with strings.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `num^=1`,
 		err:    "Operations ~=, ^= and $= can only be used with strings.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `num$=1`,
 		err:    "Operations ~=, ^= and $= can only be used with strings.",
 	},
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `bool<=true`,
 		err:    "Operations <,>,<= and >= can not be used with booleans.",
 	},
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `bool~=true`,
 		err:    "Operations ~=, ^= and $= can only be used with strings.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `struct={}`,
 		err:    "Structs are not supported in filters.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `slice~={"key":"value"}`,
 		err:    "Slices are not supported in filters.",
 	},
 	// Applies valid filters with multiple conditions.
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `str~=string,num<5.34`,
-		res:    testSlice,
+		res:    filterTestSlice,
 	},
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `str~=str,num>1.85`,
-		res:    []interface{}{testSlice[1]},
+		res:    []interface{}{filterTestSlice[1]},
 	},
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `str$=g,bool=false`,
-		res:    []interface{}{testSlice[1]},
+		res:    []interface{}{filterTestSlice[1]},
 	},
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `str^=ano,bool=true`,
 		res:    nil,
 	},
 	// Complains about the unknown fields.
 	{
-		input:  testSlice,
+		input:  filterTestSlice,
 		filter: `str$=ing,unknown=5`,
 		err:    "Unknown: there is no such field in result.",
 	},
 	// Complains about the inappropriate values for the fields of the certain types.
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `num=abc`,
 		err:    "Invalid value for the number: abc.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `num=""`,
 		err:    "num: non-empty value required.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `bool=0`,
 		err:    "Invalid value for the boolean: 0.",
 	},
 	{
-		input:  testStruct,
+		input:  filterTestStruct,
 		filter: `bool=""`,
 		err:    "bool: non-empty value required.",
 	},
