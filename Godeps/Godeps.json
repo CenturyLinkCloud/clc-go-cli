@@ -1,0 +1,18 @@
+{
+	"ImportPath": "github.com/centurylinkcloud/clc-go-cli",
+	"GoVersion": "go1.4.2",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/asaskevich/govalidator",
+			"Comment": "v2",
+			"Rev": "5fe52de9fffecc6df9539fcfd6ac6ae6aa6fc626"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40"
+		}
+	]
+}
