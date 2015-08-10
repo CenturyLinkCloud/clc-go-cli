@@ -100,11 +100,17 @@ var curQuote rune
 var curItem []rune
 var items []string
 
+var isFilter bool
+var nextRune rune
+var prevRune rune
+var conditions []string
+
 func ParseObject(obj string) (map[string]interface{}, error) {
 	curState = startParseKey
 	curQuote = '\000'
 	curItem = []rune{}
 	items = []string{}
+	isFilter = false
 	for _, c := range obj {
 		err := curState(c)
 		if err != nil {
@@ -127,6 +133,41 @@ func ParseObject(obj string) (map[string]interface{}, error) {
 	return res, nil
 }
 
+func ParseFilterObject(obj string) (map[string]Filter, error) {
+	curState = startParseKey
+	curQuote = '\000'
+	curItem = []rune{}
+	items = []string{}
+	isFilter = true
+	conditions = []string{}
+	for i, c := range obj {
+		if i < len(obj)-1 {
+			nextRune = rune(obj[i+1])
+		}
+		if i > 0 {
+			prevRune = rune(obj[i-1])
+		}
+		err := curState(c)
+		if err != nil {
+			return nil, err
+		}
+	}
+	curState('\000')
+	if len(items) <= 1 {
+		return nil, errors.New("Invalid filter format.")
+	}
+	res := make(map[string]Filter, 0)
+	for i := 0; i < len(items); i += 2 {
+		key := items[i]
+		if i == len(items)-1 {
+			res[key] = Filter{conditions[i/2], ""}
+		} else {
+			res[key] = Filter{conditions[i/2], items[i+1]}
+		}
+	}
+	return res, nil
+}
+
 func saveCurItem() {
 	items = append(items, string(curItem))
 	curItem = []rune{}
@@ -139,7 +180,11 @@ func startParseKey(r rune) error {
 		curState = parseQuotedKey
 	default:
 		curItem = append(curItem, r)
-		curState = parseSimpleKey
+		if !isFilter {
+			curState = parseSimpleKey
+		} else {
+			curState = parseFilterKey
+		}
 	}
 	return nil
 }
@@ -147,6 +192,26 @@ func startParseKey(r rune) error {
 func parseSimpleKey(r rune) error {
 	switch r {
 	case '=':
+		curState = startParseValue
+		saveCurItem()
+	case '\000':
+		saveCurItem()
+	default:
+		curItem = append(curItem, r)
+	}
+	return nil
+}
+
+func parseFilterKey(r rune) error {
+	if strings.Contains("^$~<>", string(r)) && nextRune == '=' {
+		conditions = append(conditions, fmt.Sprintf("%s=", string(r)))
+		return nil
+	}
+	switch r {
+	case '<', '>', '=':
+		if r != '=' || !strings.Contains("^$~<>", string(prevRune)) {
+			conditions = append(conditions, string(r))
+		}
 		curState = startParseValue
 		saveCurItem()
 	case '\000':
