@@ -219,6 +219,17 @@ Parameters:
 Parameters:
 	--server-ids	List of server IDs to start maintenance mode on.`,
 	})
+	registerCommandBase(&server.MaintenanceRequest{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/stopMaintenance",
+		Resource: "server",
+		Command:  "stop-maintenance-mode",
+		Brief:    `Sends a stop maintenance mode operation to a list of servers and adds operation to queue.`,
+		Help: `
+
+Parameters:
+	--server-ids	List of server IDs to start maintenance mode on.`,
+	})
 
 	registerCommandBase(&group.GetReq{}, &group.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
