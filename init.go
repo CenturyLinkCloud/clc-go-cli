@@ -208,7 +208,7 @@ Parameters:
 		Resource: "server",
 		Command:  "delete-snapshot",
 	})
-	registerCommandBase(&server.StartMaintenance{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+	registerCommandBase(&server.MaintenanceRequest{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/startMaintenance",
 		Resource: "server",
