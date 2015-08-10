@@ -196,7 +196,7 @@ var filterTestCases = []filterTestParam{
 	{
 		input:  filterTestStruct,
 		filter: `num=""`,
-		err:    "num: non-empty value required.",
+		err:    "Non-empty value is required for the number.",
 	},
 	{
 		input:  filterTestStruct,
@@ -206,7 +206,7 @@ var filterTestCases = []filterTestParam{
 	{
 		input:  filterTestStruct,
 		filter: `bool=""`,
-		err:    "bool: non-empty value required.",
+		err:    "Non-empty value is required for the boolean.",
 	},
 }
 
