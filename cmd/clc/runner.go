@@ -112,6 +112,16 @@ func run(args []string) string {
 			outputModel = queried
 		}
 	}
+	if options.Filter != "" {
+		filtered, err := parser.ParseFilter(outputModel, options.Filter)
+		if err != nil {
+			return err.Error()
+		} else if filtered == nil {
+			return "No results found for the given filter."
+		} else {
+			outputModel = filtered
+		}
+	}
 	output, err := f.FormatOutput(outputModel)
 	if err != nil {
 		return err.Error()
