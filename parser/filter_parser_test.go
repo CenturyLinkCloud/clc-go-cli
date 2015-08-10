@@ -153,12 +153,12 @@ var filterTestCases = []filterTestParam{
 	{
 		input:  filterTestStruct,
 		filter: `struct={}`,
-		err:    "Structs are not supported in filters.",
+		err:    "Only strings, numbers and booleans are supported in filters.",
 	},
 	{
 		input:  filterTestStruct,
 		filter: `slice~={"key":"value"}`,
-		err:    "Slices are not supported in filters.",
+		err:    "Only strings, numbers and booleans are supported in filters.",
 	},
 	// Applies valid filters with multiple conditions.
 	{
