@@ -62,3 +62,29 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 	}
 	return res, nil
 }
+
+func AreToBeSaved(parsedArgs map[string]interface{}) (bool, error) {
+	if val, ok := parsedArgs["GenerateCliSkeleton"]; ok {
+		if reflect.ValueOf(val).Kind() != reflect.Invalid {
+			return false, fmt.Errorf("generate-cli-skeleton option must not have a value")
+		}
+		delete(parsedArgs, "GenerateCliSkeleton")
+		return true, nil
+	}
+	return false, nil
+}
+
+func AreToBeTakenFromFile(parsedArgs map[string]interface{}) (bool, string, error) {
+	if file, ok := parsedArgs["FromFile"]; !ok {
+		return false, "", nil
+	} else {
+		if len(parsedArgs) != 1 {
+			return false, "", fmt.Errorf("No other options are allowed to be with the from-file.")
+		}
+		if filepath, ok := file.(string); !ok {
+			return false, "", fmt.Errorf("Invalid file path: %v.", file)
+		} else {
+			return true, filepath, nil
+		}
+	}
+}

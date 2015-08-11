@@ -48,6 +48,27 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
+	yes, filename, err := options.AreToBeTakenFromFile(parsedArgs)
+	if err != nil {
+		return err.Error()
+	}
+	if yes {
+		parsedArgs, err = state.ArgumentsFromJSON(filename)
+		if err != nil {
+			return err.Error()
+		}
+	}
+	yes, err = options.AreToBeSaved(parsedArgs)
+	if err != nil {
+		return err.Error()
+	}
+	if yes {
+		output, err := state.ArgumentsToJSON(parsedArgs, cmd.InputModel())
+		if err != nil {
+			return err.Error()
+		}
+		return output
+	}
 	options, err := options.ExtractFrom(parsedArgs)
 	if err != nil {
 		return err.Error()
