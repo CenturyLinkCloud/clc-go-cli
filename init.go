@@ -230,6 +230,54 @@ Parameters:
 Parameters:
 	--server-ids	List of server IDs to start maintenance mode on.`,
 	})
+	registerCommandBase(&server.Import{}, &server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/vmImport/{accountAlias}",
+		Resource: "server",
+		Command:  "import",
+		Brief:    `Imports a new server from an uploaded OVF.`,
+		Help: `
+
+Parameters:
+	--name
+			Name of the server to create. Alphanumeric characters and dashes only.
+			Must be between 1-8 characters depending on the length of the account alias.
+			The combination of account alias and server name here must be no more than 10 characters in length.
+			This name will be appended with a two digit number and prepended with the datacenter code
+			and account alias to make up the final server name.
+	--description
+			User-defined description of this server.
+	--group-id
+			ID of the parent group.
+	--primary-dns
+			Primary DNS to set on the server. If not supplied the default value set on the account will be used.
+	--secondary-dns
+			Secondary DNS to set on the server. If not supplied the default value set on the account will be used.
+	--network-id
+			ID of the network to which to deploy the server. If not provided, a network will be chosen automatically.
+			If your account has not yet been assigned a network, leave this blank and one will be assigned automatically.
+	--root-password
+			Password of administrator or root user on server. This password must match
+			the one set on the server being imported or the import will fail.
+	--cpu
+			Number of processors to configure the server with (1-16). If this value is different from the one specified in the OVF,
+			the import process will resize the server according to the value specified here.
+	--memoryGB
+			Number of GB of memory to configure the server with (1-128). If this value is different from the one specified in the OVF,
+			the import process will resize the server according to the value specified here.
+	--type
+			Whether to create standard or hyperscale server
+	--storage-type
+			For standard servers, whether to use standard or premium storage. If not provided, will default to premium storage.
+			For hyperscale servers, storage type must be hyperscale.
+	--custom-fields
+			Collection of custom field ID-value pairs to set for the server.
+	--ovf-id
+			The identifier of the OVF that defines the server to import.
+	--ovf-os-type
+			The OS type of the server being imported. Currently, the only supported OS types
+			are redHat6_64Bit, windows2008R2DataCenter_64bit, and windows2012R2DataCenter_64Bit.`,
+	})
 
 	registerCommandBase(&group.GetReq{}, &group.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
