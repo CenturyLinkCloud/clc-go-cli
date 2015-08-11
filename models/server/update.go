@@ -11,7 +11,7 @@ type UpdateReq struct {
 
 	Cpu          int64
 	Memory       int64
-	Password     []string
+	RootPassword []string
 	CustomFields []CustomFieldDef
 	Description  string
 	GroupId      string
@@ -54,14 +54,14 @@ func (ur *UpdateReq) Validate() error {
 	if ur.Cpu < 0 || ur.Memory < 0 {
 		return fmt.Errorf("cpu and memory must be positive integers.")
 	}
-	if len(ur.Password) != 0 && len(ur.Password) != 2 {
-		return fmt.Errorf("password field must consist of 2 elements - the old password and the new one.")
+	if len(ur.RootPassword) != 0 && len(ur.RootPassword) != 2 {
+		return fmt.Errorf("root-password field must consist of 2 elements - the old password and the new one.")
 	}
 	var any int64
 	values := []int64{
 		ur.Cpu,
 		ur.Memory,
-		int64(len(ur.Password)),
+		int64(len(ur.RootPassword)),
 		int64(len(ur.CustomFields)),
 		int64(len(ur.Description)),
 		int64(len(ur.GroupId)),
@@ -72,7 +72,7 @@ func (ur *UpdateReq) Validate() error {
 		any += v
 	}
 	if any == 0 {
-		return fmt.Errorf("At least one of the cpu, memory, password, custom-fields, description, group-id, disks must be provided.")
+		return fmt.Errorf("At least one of the cpu, memory, root-password, custom-fields, description, group-id, disks must be provided.")
 	}
 	return nil
 }
@@ -94,13 +94,13 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if len(ur.Password) != 0 {
+	if len(ur.RootPassword) != 0 {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "password",
 			Value: map[string]string{
-				"current":  ur.Password[0],
-				"password": ur.Password[1],
+				"current":  ur.RootPassword[0],
+				"password": ur.RootPassword[1],
 			},
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)

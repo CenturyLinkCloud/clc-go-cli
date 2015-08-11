@@ -55,7 +55,7 @@ Parameters:
 	--ip-address
 			IP address to assign to the server. If not provided, one will be assigned automatically.
 			Ignored for bare metal servers.
-	--password
+	--root-password
 			Password of administrator or root user on server. If not provided, one will be generated automatically.
 	--source-server-password
 			Password of the source server, used only when creating a clone from an existing server.

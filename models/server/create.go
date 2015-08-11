@@ -18,7 +18,7 @@ type CreateReq struct {
 	SecondaryDns           string           `json:"omitempty"`
 	NetworkId              string           `json:"omitempty"`
 	IpAddress              string           `json:"omitempty"`
-	Password               string           `json:"omitempty"`
+	RootPassword           string           `json:"omitempty"`
 	SourceServerPassword   string           `json:"omitempty"`
 	Cpu                    int64            `valid:"required"`
 	CpuAutoscalePolicyId   string           `json:"omitempty"`
