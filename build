@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+echo -e "Generating Binary..."
+go build -o ./out/clc cmd/clc/*
+
