@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/help"
 )
 
 type CommandBase struct {
@@ -15,8 +16,7 @@ type CommandExcInfo struct {
 	Url      string
 	Resource string
 	Command  string
-	Brief    string
-	Help     string
+	Help     help.Command
 }
 
 func (c *CommandBase) Execute(cn base.Connection) error {
@@ -32,11 +32,11 @@ func (c *CommandBase) Command() string {
 }
 
 func (c *CommandBase) ShowBrief() string {
-	return c.ExcInfo.Brief
+	return c.ExcInfo.Help.Brief
 }
 
 func (c *CommandBase) ShowHelp() string {
-	return c.ExcInfo.Brief + c.ExcInfo.Help
+	return help.ForCommand(c.ExcInfo.Help)
 }
 
 func (c *CommandBase) InputModel() interface{} {
