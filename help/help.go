@@ -63,6 +63,13 @@ OPTIONS:
 			<,<=,>,>= 	comparison operators, can be used with numbers and strings
 	--trace
 			If specified, prints out all the HTTP request/response data.
+
+ENVIRONMENT VARIABLES:
+
+	CLC_USER	Specifies a user name for the account.
+	CLC_PASSWORD	Specifies the password for the given user.
+	CLC_PROFILE	Specifies a profile to use (one from the config file).
+	CLC_TRACE	If specified (any non-empty value fits), prints out all the HTTP request/response data.
 `
 
 func ForCommand(cmd Command) string {
