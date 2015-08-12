@@ -88,7 +88,7 @@ func parseQueryAliases(raw string) (fields []string, aliases map[string]string, 
 				return nil, nil, fmt.Errorf("Invalid query: more than one semicolon was encountered within the alias expression.")
 			}
 			alias, field := m[0], m[1]
-			aliases[field] = alias
+			aliases[normalizePropertyName(field)] = alias
 			fields = append(fields, field)
 		} else {
 			fields = append(fields, strings.Trim(part, "\t "))
@@ -136,7 +136,7 @@ func filterFields(m map[string]interface{}, fields []string, aliases map[string]
 	for k, v := range m {
 		if !contains(fields, k) {
 			delete(m, k)
-		} else if alias, ok := aliases[k]; ok {
+		} else if alias, ok := inAliases(aliases, k); ok {
 			delete(m, k)
 			m[alias] = v
 		}
@@ -150,6 +150,16 @@ func contains(where []string, what string) bool {
 		}
 	}
 	return false
+}
+
+func inAliases(aliases map[string]string, k string) (string, bool) {
+	if alias, ok := aliases[k]; ok {
+		return alias, true
+	}
+	if alias, ok := aliases[normalizePropertyName(k)]; ok {
+		return alias, true
+	}
+	return "", false
 }
 
 func getNextStep(path []string, next string) string {
