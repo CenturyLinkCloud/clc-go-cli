@@ -17,7 +17,7 @@ type Argument struct {
 
 var commandHelpTemplate = `{{.Brief}}
 
-Parameters:
+PARAMETERS:
 {{range .Arguments}}
 	{{.Name}}
 {{range .Description}} {{ printf "\t\t" }} {{ . }} {{ printf "\n" }} {{end}}
