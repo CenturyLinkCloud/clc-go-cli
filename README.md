@@ -22,6 +22,6 @@ The documentation of the underlying HTTP API can be found [here](https://www.ctl
 * Install dependencies with Godep: enter the repo's root and `godep restore`.
 * Use the dev script to run commands: `./dev <resource> <command>`.
 * Install go vet: `go get code.google.com/p/go.tools/cmd/vet`.
-* Before commit check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output and check that all tests pass via `./run_tests`.
+* Before commit check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it) and check that all tests pass via `./run_tests`.
 
 If you want to make an executabe, simply run `./build`. The binary will appear in the `./out` folder.
