@@ -11,6 +11,10 @@
 			"Rev": "5fe52de9fffecc6df9539fcfd6ac6ae6aa6fc626"
 		},
 		{
+			"ImportPath": "github.com/ldmberman/tablewriter",
+			"Rev": "4050aab3e19417fa16f5c57094474faf2a2ceda7"
+		},
+		{
 			"ImportPath": "gopkg.in/yaml.v2",
 			"Rev": "7ad95dd0798a40da1ccdff6dff35fd177b5edf40"
 		}
