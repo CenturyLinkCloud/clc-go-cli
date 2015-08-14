@@ -403,6 +403,29 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&server.AddNetwork{}, &models.Status{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/networks",
+		Resource: "server",
+		Command:  "add-secondary-network",
+		Help: help.Command{
+			Brief: `Adds a secondary network adapter to a given server in a given account.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server."},
+				},
+				{
+					"--network-id",
+					[]string{"ID of the network."},
+				},
+				{
+					"--ip-address",
+					[]string{"Optional IP address for the network ID."},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&group.GetReq{}, &group.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
