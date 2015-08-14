@@ -35,33 +35,40 @@ func (w *Wait) Execute(cn base.Connection) error {
 	}
 
 	var links []models.LinkEntity
-	complex := ComplexResponse{}
-	err = json.Unmarshal(bytes, &complex)
-	if err == nil && len(complex.Links) != 0 {
-		links = complex.Links
+	c := ComplexResponse{}
+	l := models.LinkEntity{}
+	status := models.Status{}
+
+	if err = json.Unmarshal(bytes, &l); err == nil && l.Href != "" {
+		links = []models.LinkEntity{l}
+	} else if err = json.Unmarshal(bytes, &c); err == nil && len(c.Links) > 0 {
+		links = c.Links
 	} else {
-		flat := models.LinkEntity{}
-		err = json.Unmarshal(bytes, &flat)
-		if err != nil {
-			return nil
-		}
-		links = []models.LinkEntity{flat}
+		json.Unmarshal(bytes, &status)
 	}
-	for _, link := range links {
-		if link.Rel == "status" {
-			sr := StatusResponse{Status: "notStarted"}
-			statusURL := fmt.Sprintf("%s%s", BaseURL, link.Href)
-			for sr.Status == "executing" || sr.Status == "resumed" || sr.Status == "notStarted" {
-				cn.ExecuteRequest("GET", statusURL, nil, &sr)
-				time.Sleep(200)
+
+	if len(links) > 0 {
+		for _, link := range links {
+			if link.Rel == "status" {
+				w.Output = ping(cn, fmt.Sprintf("%s%s", BaseURL, link.Href))
+				return nil
 			}
-			w.Output = sr
-			return nil
 		}
+	} else if status.URI != "" {
+		w.Output = ping(cn, fmt.Sprintf("%s%s", BaseURL, status.URI))
 	}
 	return nil
 }
 
 func (w *Wait) InputModel() interface{} {
 	return &inputStub{}
+}
+
+func ping(cn base.Connection, URL string) (status StatusResponse) {
+	status = StatusResponse{Status: "notStarted"}
+	for status.Status == "executing" || status.Status == "resumed" || status.Status == "notStarted" {
+		cn.ExecuteRequest("GET", URL, nil, &status)
+		time.Sleep(200)
+	}
+	return
 }
