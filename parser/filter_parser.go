@@ -94,7 +94,7 @@ func ParseFilter(input interface{}, filter string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	model, err := convertToMapOrSlice(input)
+	model, err := ConvertToMapOrSlice(input)
 	if err != nil {
 		return nil, err
 	}
