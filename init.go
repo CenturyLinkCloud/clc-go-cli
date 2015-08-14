@@ -426,6 +426,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&server.RemoveNetwork{}, &models.Status{}, commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/networks/{NetworkId}",
+		Resource: "server",
+		Command:  "remove-secondary-network",
+		Help: help.Command{
+			Brief: `Removes a secondary network adapter from a given server in a given account.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server."},
+				},
+				{
+					"--network-id",
+					[]string{"ID of the network."},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&group.GetReq{}, &group.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
