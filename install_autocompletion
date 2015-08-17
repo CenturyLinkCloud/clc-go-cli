@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir -p ~/.bash_completion
+cp ./autocomplete/bash_autocomplete ~/.bash_completion/clc
+
+source_autocompletion="source ~/.bash_completion/clc"
+if [[ $(grep -q "$source_autocompletion" ~/.bashrc) -eq 1 ]]; then
+    echo $source_autocompletion >> ~/.bashrc
+fi
+
+source ~/.bash_completion/clc
