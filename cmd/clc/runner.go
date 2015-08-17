@@ -160,6 +160,9 @@ func usage() string {
 
 func help() string {
 	res := "To get full usage information run clc without arguments.\n\nAvailable resources:\n\n"
-	res += command_loader.GetResources()
+	resources := command_loader.GetResources()
+	for _, rsr := range resources {
+		res += fmt.Sprintf("\t%v\n", rsr)
+	}
 	return res
 }

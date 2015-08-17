@@ -28,16 +28,16 @@ func LoadCommand(resource, command string) (base.Command, error) {
 	return nil, fmt.Errorf("Command %s %s not found. Use 'clc %s --help' to list all avaliable commands.", resource, command, resource)
 }
 
-func GetResources() string {
+func GetResources() []string {
 	resources := []string{}
 	m := map[string]bool{}
 	for _, cmd := range cli.AllCommands {
 		m[cmd.Resource()] = true
 	}
 	for k, _ := range m {
-		resources = append(resources, fmt.Sprintf("  %s", k))
+		resources = append(resources, k)
 	}
-	return strings.Join(resources, "\n")
+	return resources
 }
 
 func GetCommands(resource string) []string {
