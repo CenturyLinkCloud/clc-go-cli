@@ -40,19 +40,39 @@ func GetResources() string {
 	return strings.Join(resources, "\n")
 }
 
-func GetCommands(resource string) string {
+func GetCommands(resource string) []string {
 	commands := []string{}
-	m := map[string]base.Command{}
-	for _, cmd := range cli.AllCommands {
-		if cmd.Resource() == resource {
-			if cmd.Command() == "" {
-				return ""
-			}
-			m[cmd.Command()] = cmd
-		}
+	m := resourceCommandsInfo(resource)
+	if m == nil {
+		return []string{""}
+	}
+	for k := range m {
+		commands = append(commands, k)
+	}
+	return commands
+}
+
+func GetCommandsWithDescriptions(resource string) string {
+	commands := []string{}
+	m := resourceCommandsInfo(resource)
+	if m == nil {
+		return ""
 	}
 	for k, cmd := range m {
 		commands = append(commands, fmt.Sprintf("  %s  %s", k, cmd.ShowBrief()))
 	}
 	return strings.Join(commands, "\n")
+}
+
+func resourceCommandsInfo(resource string) map[string]base.Command {
+	m := map[string]base.Command{}
+	for _, cmd := range cli.AllCommands {
+		if cmd.Resource() == resource {
+			if cmd.Command() == "" {
+				return nil
+			}
+			m[cmd.Command()] = cmd
+		}
+	}
+	return m
 }

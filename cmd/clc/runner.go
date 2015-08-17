@@ -32,7 +32,7 @@ func run(args []string) string {
 		return err.Error()
 	}
 	if cmdArg == "--help" {
-		available := command_loader.GetCommands(resource)
+		available := command_loader.GetCommandsWithDescriptions(resource)
 		if available != "" {
 			return fmt.Sprintf("Available commands:\n\n%s", available)
 		}
