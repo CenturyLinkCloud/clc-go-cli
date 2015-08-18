@@ -10,3 +10,18 @@ type Options struct {
 	Trace    bool
 	Help     bool
 }
+
+func Get() []string {
+	return []string{
+		"--help",
+		"--from-file",
+		"--user",
+		"--password",
+		"--profile",
+		"--trace",
+		"--query",
+		"--filter",
+		"--output",
+		"--generate-cli-skeleton",
+	}
+}
