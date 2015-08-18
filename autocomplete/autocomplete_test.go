@@ -53,14 +53,6 @@ func TestCommandAutocomplete(t *testing.T) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", commands, opts)
 	}
 
-	args = []string{"server", "create"}
-	commands = []string{""}
-	opts = strings.Split(autocomplete.Run(args), " ")
-	sort.Strings(opts)
-	if !reflect.DeepEqual(opts, commands) {
-		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", commands, opts)
-	}
-
 	args = []string{"serv", "create"}
 	commands = []string{""}
 	opts = strings.Split(autocomplete.Run(args), " ")
