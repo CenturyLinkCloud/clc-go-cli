@@ -3,6 +3,7 @@ package autocomplete_test
 import (
 	"github.com/centurylinkcloud/clc-go-cli/autocomplete"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/options"
 	"reflect"
 	"sort"
 	"strings"
@@ -59,5 +60,84 @@ func TestCommandAutocomplete(t *testing.T) {
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, commands) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", commands, opts)
+	}
+}
+
+func TestArgumentsAutocomplete(t *testing.T) {
+	opts := options.Get()
+	r, _ := command_loader.LoadResource("server")
+	c, _ := command_loader.LoadCommand(r, "create")
+	arguments := append(c.Arguments(), opts...)
+	sort.Strings(arguments)
+
+	args := []string{"server", "create"}
+	got := strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--user", "test-user"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--cpu", "0"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--trace"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "not", "valid", "arguments"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	arguments = []string{""}
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--user"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--from-file"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--trace", "--from-file"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--cpu"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+
+	args = []string{"server", "create", "--cpu", "0", "--memoryGB"}
+	got = strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
+	if !reflect.DeepEqual(got, arguments) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 }
