@@ -44,6 +44,9 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 	}
 	if val, ok := parsedArgs["Output"]; ok {
 		delete(parsedArgs, "Output")
+		if _, ok := val.(string); !ok {
+			return nil, fmt.Errorf("The --output value must be a string.")
+		}
 		res.Output = val.(string)
 	}
 	if val, ok := parsedArgs["Query"]; ok {
