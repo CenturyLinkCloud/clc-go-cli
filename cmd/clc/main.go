@@ -11,7 +11,7 @@ func main() {
 
 	var output string
 	if len(args) >= 1 && args[len(args)-1] == "--generate-bash-completion" {
-		output = autocomplete.Run(args)
+		output = autocomplete.Run(args[:len(args)-1])
 	} else {
 		output = run(args)
 	}
