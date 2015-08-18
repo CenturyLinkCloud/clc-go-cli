@@ -32,7 +32,7 @@ OPTIONS:
 			Specifies the password for the given user.
 	--profile
 			Specifies a profile to use (one from the config file).
-	--format
+	--output
 			Specifies the output format - either 'json', 'text' or 'table'.
 			Defaults to 'json'.
 	--generate-cli-skeleton

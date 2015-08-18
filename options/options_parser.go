@@ -42,8 +42,8 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 		delete(parsedArgs, "Trace")
 		res.Trace = true
 	}
-	if val, ok := parsedArgs["Format"]; ok {
-		delete(parsedArgs, "Format")
+	if val, ok := parsedArgs["Output"]; ok {
+		delete(parsedArgs, "Output")
 		res.Output = val.(string)
 	}
 	if val, ok := parsedArgs["Query"]; ok {
