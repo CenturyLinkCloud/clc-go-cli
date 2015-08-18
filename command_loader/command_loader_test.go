@@ -24,6 +24,10 @@ func (c *command) Command() string {
 	return c.command
 }
 
+func (c *command) Arguments() []string {
+	return []string{}
+}
+
 func (c *command) ShowBrief() string {
 	return ""
 }

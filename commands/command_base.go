@@ -3,6 +3,8 @@ package commands
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/help"
+	"github.com/centurylinkcloud/clc-go-cli/parser"
+	"reflect"
 )
 
 type CommandBase struct {
@@ -29,6 +31,29 @@ func (c *CommandBase) Resource() string {
 
 func (c *CommandBase) Command() string {
 	return c.ExcInfo.Command
+}
+
+func (c *CommandBase) Arguments() []string {
+	if c.Input == nil {
+		return []string{}
+	}
+
+	metaPtr := reflect.TypeOf(c.Input)
+	if metaPtr.Kind() != reflect.Ptr {
+		return []string{}
+	}
+	meta := metaPtr.Elem()
+	if meta.Kind() != reflect.Struct {
+		return []string{}
+	}
+
+	args := []string{}
+	n := meta.NumField()
+	for i := 0; i < n; i++ {
+		f := meta.FieldByIndex([]int{i})
+		args = append(args, parser.DenormalizePropertyName(f.Name))
+	}
+	return args
 }
 
 func (c *CommandBase) ShowBrief() string {
