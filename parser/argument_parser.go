@@ -93,6 +93,27 @@ func normalizePropertyName(prName string) string {
 	return string(res)
 }
 
+func DenormalizePropertyName(name string) string {
+	denormalized := []rune{'-'}
+	for i, char := range name {
+		var prevIsUpper, nextIsUpper bool
+		r := rune(char)
+
+		if i < len(name)-1 && unicode.IsUpper(rune(name[i+1])) {
+			nextIsUpper = true
+		} else if i > 0 && unicode.IsUpper(rune(name[i-1])) {
+			prevIsUpper = true
+		}
+		if unicode.IsUpper(r) && !prevIsUpper && !nextIsUpper {
+			denormalized = append(denormalized, '-')
+			denormalized = append(denormalized, unicode.ToLower(r))
+		} else {
+			denormalized = append(denormalized, r)
+		}
+	}
+	return string(denormalized)
+}
+
 type state func(r rune) error
 
 var curState state
