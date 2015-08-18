@@ -88,7 +88,7 @@ func parseQueryAliases(raw string) (fields []string, aliases map[string]string, 
 				return nil, nil, fmt.Errorf("Invalid query: more than one semicolon was encountered within the alias expression.")
 			}
 			alias, field := m[0], m[1]
-			aliases[normalizePropertyName(field)] = alias
+			aliases[NormalizePropertyName(field)] = alias
 			fields = append(fields, field)
 		} else {
 			fields = append(fields, strings.Trim(part, "\t "))
@@ -121,7 +121,7 @@ func parseModelByQuery(path, fields []string, model interface{}, current, next s
 			var sub interface{}
 			if val, ok := hash[current]; ok {
 				sub = val
-			} else if val, ok := hash[normalizePropertyName(current)]; ok {
+			} else if val, ok := hash[NormalizePropertyName(current)]; ok {
 				sub = val
 			} else {
 				return nil
@@ -145,7 +145,7 @@ func filterFields(m map[string]interface{}, fields []string, aliases map[string]
 
 func contains(where []string, what string) bool {
 	for _, s := range where {
-		if normalizePropertyName(s) == normalizePropertyName(what) {
+		if NormalizePropertyName(s) == NormalizePropertyName(what) {
 			return true
 		}
 	}
@@ -156,7 +156,7 @@ func inAliases(aliases map[string]string, k string) (string, bool) {
 	if alias, ok := aliases[k]; ok {
 		return alias, true
 	}
-	if alias, ok := aliases[normalizePropertyName(k)]; ok {
+	if alias, ok := aliases[NormalizePropertyName(k)]; ok {
 		return alias, true
 	}
 	return "", false

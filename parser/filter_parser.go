@@ -121,7 +121,7 @@ func parseFilter(model interface{}, filter map[string]Filter) (interface{}, erro
 		for k, v := range filter {
 			key := k
 			if _, ok := m[k]; !ok {
-				key = normalizePropertyName(k)
+				key = NormalizePropertyName(k)
 				if _, ok := m[key]; !ok {
 					return nil, fmt.Errorf("%s: there is no such field in result.", key)
 				}

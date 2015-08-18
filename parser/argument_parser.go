@@ -21,7 +21,7 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 			return nil, fmt.Errorf("-- is an invalid argument.")
 		}
 		if strings.HasPrefix(args[i], "--") {
-			key = normalizePropertyName(args[i])
+			key = NormalizePropertyName(args[i])
 			if _, ok := res[key]; ok {
 				return nil, fmt.Errorf("Option '%s' is specified twice.", key)
 			}
@@ -69,7 +69,7 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 func NormalizeKeys(arg interface{}) {
 	if argObj, isObj := arg.(map[string]interface{}); isObj {
 		for k, v := range argObj {
-			n := normalizePropertyName(k)
+			n := NormalizePropertyName(k)
 			delete(argObj, k)
 			(argObj)[n] = v
 			NormalizeKeys(v)
@@ -81,7 +81,7 @@ func NormalizeKeys(arg interface{}) {
 	}
 }
 
-func normalizePropertyName(prName string) string {
+func NormalizePropertyName(prName string) string {
 	prName = strings.TrimLeft(prName, "--")
 	array := strings.Split(prName, "-")
 	res := make([]rune, 0)
@@ -144,7 +144,7 @@ func ParseObject(obj string) (map[string]interface{}, error) {
 	}
 	res := make(map[string]interface{}, 0)
 	for i := 0; i < len(items); i += 2 {
-		key := normalizePropertyName(items[i])
+		key := NormalizePropertyName(items[i])
 		if i == len(items)-1 {
 			res[key] = nil
 		} else {
