@@ -24,7 +24,8 @@ func (f *TableFormatter) FormatOutput(model interface{}) (res string, err error)
 // are, in turn, placed each in a separate table row. The rest of the values are
 // rendered as a table occupying the first row of the outer table.
 //
-// Elements that are neither maps nor slices are rendered in Go %v format.
+// Elements that are neither maps nor slices are rendered in Go %v format except for
+// the nil values: cell content for them is empty.
 //
 // Every table can either have map keys in the first row and map values in the second
 // or map keys in the first column and map values in the second. The latter is chosen
@@ -80,6 +81,9 @@ func getTable(m interface{}, depth int) (string, error) {
 		}
 		return strings.Join(values, "\n"), nil
 	} else {
+		if m == nil {
+			return "", nil
+		}
 		return fmt.Sprintf("%v", m), nil
 	}
 }
