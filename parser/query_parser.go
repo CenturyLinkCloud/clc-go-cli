@@ -10,10 +10,6 @@ import (
 // If the function returns a slice, its elements are either map[string]interface{} or []interface{} recursively.
 // Only the keys parsed from the given query string are left in the resulting maps.
 func ParseQuery(input interface{}, query string) (interface{}, error) {
-	model, err := ConvertToMapOrSlice(input)
-	if err != nil {
-		return nil, err
-	}
 	path, fields, aliases, err := parseQueryFields(query)
 	if err != nil {
 		return nil, err
@@ -24,7 +20,7 @@ func ParseQuery(input interface{}, query string) (interface{}, error) {
 	} else {
 		current = path[0]
 	}
-	return parseModelByQuery(path, fields, model, current, getNextStep(path, current), aliases), nil
+	return parseModelByQuery(path, fields, input, current, getNextStep(path, current), aliases), nil
 }
 
 func ConvertToMapOrSlice(input interface{}) (interface{}, error) {

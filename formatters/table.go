@@ -3,7 +3,6 @@ package formatters
 import (
 	"bytes"
 	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/parser"
 	table "github.com/ldmberman/tablewriter"
 	"math"
 	"sort"
@@ -13,11 +12,7 @@ import (
 type TableFormatter struct{}
 
 func (f *TableFormatter) FormatOutput(model interface{}) (res string, err error) {
-	m, err := parser.ConvertToMapOrSlice(model)
-	if err != nil {
-		return "", err
-	}
-	return getTable(m, 0)
+	return getTable(model, 0)
 }
 
 // getTable constructs a textual table representation of the input model, which

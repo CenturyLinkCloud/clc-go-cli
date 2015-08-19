@@ -123,27 +123,31 @@ func run(args []string) string {
 	if messagePtr, ok := outputModel.(*string); ok {
 		return *messagePtr
 	}
+	detyped, err := parser.ConvertToMapOrSlice(outputModel)
+	if err != nil {
+		return err.Error()
+	}
 	if options.Query != "" {
-		queried, err := parser.ParseQuery(outputModel, options.Query)
+		queried, err := parser.ParseQuery(detyped, options.Query)
 		if err != nil {
 			return err.Error()
 		} else if queried == nil {
 			return "No results found for the given query."
 		} else {
-			outputModel = queried
+			detyped = queried
 		}
 	}
 	if options.Filter != "" {
-		filtered, err := parser.ParseFilter(outputModel, options.Filter)
+		filtered, err := parser.ParseFilter(detyped, options.Filter)
 		if err != nil {
 			return err.Error()
 		} else if filtered == nil {
 			return "No results found for the given filter."
 		} else {
-			outputModel = filtered
+			detyped = filtered
 		}
 	}
-	output, err := f.FormatOutput(outputModel)
+	output, err := f.FormatOutput(detyped)
 	if err != nil {
 		return err.Error()
 	}
