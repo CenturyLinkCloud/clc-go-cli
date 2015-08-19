@@ -88,7 +88,7 @@ var testCases = []formatterProviderTestCase{
 	},
 }
 
-func FormatterProviderTest(t *testing.T) {
+func TestFormatterProvider(t *testing.T) {
 	for i, testCase := range testCases {
 		if testCase.skip {
 			t.Logf("Skipping %d test case.", i+1)
