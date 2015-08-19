@@ -127,16 +127,6 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	if options.Query != "" {
-		queried, err := parser.ParseQuery(detyped, options.Query)
-		if err != nil {
-			return err.Error()
-		} else if queried == nil {
-			return "No results found for the given query."
-		} else {
-			detyped = queried
-		}
-	}
 	if options.Filter != "" {
 		filtered, err := parser.ParseFilter(detyped, options.Filter)
 		if err != nil {
@@ -145,6 +135,16 @@ func run(args []string) string {
 			return "No results found for the given filter."
 		} else {
 			detyped = filtered
+		}
+	}
+	if options.Query != "" {
+		queried, err := parser.ParseQuery(detyped, options.Query)
+		if err != nil {
+			return err.Error()
+		} else if queried == nil {
+			return "No results found for the given query."
+		} else {
+			detyped = queried
 		}
 	}
 	output, err := f.FormatOutput(detyped)
