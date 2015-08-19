@@ -108,11 +108,11 @@ func parseModelByQuery(path, fields []string, model interface{}, current, next s
 		return result
 	} else if hash, ok := model.(map[string]interface{}); ok {
 		if next == "" {
-			filterFields(hash, fields, aliases)
-			if len(hash) == 0 {
+			result := filterFields(hash, fields, aliases)
+			if len(result) == 0 {
 				return nil
 			}
-			return hash
+			return result
 		} else {
 			var sub interface{}
 			if val, ok := hash[current]; ok {
@@ -128,15 +128,16 @@ func parseModelByQuery(path, fields []string, model interface{}, current, next s
 	return nil
 }
 
-func filterFields(m map[string]interface{}, fields []string, aliases map[string]string) {
+func filterFields(m map[string]interface{}, fields []string, aliases map[string]string) map[string]interface{} {
+	r := map[string]interface{}{}
 	for k, v := range m {
-		if !contains(fields, k) {
-			delete(m, k)
-		} else if alias, ok := inAliases(aliases, k); ok {
-			delete(m, k)
-			m[alias] = v
+		if alias, ok := inAliases(aliases, k); ok {
+			r[alias] = v
+		} else if contains(fields, k) {
+			r[k] = v
 		}
 	}
+	return r
 }
 
 func contains(where []string, what string) bool {
