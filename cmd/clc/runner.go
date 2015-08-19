@@ -115,7 +115,7 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	f, err := formatter_provider.GetOutputFormatter(options)
+	f, err := formatter_provider.GetOutputFormatter(options, conf)
 	if err != nil {
 		return err.Error()
 	}

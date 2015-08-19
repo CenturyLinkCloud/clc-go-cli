@@ -2,6 +2,7 @@ package formatter_provider_test
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/formatter_provider"
 	"github.com/centurylinkcloud/clc-go-cli/formatters"
 	"github.com/centurylinkcloud/clc-go-cli/options"
@@ -11,6 +12,7 @@ import (
 
 type formatterProviderTestCase struct {
 	opts options.Options
+	conf config.Config
 	res  base.Formatter
 	err  string
 	skip bool
@@ -48,6 +50,42 @@ var testCases = []formatterProviderTestCase{
 		},
 		err: "Unknown output 'xml'. Must be one of the following: json, table, text.",
 	},
+	// Reads values from config.
+	{
+		conf: config.Config{
+			DefaultFormat: "json",
+		},
+		res: &formatters.JsonFormatter{},
+	},
+	{
+		conf: config.Config{
+			DefaultFormat: "table",
+		},
+		res: &formatters.TableFormatter{},
+	},
+	{
+		conf: config.Config{
+			DefaultFormat: "text",
+		},
+		res: &formatters.TextFormatter{},
+	},
+	// Gives options a bigger priority.
+	{
+		conf: config.Config{
+			DefaultFormat: "table",
+		},
+		opts: options.Options{
+			Output: "json",
+		},
+		res: &formatters.JsonFormatter{},
+	},
+	// Complains about invalid data read from the config.
+	{
+		conf: config.Config{
+			DefaultFormat: "xml",
+		},
+		err: "Invalid config value for DefaultFormat: 'xml'. Must be one of the following: json, table, text.",
+	},
 }
 
 func FormatterProviderTest(t *testing.T) {
@@ -57,7 +95,7 @@ func FormatterProviderTest(t *testing.T) {
 			continue
 		}
 		t.Logf("Executing %d test case.", i+1)
-		res, err := formatter_provider.GetOutputFormatter(&testCase.opts)
+		res, err := formatter_provider.GetOutputFormatter(&testCase.opts, &testCase.conf)
 		if (err != nil || testCase.err != "") && err.Error() != testCase.err {
 			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
 		}
