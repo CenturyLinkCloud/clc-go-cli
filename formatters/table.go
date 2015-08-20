@@ -55,16 +55,16 @@ func getTable(m interface{}, depth int) (string, error) {
 			}
 		}
 		if len(nested) == 0 {
-			return innerTable(keys, values, depth, true), nil
+			return innerTable(keys, values, depth, true, false), nil
 		}
 		// outerT contains a table with non-map,non-slice values in the first
 		// row and tables with other values in the subsequent rows.
 		outerT, outerBuf := setupTable(false)
 		if len(keys) > 0 {
-			outerT.Append([]string{innerTable(keys, values, depth+1, true)})
+			outerT.Append([]string{innerTable(keys, values, depth+1, true, false)})
 		}
 		for _, k := range sortedKeys(nested) {
-			outerT.Append([]string{innerTable([]string{k}, []string{nested[k].(string)}, depth+1, false)})
+			outerT.Append([]string{innerTable([]string{k}, []string{nested[k].(string)}, depth+1, false, true)})
 		}
 		outerT.Render()
 		return outerBuf.String(), nil
@@ -110,9 +110,9 @@ func sortedKeys(m map[string]interface{}) (keys []string) {
 	return
 }
 
-func innerTable(keys, values []string, depth int, autowrap bool) string {
+func innerTable(keys, values []string, depth int, autowrap bool, vertical bool) string {
 	t, buf := setupTable(autowrap)
-	if getMinWidth(keys, values, depth) < getTerminalWidth() {
+	if vertical || getMinWidth(keys, values, depth) < getTerminalWidth() {
 		t.Append(keys)
 		t.Append(values)
 		t.Render()
