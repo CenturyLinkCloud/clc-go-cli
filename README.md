@@ -11,7 +11,7 @@ Download a binary compiled for your platform from the [releases page](https://gi
 ### Bash
 
 Starting from `2015-08-18` the release tarballs contain 2 bash files: `bash_autocomplete` and `install_autocompletion`. You can enable autocomplete for the current terminal session by simply sourcing the former. Or you can install it user-wide by
-executing the latter. In this case, the script will copy `bash_autocomple` contents into `~/.bash_autocompletion/clc` and update `~/.bashrc` with the lines sourcing this file.
+executing the latter. In this case, the script will copy `bash_autocomple` contents into `~/.bash_completion/clc` and update `~/.bashrc` with the lines sourcing this file.
 
 ## Getting Help
 
