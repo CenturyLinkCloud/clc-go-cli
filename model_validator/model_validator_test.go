@@ -10,6 +10,7 @@ type testModel struct {
 	FieldNotRequired    string
 	FieldRequired       string `valid:"required"`
 	FieldRequiredCustom string
+	Enumerable          string `oneOf:"v1,v2,v3"`
 }
 
 func (t testModel) Validate() error {
@@ -35,6 +36,7 @@ var testCases = []modelValidatorTestCase{
 		model: testModel{
 			FieldRequired:       "some string",
 			FieldRequiredCustom: "another string",
+			Enumerable:          "v1",
 		},
 		err: "",
 	},
@@ -48,6 +50,7 @@ var testCases = []modelValidatorTestCase{
 		model: testModel{
 			FieldRequired:       "some string",
 			FieldRequiredCustom: "",
+			Enumerable:          "v3",
 		},
 		err: "Field required.",
 	},
@@ -56,6 +59,22 @@ var testCases = []modelValidatorTestCase{
 			FieldRequired: "some string",
 		},
 		err: "",
+	},
+	{
+		model: testModel{
+			Enumerable:          "v2",
+			FieldRequired:       "checked",
+			FieldRequiredCustom: "checked",
+		},
+		err: "",
+	},
+	{
+		model: testModel{
+			Enumerable:          "v100",
+			FieldRequired:       "checked",
+			FieldRequiredCustom: "checked",
+		},
+		err: "Enumerable value must be one of v1, v2, v3.",
 	},
 }
 
