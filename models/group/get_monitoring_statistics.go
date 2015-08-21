@@ -48,11 +48,11 @@ type GuestDiskUsage struct {
 }
 
 func (g *GetStatsReq) Validate() error {
-	if g.Type == "Latest" {
+	if g.Type == "latest" {
 		return nil
 	}
 	if g.Start == "" || g.SampleInterval == "" {
-		return fmt.Errorf("For the types Hourly and Realtime both start and sample-interval must be set.")
+		return fmt.Errorf("For the types hourly and realtime both start and sample-interval must be set.")
 	}
 	_, err := time.Parse(timeFormat, g.Start)
 	if err != nil {
