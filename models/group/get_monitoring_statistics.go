@@ -15,7 +15,7 @@ type GetStatsReq struct {
 	Start          string `URIParam:"yes"`
 	End            string `URIParam:"yes"`
 	SampleInterval string `URIParam:"yes"`
-	Type           string `URIParam:"yes"`
+	Type           string `URIParam:"yes" oneOf:"latest,hourly,realtime"`
 }
 
 type GetStatsRes struct {
@@ -50,8 +50,6 @@ type GuestDiskUsage struct {
 func (g *GetStatsReq) Validate() error {
 	if g.Type == "Latest" {
 		return nil
-	} else if g.Type != "Hourly" && g.Type != "Realtime" {
-		return fmt.Errorf("Valid type values are Latest, Hourly and Realtime.")
 	}
 	if g.Start == "" || g.SampleInterval == "" {
 		return fmt.Errorf("For the types Hourly and Realtime both start and sample-interval must be set.")

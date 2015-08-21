@@ -23,8 +23,8 @@ type CreateReq struct {
 	Cpu                    int64            `valid:"required"`
 	CpuAutoscalePolicyId   string           `json:"omitempty"`
 	MemoryGB               int64            `valid:"required"`
-	Type                   string           `valid:"required"`
-	StorageType            string           `json:"omitempty"`
+	Type                   string           `valid:"required" oneOf:"standard,hyperscale,bareMetal"`
+	StorageType            string           `json:"omitempty" oneOf:"standard,premium,hyperscale"`
 	AntiAffinityPolicyId   string           `json:"omitempty"`
 	AntiAffinityPolicyName string           `json:"omitempty"`
 	CustomFields           []CustomFieldDef `json:"omitempty"`

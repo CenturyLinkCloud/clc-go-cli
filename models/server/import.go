@@ -10,8 +10,8 @@ type Import struct {
 	RootPassword string           `valid:"required"`
 	Cpu          int64            `valid:"required"`
 	MemoryGB     int64            `valid:"required"`
-	Type         string           `valid:"required"`
-	StorageType  string           `json:"omitempty"`
+	Type         string           `valid:"required" oneOf:"standard,hyperscale"`
+	StorageType  string           `json:"omitempty" oneOf:"standard,premium,hyperscale"`
 	CustomFields []CustomFieldDef `json:"omitempty"`
 	OvfId        string           `valid:"required"`
 	OvfOsType    string           `valid:"required"`

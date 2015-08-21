@@ -4,7 +4,7 @@ type GetRes struct {
 	Id         string
 	Name       string
 	IsRequired bool
-	Type       string
+	Type       string `oneOf:"text,checkbox,option"`
 	Options    []NameValue
 }
 

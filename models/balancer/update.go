@@ -5,5 +5,5 @@ type Update struct {
 	LoadBalancerId string `valid:"required" URIParam:"yes"`
 	Name           string `valid:"required"`
 	Description    string `valid:"required"`
-	Status         string
+	Status         string `oneOf:"enabled,disabled"`
 }
