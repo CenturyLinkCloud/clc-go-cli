@@ -3,6 +3,8 @@ package autocomplete_test
 import (
 	"github.com/centurylinkcloud/clc-go-cli/autocomplete"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/model_validator"
+	"github.com/centurylinkcloud/clc-go-cli/models/server"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"reflect"
 	"sort"
@@ -139,5 +141,14 @@ func TestArgumentsAutocomplete(t *testing.T) {
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
+	}
+}
+
+func TestEnumerablesAutocomplete(t *testing.T) {
+	args := []string{"server", "create", "--type"}
+	expected, _ := model_validator.FieldOptions(&server.CreateReq{}, "Type")
+	got := strings.Split(autocomplete.Run(args), " ")
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
 	}
 }

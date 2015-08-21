@@ -3,6 +3,7 @@ package autocomplete
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/model_validator"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
@@ -57,8 +58,13 @@ func Run(args []string) string {
 	}
 	last := args[len(args)-1]
 	if strings.HasPrefix(last, "--") {
-		if hasArg(cmd.InputModel(), parser.NormalizePropertyName(last)) {
-			// TODO autocomplete property values
+		key := parser.NormalizePropertyName(last)
+		if hasArg(cmd.InputModel(), key) {
+			// Looking for enums.
+			opts, exist := model_validator.FieldOptions(cmd.InputModel(), key)
+			if exist {
+				return strings.Join(opts, " ")
+			}
 			return ""
 		}
 	}
