@@ -43,6 +43,7 @@ func Run(args []string) string {
 	if len(arguments) == 0 {
 		return strings.Join(optionsAndArguments(cmd), " ")
 	}
+
 	parsed, err := parser.ParseArguments(arguments)
 	if err != nil {
 		return ""
@@ -51,12 +52,15 @@ func Run(args []string) string {
 	if yes || err != nil {
 		return ""
 	}
+
+	last := args[len(args)-1]
 	_, err = options.ExtractFrom(parsed)
 	if err != nil {
-		// Do not show anything if option needs a value.
+		if last == "--output" {
+			return "json table text"
+		}
 		return ""
 	}
-	last := args[len(args)-1]
 	if strings.HasPrefix(last, "--") {
 		key := parser.NormalizePropertyName(last)
 		if hasArg(cmd.InputModel(), key) {

@@ -152,3 +152,12 @@ func TestEnumerablesAutocomplete(t *testing.T) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
 	}
 }
+
+func TestOutputOptionAutocomplete(t *testing.T) {
+	args := []string{"server", "create", "--output"}
+	expected := "json table text"
+	got := autocomplete.Run(args)
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
+	}
+}
