@@ -12,7 +12,11 @@ type winsize struct {
 	Ypixel uint16
 }
 
-func getTerminalWidth() uint {
+func SetTerminalWidthFn(f func() uint) {
+	getTerminalWidth = f
+}
+
+var getTerminalWidth = func() uint {
 	ws := &winsize{}
 	retCode, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
 		uintptr(syscall.Stdin),
