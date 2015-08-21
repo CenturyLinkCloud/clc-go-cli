@@ -3,9 +3,14 @@ package autocomplete_test
 import (
 	"github.com/centurylinkcloud/clc-go-cli/autocomplete"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/model_validator"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 	"github.com/centurylinkcloud/clc-go-cli/options"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"os"
+	"path"
 	"reflect"
 	"sort"
 	"strings"
@@ -157,6 +162,47 @@ func TestOutputOptionAutocomplete(t *testing.T) {
 	args := []string{"server", "create", "--output"}
 	expected := "json table text"
 	got := autocomplete.Run(args)
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
+	}
+}
+
+func TestProfileOptionAutocomplete(t *testing.T) {
+	dir, err := ioutil.TempDir("", "")
+	config.SetConfigPathFunc(func() (string, error) {
+		return dir, nil
+	})
+	defer func() {
+		os.RemoveAll(dir)
+	}()
+
+	f, err := os.Create(path.Join(dir, "config.yml"))
+	defer f.Close()
+	if err != nil {
+		t.Error(err)
+	}
+
+	profiles := map[string]config.Profile{
+		"Default": config.Profile{
+			User:     "Vincent",
+			Password: "Vega",
+		},
+		"Empty": config.Profile{},
+		"Profile2": config.Profile{
+			User:     "Mia",
+			Password: "Wallace",
+		},
+	}
+	bytes, err := yaml.Marshal(config.Config{Profiles: profiles})
+	if err != nil {
+		t.Error(err)
+	}
+	f.Write(bytes)
+
+	args := []string{"server", "create", "--profile"}
+	expected := []string{"Default", "Empty", "Profile2"}
+	got := strings.Split(autocomplete.Run(args), " ")
+	sort.Strings(got)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
 	}

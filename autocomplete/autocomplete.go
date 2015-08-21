@@ -3,6 +3,7 @@ package autocomplete
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/model_validator"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
@@ -58,6 +59,15 @@ func Run(args []string) string {
 	if err != nil {
 		if last == "--output" {
 			return "json table text"
+		} else if last == "--profile" {
+			conf, err := config.LoadConfig()
+			if err == nil {
+				opts := []string{}
+				for k := range conf.Profiles {
+					opts = append(opts, k)
+				}
+				return strings.Join(opts, " ")
+			}
 		}
 		return ""
 	}
