@@ -52,5 +52,5 @@ func AuthenticateCommand(opt *options.Options, conf *config.Config) (cn base.Con
 		}
 	}
 
-	return nil, fmt.Errorf("No credentials provided. Use 'clc auth --help' to view list of all authentication options.")
+	return nil, fmt.Errorf("No credentials provided. Use 'clc login --help' to view list of all authentication options.")
 }

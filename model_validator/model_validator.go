@@ -9,6 +9,9 @@ import (
 )
 
 func ValidateModel(model interface{}) error {
+	if model == nil {
+		return nil
+	}
 	_, err := govalidator.ValidateStruct(model)
 	if err != nil {
 		parts := strings.Split(err.Error(), ";")
@@ -68,6 +71,9 @@ func validateEnums(model interface{}) error {
 		opts, exist := FieldOptions(model, name)
 		if exist {
 			field := v.FieldByIndex([]int{i})
+			if field.String() == "" {
+				continue
+			}
 			if !contains(opts, field.String()) {
 				return fmt.Errorf("%s value must be one of %s.", name, strings.Join(opts, ", "))
 			}

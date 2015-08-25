@@ -39,7 +39,7 @@ var testCases = []testParam{
 	},
 	{config: &config.Config{User: "user", Password: "password"}, res: &expectedResult{"user", "password"}},
 	{config: &config.Config{User: "user"}, err: "Incorrect config. Both User and Password should be specified."},
-	{err: "No credentials provided. Use 'clc auth --help' to view list of all authentication options."},
+	{err: "No credentials provided. Use 'clc login --help' to view list of all authentication options."},
 }
 
 type testParam struct {
