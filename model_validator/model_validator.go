@@ -9,6 +9,9 @@ import (
 )
 
 func ValidateModel(model interface{}) error {
+	if model == nil {
+		return nil
+	}
 	_, err := govalidator.ValidateStruct(model)
 	if err != nil {
 		parts := strings.Split(err.Error(), ";")
