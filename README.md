@@ -10,8 +10,8 @@ Download a binary compiled for your platform from the [releases page](https://gi
 
 ### Bash
 
-Starting from `2015-08-18` the release tarballs contain 2 bash files: `bash_autocomplete` and `install_autocompletion`. You can enable autocomplete for the current terminal session by simply sourcing the former. Or you can install it user-wide by
-executing the latter. In this case, the script will copy `bash_autocomple` contents into `~/.bash_completion/clc` and update `~/.bashrc` with the lines sourcing this file.
+Release tarballs for Linux/Unix/Darwin (starting from the release `2015-08-18`) contain 2 files for enabling autocomplete: `bash_autocomplete` and `install_autocompletion`. Execute `source bash_autocomplete` to turn on autocomplete for the current terminal session. `install_autocompletion` is provided for you to install autocomplete user-wide. The script, upon invoking,
+copies the `bash_autocomplete` contents into `~/.bash_completion/clc` and updates `~/.bashrc` accordingly.
 
 ### PowerShell
 
