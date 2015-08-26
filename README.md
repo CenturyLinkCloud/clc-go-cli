@@ -12,10 +12,26 @@ Download a release tarball compiled for your platform from the [releases page](h
 
 You need to be authenticated with a username and password in order to execute CLI commands. There are plenty of ways to set the credentials:
 
-1. A config (see [a Config section](#set-up-the-configuration-file) for more details).
-2. A `login` command: `clc login --user bob --password passw0rd`. This puts the passed credentials into the config.
-3. `CLC_USER` and `CLC_PASSWORD` environment variables: `CLC_USER=bob CLC_PASSWORD=passw0rd clc server list` or on Windows in PowerShell: `$env:CLC_USER="bob"; $env:CLC_PASSWORD="passw0rd"; clc.exe server list`. If specified, they take precedence over the values from the configuration file, if any.
-4. `--user` and `--password` command options: `clc server list --user bob --password passw0rd`. If specified, they take precedence over the values from the configuration file and environment variables, if any.
+1. A config (see [the Config section](#set-up-the-configuration-file) for more details).
+2. A `login` command:
+  
+  `clc login --user bob --password passw0rd`.
+  
+  This puts the passed credentials into the config.
+3. `CLC_USER` and `CLC_PASSWORD` environment variables:
+
+  `CLC_USER=bob CLC_PASSWORD=passw0rd clc server list`
+  
+  or on Windows in PowerShell:
+  
+  `$env:CLC_USER="bob"; $env:CLC_PASSWORD="passw0rd"; clc.exe server list`.
+  
+  If specified, they take precedence over the values from the configuration file, if any.
+4. `--user` and `--password` command options:
+
+  `clc server list --user bob --password passw0rd`.
+  
+  If specified, they take precedence over the values from the configuration file and environment variables, if any.
 
 ### Set up the configuration file
 
@@ -46,43 +62,63 @@ Explore the list of data centers:
 
 Find server template ids that contain the word "UBUNTU" in some data center `<data-center>`:
 
-`clc data-center get-deployment-capabilities --data-center <data-center> --query templates.name --output text | grep UBUNTU`
+```
+clc data-center get-deployment-capabilities --data-center <data-center> --query templates.name --output text | grep UBUNTU
+```
 
 Search for the root group id of the data center under consideration:
 
-`clc group list --filter location-id=<data-center> --query id --output text`
+```
+clc group list --filter location-id=<data-center> --query id --output text
+```
 
 Get the list of subgroups. Use a "SubGroup" alias for subgroups ids in the output:
 
-`clc group get --group-id <root-group-id> --query 'groups.{SubGroup:id}'`
+```
+clc group get --group-id <root-group-id> --query 'groups.{SubGroup:id}'
+```
 
 Create a server:
 
-`clc server create --name myserv --source-server-id <template-id> --group-id <group-id> --cpu 1 --memoryGB 1`
+```
+clc server create --name myserv --source-server-id <template-id> --group-id <group-id> --cpu 1 --memoryGB 1
+```
 
 Wait until the server has been created:
 
-`clc wait`
+```
+clc wait
+```
 
 Query only servers with status "active" and see the output as a table:
 
-`clc server list --filter status=active --output table`
+```
+clc server list --filter status=active --output table
+```
 
 Increase the server's CPUs count and log the HTTP request/response data:
 
-`clc server update --server-id <server_id> --cpu 2 --trace`
+```
+clc server update --server-id <server_id> --cpu 2 --trace
+```
 
 Show billing details of the servers of the group as a table:
 
-`clc group get-billing-details --group-id <group-id> --query groups.<group-id>.servers --output table`
+```
+clc group get-billing-details --group-id <group-id> --query groups.<group-id>.servers --output table
+```
 
 Make a skeleton of a command for getting groups with servers inside:
 
-`clc group list --filter 'servers-count>0' --generate-cli-skeleton > groups_with_servers.json`
+```
+clc group list --filter 'servers-count>0' --generate-cli-skeleton > groups_with_servers.json
+```
 
 Apply the skeleton:
 
-`clc group list --from-file groups_with_servers.json`
+```
+clc group list --from-file groups_with_servers.json
+```
 
 ## Autocomplete
 
