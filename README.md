@@ -13,6 +13,12 @@ Download a binary compiled for your platform from the [releases page](https://gi
 Starting from `2015-08-18` the release tarballs contain 2 bash files: `bash_autocomplete` and `install_autocompletion`. You can enable autocomplete for the current terminal session by simply sourcing the former. Or you can install it user-wide by
 executing the latter. In this case, the script will copy `bash_autocomple` contents into `~/.bash_completion/clc` and update `~/.bashrc` with the lines sourcing this file.
 
+### PowerShell
+
+Only v3 support is provided because previous versions do not support custom autocomplete handlers. PowerShell v3 is distributed as a part of Windows Management Framework 3.0, which can be downloaded [from here](http://www.microsoft.com/en-us/download/details.aspx?id=34595). You can check the version by typing `$PSVersionTable.PSVersion`.
+
+To turn on autocomplete execute `.\powershell3_autocomplete.ps1`. You can find the file in the release tarball for Windows.
+
 ## Getting Help
 
 Explore the available resources, commands, options and other useful guidance using the `--help` option:
