@@ -180,6 +180,9 @@ func ParseFilterObject(obj string) (map[string]Filter, error) {
 	res := make(map[string]Filter, 0)
 	for i := 0; i < len(items); i += 2 {
 		key := items[i]
+		if len(conditions) <= i/2 {
+			return nil, fmt.Errorf("Failed to parse the filter: enclose it in quotes")
+		}
 		if i == len(items)-1 {
 			res[key] = Filter{conditions[i/2], ""}
 		} else {
