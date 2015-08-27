@@ -5,6 +5,11 @@ import (
 	"text/template"
 )
 
+type Resource struct {
+	Name     string
+	Commands []Argument
+}
+
 type Command struct {
 	Brief     string
 	Arguments []Argument
@@ -14,6 +19,12 @@ type Argument struct {
 	Name        string
 	Description []string
 }
+
+var resourceHelpTemplate = `Available {{.Name}} commands:
+{{range .Commands}}
+	{{.Name}}
+{{range .Description}}{{ printf "\t\t" }}{{ . }}{{ printf "\n" }}{{end}}
+{{end}}`
 
 var commandHelpTemplate = `{{.Brief}}
 
@@ -79,6 +90,19 @@ func ForCommand(cmd Command) string {
 	}
 	buf := bytes.NewBuffer([]byte{})
 	err = tmpl.Execute(buf, cmd)
+	if err != nil {
+		panic(err)
+	}
+	return string(buf.Bytes())
+}
+
+func ForResource(r Resource) string {
+	tmpl, err := template.New("resource help").Parse(resourceHelpTemplate)
+	if err != nil {
+		panic(err)
+	}
+	buf := bytes.NewBuffer([]byte{})
+	err = tmpl.Execute(buf, r)
 	if err != nil {
 		panic(err)
 	}
