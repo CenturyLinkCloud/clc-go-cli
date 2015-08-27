@@ -129,9 +129,16 @@ func TestGetCommands(t *testing.T) {
 
 func TestGetCommandsWithDescriptions(t *testing.T) {
 	got := command_loader.GetCommandsWithDescriptions("resource1")
-	expected := `  command1  A testing command
-  command2  A testing command`
+	expected := `Available commands:
 
+	command1
+		A testing command
+
+
+	command2
+		A testing command
+
+`
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("\nInvalid result.\nExpected: %v\nGot: %v", expected, got)
 	}

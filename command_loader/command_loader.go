@@ -4,7 +4,8 @@ import (
 	"fmt"
 	cli "github.com/centurylinkcloud/clc-go-cli"
 	"github.com/centurylinkcloud/clc-go-cli/base"
-	"strings"
+	"github.com/centurylinkcloud/clc-go-cli/help"
+	"sort"
 )
 
 func LoadResource(resource string) (string, error) {
@@ -53,15 +54,26 @@ func GetCommands(resource string) []string {
 }
 
 func GetCommandsWithDescriptions(resource string) string {
-	commands := []string{}
+	commands := []help.Argument{}
 	m := resourceCommandsInfo(resource)
 	if m == nil {
 		return ""
 	}
-	for k, cmd := range m {
-		commands = append(commands, fmt.Sprintf("  %s  %s", k, cmd.ShowBrief()))
+	sortedKeys := []string{}
+	for k := range m {
+		sortedKeys = append(sortedKeys, k)
 	}
-	return strings.Join(commands, "\n")
+	sort.Strings(sortedKeys)
+	for _, k := range sortedKeys {
+		commands = append(commands, help.Argument{
+			Name:        k,
+			Description: []string{m[k].ShowBrief()},
+		})
+	}
+	return help.ForResource(help.Resource{
+		Name:     resource,
+		Commands: commands,
+	})
 }
 
 func resourceCommandsInfo(resource string) map[string]base.Command {
