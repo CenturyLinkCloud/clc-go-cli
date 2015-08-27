@@ -3,7 +3,6 @@ package config_test
 import (
 	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/config"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"path"
@@ -94,12 +93,9 @@ func TestInvalidConfigContent(t *testing.T) {
 
 func TestCorrectConfigContent(t *testing.T) {
 	c := &config.Config{User: "user", Password: "password", Profiles: map[string]config.Profile{}}
-	content, err := yaml.Marshal(c)
-	if err != nil {
-		t.Error(err)
-	}
-	initTest("", content, nil)
+	initTest("", nil, nil)
 	defer finishTest()
+	config.Save(c)
 	c1, err := config.LoadConfig()
 	if err != nil {
 		t.Error(err)
