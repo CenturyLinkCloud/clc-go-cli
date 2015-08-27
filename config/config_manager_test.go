@@ -39,7 +39,7 @@ func initTest(confPath string, content []byte, err error) {
 				return "", err
 			}
 		}
-		return configDir, err
+		return configDir, nil
 	})
 }
 
