@@ -22,9 +22,11 @@ func initTest(confPath string, content []byte, err error) {
 		if err != nil {
 			return "", err
 		}
-		configDir, err = ioutil.TempDir(os.TempDir(), "")
-		if err != nil {
-			return "", err
+		if configDir == "" {
+			configDir, err = ioutil.TempDir(os.TempDir(), "")
+			if err != nil {
+				return "", err
+			}
 		}
 		configPath = path.Join(configDir, "config.yml")
 		if content != nil {
@@ -44,6 +46,7 @@ func initTest(confPath string, content []byte, err error) {
 
 func finishTest() {
 	os.RemoveAll(configDir)
+	configDir = ""
 }
 
 func TestCreateNewConfig(t *testing.T) {
