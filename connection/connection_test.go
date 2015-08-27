@@ -128,3 +128,32 @@ func TestExtractURIParams(t *testing.T) {
 		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
 	}
 }
+
+func TestFilterQuery(t *testing.T) {
+	cases := [][]string{
+		{
+			"http://some-url/?",
+			"http://some-url/",
+		},
+		{
+			"http://some-url?param1=",
+			"http://some-url",
+		},
+		{
+			"http://some-url?param1=1&",
+			"http://some-url?param1=1",
+		},
+		{
+			"http://some-url?param1=&param2=&param3=5",
+			"http://some-url?param3=5",
+		},
+	}
+
+	for _, testCase := range cases {
+		raw, expected := testCase[0], testCase[1]
+		got := connection.FilterQuery(raw)
+		if got != expected {
+			t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
+		}
+	}
+}
