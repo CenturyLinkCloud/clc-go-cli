@@ -62,15 +62,14 @@ func (cn *connection) ExecuteRequest(verb string, url string, reqModel interface
 }
 
 func ExtractURIParams(uri string, model interface{}) string {
-	meta := reflect.TypeOf(model)
-	var value reflect.Value
-	if meta.Kind() == reflect.Ptr {
-		meta = meta.Elem()
-		value = reflect.ValueOf(model).Elem()
+	value := reflect.ValueOf(model)
+	if value.Kind() == reflect.Ptr {
+		value = value.Elem()
 	}
-	if meta.Kind() != reflect.Struct {
+	if value.Kind() != reflect.Struct {
 		panic("ExtractURIParams was called with the model not being a struct.")
 	}
+	meta := value.Type()
 
 	var newURI = uri
 	for i := 0; i < meta.NumField(); i++ {
