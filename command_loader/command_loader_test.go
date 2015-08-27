@@ -129,7 +129,7 @@ func TestGetCommands(t *testing.T) {
 
 func TestGetCommandsWithDescriptions(t *testing.T) {
 	got := command_loader.GetCommandsWithDescriptions("resource1")
-	expected := `Available commands:
+	expected := `Available resource1 commands:
 
 	command1
 		A testing command
