@@ -746,48 +746,205 @@ func init() {
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}",
 		Resource: "group",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets the details for a individual server group and any sub-groups and servers that it contains."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group being queried."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.CreateReq{}, &group.Entity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}",
 		Resource: "group",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a new group."},
+			Arguments: []help.Argument{
+				{
+					"--name",
+					[]string{"Name of the group to create."},
+				},
+				{
+					"--description",
+					[]string{"User-defined description of this group."},
+				},
+				{
+					"--parent-group-id",
+					[]string{"ID of the parent group."},
+				},
+				{
+					"--custom-fields",
+					[]string{"Collection of custom field ID-value pairs to set for the server."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.DeleteReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}",
 		Resource: "group",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Sends the delete operation to a given group and adds operation to queue."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group to be deleted."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.GetBillingReq{}, &group.GetBillingRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/billing",
 		Resource: "group",
 		Command:  "get-billing-details",
+		Help: help.Command{
+			Brief: []string{"Gets the current and estimated charges for each server in a designated group hierarchy."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group being queried."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.GetStatsReq{}, &[]group.GetStatsRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/statistics?start={Start}&end={End}&sampleInterval={SampleInterval}&type={Type}",
 		Resource: "group",
 		Command:  "get-monitoring-statistics",
+		Help: help.Command{
+			Brief: []string{
+				"Gets the resource consumption details for whatever window specified in the request.",
+				"Data can be retrieved for a variety of time windows and intervals.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group being queried."},
+				},
+				{
+					"--type",
+					[]string{
+						"Valid values are latest, hourly, or realtime.",
+						"",
+						"'latest' will return a single data point that reflects the last monitoring data collected.",
+						"No start, end, or sampleInterval values are required for this type.",
+						"",
+						"'hourly' returns data points for each sampleInterval value between the start and end times provided.",
+						"The start and sampleInterval parameters are both required for this type.",
+						"",
+						"'realtime' will return data from the last 4 hours, available in smaller increments.",
+						"To use realtime type, start parameter must be within the last 4 hours.",
+						"The start and sampleInterval parameters are both required for this type.",
+					},
+				},
+				{
+					"--start",
+					[]string{
+						"DateTime (UTC) of the query window. Note that statistics are only held for 14 days.",
+						"Start date (and optional end date) must be within the past 14 days.",
+						"Value is not required if choosing the latest query type.",
+					},
+				},
+				{
+					"--end",
+					[]string{
+						"DateTime (UTC) of the query window. Default is the current time in UTC.",
+						"End date (and start date) must be within the past 14 days.",
+						"Not a required value if results should be up to the current time.",
+					},
+				},
+				{
+					"--sample-interval",
+					[]string{
+						"Result interval. For the default hourly type, the minimum value is 1 hour (01:00:00)",
+						"and maximum is the full window size of 14 days. Note that interval must fit within start/end window,",
+						"or you will get an exception that states: 'The 'end' parameter must represent a time that occurs at least one 'sampleInterval' before 'start.'",
+						"If realtime type is specified, interval can be as small as 5 minutes (05:00).",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PATCH",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}",
 		Resource: "group",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Changes the custom fields, name, description and parent group of the given group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group being updated."},
+				},
+				{
+					"--custom-fields",
+					[]string{
+						"A list of id-value pairs for all custom fields including all required values and other custom field",
+						"values that you wish to set.",
+						"",
+						"Note: You must specify the complete list of custom field values",
+						"to set on the group. If you want to change only one value,",
+						"specify all existing field values along with the new value for the field you wish to change.",
+						"To unset the value for an unrequired field, you may leave the field id-value pairing out,",
+						"however all required fields must be included",
+					},
+				},
+				{
+					"--name",
+					[]string{"The name to set for the group."},
+				},
+				{
+					"--description",
+					[]string{"The description to set for the group."},
+				},
+				{
+					"--parent-group-id",
+					[]string{"The group identifier for the new parent group."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.GetReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/archive",
 		Resource: "group",
 		Command:  "archive",
+		Help: help.Command{
+			Brief: []string{"Sends the archive operation to a group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group to archive."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&group.RestoreReq{}, &group.RestoreRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/restore",
 		Resource: "group",
 		Command:  "restore",
+		Help: help.Command{
+			Brief: []string{"Sends the restore operation to an archived group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"ID of the group to restore."},
+				},
+				{
+					"--target-group-id",
+					[]string{"The unique identifier of the target group to restore the group to."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
