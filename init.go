@@ -173,114 +173,397 @@ func init() {
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
 		Resource: "server",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: `Sends the delete operation to a given server and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server to be deleted."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.UpdateReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "PATCH",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
 		Resource: "server",
 		Command:  "update",
+		Help: help.Command{
+			Brief: `Changes the amount of CPU cores, memory (in GB), server credentials, custom fields, description, disks and server's group.`,
+			Arguments: []help.Argument{
+				{
+					"--cpu",
+					[]string{"The amount of CPU cores to set for the given server."},
+				},
+				{
+					"--memory",
+					[]string{"The amount of memory (in GB) to set for the given server."},
+				},
+				{
+					"--root-password",
+					[]string{
+						"The current and new administrator/root password values.",
+						"Has to be an object with 2 fields:",
+						"1) current: the current administrator/root password used to login;",
+						"2) password: the new administrator/root password to change to.",
+					},
+				},
+				{
+					"--custom-fields",
+					[]string{
+						"A list of id-value pairs for all custom fields including all required values",
+						"and other custom field values that you wish to set.",
+						"",
+						"Note: You must specify the complete list of custom field values to set on the server.",
+						"If you want to change only one value, specify all existing field values",
+						"along with the new value for the field you wish to change.",
+						"To unset the value for an unrequired field, you may leave the field id-value pairing out,",
+						"however all required fields must be included.",
+					},
+				},
+				{
+					"--description",
+					[]string{"The description of the server to set"},
+				},
+				{
+					"--group-id",
+					[]string{"The unique identifier of the group to set as the parent."},
+				},
+				{
+					"--disks",
+					[]string{
+						"A list of information for all disks to be on the server including type (raw or partition), size, and path",
+						"",
+						"Note: You must specify the complete list of disks to be on the server.",
+						"If you want to add or resize a disk, specify all existing disks/sizes",
+						"along with a new entry for the disk to add or the new size of an existing disk.",
+						"To delete a disk, just specify all the disks that should remain.",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.GetReq{}, &server.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}",
 		Resource: "server",
 		Command:  "get",
+		Help: help.Command{
+			Brief: `Gets the details for a individual server.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server being queried."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.GetCredentialsReq{}, &server.GetCredentialsRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/credentials",
 		Resource: "server",
 		Command:  "get-credentials",
+		Help: help.Command{
+			Brief: `Retrieves the administrator/root password on an existing server.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server with the credentials to return."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.GetImportsReq{}, &server.GetImportsRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/vmImport/{accountAlias}/{LocationId}/available",
 		Resource: "server",
 		Command:  "get-imports",
+		Help: help.Command{
+			Brief: `Gets the list of available servers that can be imported.`,
+			Arguments: []help.Argument{
+				{
+					"--location-id",
+					[]string{"Data center location identifier."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.GetIPAddressReq{}, &server.GetIPAddressRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
 		Resource: "server",
 		Command:  "get-public-ip-address",
+		Help: help.Command{
+			Brief: `Gets the details for the public IP address of a server, including the specific set of protocols and ports allowed and any source IP restrictions.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server being queried."},
+				},
+				{
+					"--public-ip",
+					[]string{"The specific public IP to return details about."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.AddIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses",
 		Resource: "server",
 		Command:  "add-public-ip-address",
+		Help: help.Command{
+			Brief: `Claims a public IP address and associates it with a server, allowing access to it on a given set of protocols and ports. It may also be set to restrict access based on a source IP range.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server being queried."},
+				},
+				{
+					"--internal-ip-address",
+					[]string{
+						"The internal (private) IP address to map to the new public IP address.",
+						"If not provided, one will be assigned for you.",
+					},
+				},
+				{
+					"--ports",
+					[]string{
+						"The set of ports and protocols to allow access to for the new public IP address.",
+						"Only these specified ports on the respective protocols will be accessible",
+						"when accessing the server using the public IP address claimed here.",
+						"Has to be a list of objects with fields port, portTo and protocol.",
+					},
+				},
+				{
+					"--source-restrictions",
+					[]string{
+						"A list of the source IP address ranges allowed to access the new public IP address.",
+						"Used to restrict access to only the specified ranges of source IPs.",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.RemoveIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
 		Resource: "server",
 		Command:  "remove-public-ip-address",
+		Help: help.Command{
+			Brief: `Releases the given public IP address of a server so that it is no longer associated with the server and available to be claimed again by another server.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server being queried."},
+				},
+				{
+					"--public-ip",
+					[]string{"The specific public IP to remove."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.UpdateIPAddressReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/publicIPAddresses/{PublicIp}",
 		Resource: "server",
 		Command:  "update-public-ip-address",
+		Help: help.Command{
+			Brief: `Updates a public IP address on an existing server, allowing access to it on a given set of protocols and ports as well as restricting access based on a source IP range.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server being queried."},
+				},
+				{
+					"--public-ip",
+					[]string{"The specific public IP to update."},
+				},
+				{
+					"--ports",
+					[]string{
+						"The set of ports and protocols to allow access to for the public IP address.",
+						"Only these specified ports on the respective protocols will be accessible",
+						"when accessing the server using the public IP address claimed here.",
+						"Has to be a list of objects with fields port, portTo and protocol.",
+					},
+				},
+				{
+					"--source-restrictions",
+					[]string{
+						"A list of the source IP address ranges allowed to access the public IP address.",
+						"Used to restrict access to only the specified ranges of source IPs.",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/powerOn",
 		Resource: "server",
 		Command:  "power-on",
+		Help: help.Command{
+			Brief: `Sends the power on operation to a list of servers and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server IDs to perform power on operation on."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/powerOff",
 		Resource: "server",
 		Command:  "power-off",
+		Help: help.Command{
+			Brief: `Sends the power off operation to a list of servers and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server IDs to perform power off operation on."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/pause",
 		Resource: "server",
 		Command:  "pause",
+		Help: help.Command{
+			Brief: `Sends the pause operation to a list of servers and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server IDs to perform pause operation on."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/reset",
 		Resource: "server",
 		Command:  "reset",
+		Help: help.Command{
+			Brief: `Sends the reset operation to a list of servers and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server IDs to perform reset operation on."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/shutDown",
 		Resource: "server",
 		Command:  "shut-down",
+		Help: help.Command{
+			Brief: `Sends the shut-down operation to a list of servers and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server IDs to perform shut-down operation on."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/archive",
 		Resource: "server",
 		Command:  "archive",
+		Help: help.Command{
+			Brief: `Sends the archive operation to a list of servers and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server IDs to perform archive operation on."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.RestoreReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/restore",
 		Resource: "server",
 		Command:  "restore",
+		Help: help.Command{
+			Brief: `Restores a given archived server to a specified group.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the archived server to restore."},
+				},
+				{
+					"--target-group-id",
+					[]string{"The unique identifier of the target group to restore the server to."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.CreateSnapshotReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/createSnapshot",
 		Resource: "server",
 		Command:  "create-snapshot",
+		Help: help.Command{
+			Brief: `Sends the create snapshot operation to a list of servers (along with the number of days to keep the snapshot for) and adds operation to queue.`,
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"List of server names to perform create snapshot operation on."},
+				},
+				{
+					"--snapshot-expiration-days",
+					[]string{"Number of days to keep the snapshot for (must be between 1 and 10)."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.RevertToSnapshotReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/snapshots/{SnapshotId}/restore",
 		Resource: "server",
 		Command:  "revert-to-snapshot",
+		Help: help.Command{
+			Brief: `Reverts a server to a snapshot.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server with the snapshot to restore."},
+				},
+				{
+					"--snapshot-id",
+					[]string{"ID of the snapshot to restore."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.DeleteSnapshotReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/snapshots/{SnapshotId}",
 		Resource: "server",
 		Command:  "delete-snapshot",
+		Help: help.Command{
+			Brief: `Deletes a given server snapshot.`,
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server with the snapshot to delete."},
+				},
+				{
+					"--snapshot-id",
+					[]string{"ID of the snapshot to delete."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&server.MaintenanceRequest{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
