@@ -15,6 +15,12 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
 
+type requestWithURIParams struct {
+	param1 string `URIParam:"yes"`
+	param2 string `URIParam:"yes"`
+	param3 string
+}
+
 var serveMux *http.ServeMux
 var server *httptest.Server
 
@@ -98,5 +104,27 @@ func TestNewConnectionError(t *testing.T) {
 	_, err := newConnection(t, false)
 	if err == nil || err.Error() != "Error occured while sending request to API. Status code: 404." {
 		t.Errorf("Unexpected error: %s", err)
+	}
+}
+
+func TestExtractURIParams(t *testing.T) {
+	r := requestWithURIParams{
+		param1: "1",
+		param2: "2",
+		param3: "3",
+	}
+	uri := "http://some-url/{param1}?param2=5&param3={param3}"
+	got := connection.ExtractURIParams(uri, r)
+	expected := "http://some-url/1?param2=5&param3={param3}"
+	if got != expected {
+		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
+	}
+
+	uri = "http://some-url/{param3}?x=y&param1={param1}&param2={param2}"
+	got = connection.ExtractURIParams(uri, r)
+	expected = "http://some-url/{param3}?x=y&param1=1&param2=2"
+
+	if got != expected {
+		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
 	}
 }
