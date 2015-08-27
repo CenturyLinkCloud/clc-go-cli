@@ -67,7 +67,7 @@ func GetCommandsWithDescriptions(resource string) string {
 	for _, k := range sortedKeys {
 		commands = append(commands, help.Argument{
 			Name:        k,
-			Description: []string{m[k].ShowBrief()},
+			Description: m[k].ShowBrief(),
 		})
 	}
 	return help.ForResource(help.Resource{

@@ -5,7 +5,7 @@ type Command interface {
 	Resource() string
 	Command() string
 	Arguments() []string
-	ShowBrief() string
+	ShowBrief() []string
 	ShowHelp() string
 	InputModel() interface{}
 	OutputModel() interface{}

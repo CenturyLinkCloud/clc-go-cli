@@ -25,7 +25,10 @@ func init() {
 		Resource: "server",
 		Command:  "create",
 		Help: help.Command{
-			Brief: `Creates a new server. Use this API operation when you want to create a new server from a standard or custom template, or clone an existing server.`,
+			Brief: []string{
+				"Creates a new server.",
+				"Use this API operation when you want to create a new server from a standard or custom template, or clone an existing server.",
+			},
 			Arguments: []help.Argument{
 				{
 					"--name",
@@ -174,7 +177,7 @@ func init() {
 		Resource: "server",
 		Command:  "delete",
 		Help: help.Command{
-			Brief: `Sends the delete operation to a given server and adds operation to queue.`,
+			Brief: []string{"Sends the delete operation to a given server and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -189,7 +192,7 @@ func init() {
 		Resource: "server",
 		Command:  "update",
 		Help: help.Command{
-			Brief: `Changes the amount of CPU cores, memory (in GB), server credentials, custom fields, description, disks and server's group.`,
+			Brief: []string{"Changes the amount of CPU cores, memory (in GB), server credentials, custom fields, description, disks and server's group."},
 			Arguments: []help.Argument{
 				{
 					"--cpu",
@@ -249,7 +252,7 @@ func init() {
 		Resource: "server",
 		Command:  "get",
 		Help: help.Command{
-			Brief: `Gets the details for a individual server.`,
+			Brief: []string{"Gets the details for a individual server."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -264,7 +267,7 @@ func init() {
 		Resource: "server",
 		Command:  "get-credentials",
 		Help: help.Command{
-			Brief: `Retrieves the administrator/root password on an existing server.`,
+			Brief: []string{"Retrieves the administrator/root password on an existing server."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -279,7 +282,7 @@ func init() {
 		Resource: "server",
 		Command:  "get-imports",
 		Help: help.Command{
-			Brief: `Gets the list of available servers that can be imported.`,
+			Brief: []string{"Gets the list of available servers that can be imported."},
 			Arguments: []help.Argument{
 				{
 					"--location-id",
@@ -294,7 +297,7 @@ func init() {
 		Resource: "server",
 		Command:  "get-public-ip-address",
 		Help: help.Command{
-			Brief: `Gets the details for the public IP address of a server, including the specific set of protocols and ports allowed and any source IP restrictions.`,
+			Brief: []string{"Gets the details for the public IP address of a server, including the specific set of protocols and ports allowed and any source IP restrictions."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -313,7 +316,10 @@ func init() {
 		Resource: "server",
 		Command:  "add-public-ip-address",
 		Help: help.Command{
-			Brief: `Claims a public IP address and associates it with a server, allowing access to it on a given set of protocols and ports. It may also be set to restrict access based on a source IP range.`,
+			Brief: []string{
+				"Claims a public IP address and associates it with a server, allowing access to it on a given set of protocols and ports.",
+				"It may also be set to restrict access based on a source IP range.",
+			},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -351,7 +357,10 @@ func init() {
 		Resource: "server",
 		Command:  "remove-public-ip-address",
 		Help: help.Command{
-			Brief: `Releases the given public IP address of a server so that it is no longer associated with the server and available to be claimed again by another server.`,
+			Brief: []string{
+				"Releases the given public IP address of a server so that it is no longer associated with the server",
+				"and available to be claimed again by another server.",
+			},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -370,7 +379,10 @@ func init() {
 		Resource: "server",
 		Command:  "update-public-ip-address",
 		Help: help.Command{
-			Brief: `Updates a public IP address on an existing server, allowing access to it on a given set of protocols and ports as well as restricting access based on a source IP range.`,
+			Brief: []string{
+				"Updates a public IP address on an existing server, allowing access to it on a given set of protocols and ports",
+				"as well as restricting access based on a source IP range.",
+			},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -405,7 +417,7 @@ func init() {
 		Resource: "server",
 		Command:  "power-on",
 		Help: help.Command{
-			Brief: `Sends the power on operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends the power on operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -420,7 +432,7 @@ func init() {
 		Resource: "server",
 		Command:  "power-off",
 		Help: help.Command{
-			Brief: `Sends the power off operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends the power off operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -435,7 +447,7 @@ func init() {
 		Resource: "server",
 		Command:  "pause",
 		Help: help.Command{
-			Brief: `Sends the pause operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends the pause operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -450,7 +462,7 @@ func init() {
 		Resource: "server",
 		Command:  "reset",
 		Help: help.Command{
-			Brief: `Sends the reset operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends the reset operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -465,7 +477,7 @@ func init() {
 		Resource: "server",
 		Command:  "shut-down",
 		Help: help.Command{
-			Brief: `Sends the shut-down operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends the shut-down operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -480,7 +492,7 @@ func init() {
 		Resource: "server",
 		Command:  "archive",
 		Help: help.Command{
-			Brief: `Sends the archive operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends the archive operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -495,7 +507,7 @@ func init() {
 		Resource: "server",
 		Command:  "restore",
 		Help: help.Command{
-			Brief: `Restores a given archived server to a specified group.`,
+			Brief: []string{"Restores a given archived server to a specified group."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -514,7 +526,7 @@ func init() {
 		Resource: "server",
 		Command:  "create-snapshot",
 		Help: help.Command{
-			Brief: `Sends the create snapshot operation to a list of servers (along with the number of days to keep the snapshot for) and adds operation to queue.`,
+			Brief: []string{"Sends the create snapshot operation to a list of servers (along with the number of days to keep the snapshot for) and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -533,7 +545,7 @@ func init() {
 		Resource: "server",
 		Command:  "revert-to-snapshot",
 		Help: help.Command{
-			Brief: `Reverts a server to a snapshot.`,
+			Brief: []string{"Reverts a server to a snapshot."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -552,7 +564,7 @@ func init() {
 		Resource: "server",
 		Command:  "delete-snapshot",
 		Help: help.Command{
-			Brief: `Deletes a given server snapshot.`,
+			Brief: []string{"Deletes a given server snapshot."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -571,7 +583,7 @@ func init() {
 		Resource: "server",
 		Command:  "start-maintenance-mode",
 		Help: help.Command{
-			Brief: `Sends a start maintenance mode operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends a start maintenance mode operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -586,7 +598,7 @@ func init() {
 		Resource: "server",
 		Command:  "stop-maintenance-mode",
 		Help: help.Command{
-			Brief: `Sends a stop maintenance mode operation to a list of servers and adds operation to queue.`,
+			Brief: []string{"Sends a stop maintenance mode operation to a list of servers and adds operation to queue."},
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
@@ -601,7 +613,7 @@ func init() {
 		Resource: "server",
 		Command:  "import",
 		Help: help.Command{
-			Brief: `Imports a new server from an uploaded OVF.`,
+			Brief: []string{"Imports a new server from an uploaded OVF."},
 			Arguments: []help.Argument{
 				{
 					"--name",
@@ -692,7 +704,7 @@ func init() {
 		Resource: "server",
 		Command:  "add-secondary-network",
 		Help: help.Command{
-			Brief: `Adds a secondary network adapter to a given server in a given account.`,
+			Brief: []string{"Adds a secondary network adapter to a given server in a given account."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -715,7 +727,7 @@ func init() {
 		Resource: "server",
 		Command:  "remove-secondary-network",
 		Help: help.Command{
-			Brief: `Removes a secondary network adapter from a given server in a given account.`,
+			Brief: []string{"Removes a secondary network adapter from a given server in a given account."},
 			Arguments: []help.Argument{
 				{
 					"--server-id",

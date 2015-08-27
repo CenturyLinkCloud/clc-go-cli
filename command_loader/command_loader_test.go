@@ -30,8 +30,8 @@ func (c *command) Arguments() []string {
 	return []string{}
 }
 
-func (c *command) ShowBrief() string {
-	return "A testing command"
+func (c *command) ShowBrief() []string {
+	return []string{"A testing command"}
 }
 
 func (c *command) ShowHelp() string {

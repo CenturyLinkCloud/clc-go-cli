@@ -11,7 +11,7 @@ type Resource struct {
 }
 
 type Command struct {
-	Brief     string
+	Brief     []string
 	Arguments []Argument
 }
 
@@ -26,7 +26,7 @@ var resourceHelpTemplate = `Available {{.Name}} commands:
 {{range .Description}}{{ printf "\t\t" }}{{ . }}{{ printf "\n" }}{{end}}
 {{end}}`
 
-var commandHelpTemplate = `{{.Brief}}
+var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 
 PARAMETERS:
 {{range .Arguments}}

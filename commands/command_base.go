@@ -56,7 +56,7 @@ func (c *CommandBase) Arguments() []string {
 	return args
 }
 
-func (c *CommandBase) ShowBrief() string {
+func (c *CommandBase) ShowBrief() []string {
 	return c.ExcInfo.Help.Brief
 }
 
