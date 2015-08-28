@@ -133,8 +133,8 @@ func init() {
 				{
 					"--anti-affinity-policy-id",
 					[]string{
-						"For standard servers, whether to use standard or premium storage. If not provided, will default to premium storage.",
-						"For hyperscale servers, storage type must be hyperscale. Ignored for bare metal servers.",
+						"ID of the Anti-Affinity policy to associate the",
+						"server with. Only valid for hyperscale servers.",
 					},
 				},
 				{
