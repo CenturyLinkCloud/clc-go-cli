@@ -1256,30 +1256,77 @@ func init() {
 		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}",
 		Resource: "anti-affinity-policy",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates an anti-affinity policy in a given account."},
+			Arguments: []help.Argument{
+				{
+					"--name",
+					[]string{"Name of the anti-affinity policy."},
+				},
+				{
+					"--location",
+					[]string{"Data center location of the anti-affinity policy."},
+				},
+			},
+		},
 	})
 	registerCommandBase(nil, &affinity.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}",
 		Resource: "anti-affinity-policy",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets a list of anti-affinity policies within a given account."},
+		},
 	})
 	registerCommandBase(&affinity.GetReq{}, &affinity.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}/{PolicyId}",
 		Resource: "anti-affinity-policy",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets a given anti-affinity policy by ID."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the anti-affinity policy being queried."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&affinity.UpdateReq{}, &affinity.Entity{}, commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}/{PolicyId}",
 		Resource: "anti-affinity-policy",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates the name of an anti-affinity policy in a given account."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the anti-affinity policy being updated."},
+				},
+				{
+					"--name",
+					[]string{"Name of the anti-affinity policy."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&affinity.DeleteReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}/{PolicyId}",
 		Resource: "anti-affinity-policy",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a given anti-affinity policy by ID."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the anti-affinity policy being deleted."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(&firewall.CreateReq{}, &firewall.CreateRes{}, commands.CommandExcInfo{
