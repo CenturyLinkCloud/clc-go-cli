@@ -1499,72 +1499,296 @@ func init() {
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools",
 		Resource: "load-balancer-pool",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a new shared load balancer configuration for a given account and data center."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+				{
+					"--port",
+					[]string{"Port to configure on the public-facing side of the load balancer pool. Must be either 80 (HTTP) or 443 (HTTPS)."},
+				},
+				{
+					"--method",
+					[]string{"The balancing method for this load balancer, either leastConnection or roundRobin. Default is roundRobin."},
+				},
+				{
+					"--persistence",
+					[]string{"The persistence method for this load balancer, either standard or sticky. Default is standard."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.Create{}, &balancer.Entity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}",
 		Resource: "load-balancer",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a new shared load balancer configuration for a given account and data center."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--name",
+					[]string{"Friendly name for new the load balancer."},
+				},
+				{
+					"--description",
+					[]string{"Description for new the load balancer."},
+				},
+				{
+					"--status",
+					[]string{"Status to create the load balancer with: enabled or disabled."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.ListPools{}, &[]balancer.Pool{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools",
 		Resource: "load-balancer-pool",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of pools configured for a given shared load balancer."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.List{}, &[]balancer.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}",
 		Resource: "load-balancer",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of shared load balancers that exist for a given account and data center."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.GetPool{}, &balancer.Pool{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}",
 		Resource: "load-balancer-pool",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets a specified pool configured for the given shared load balancer."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+				{
+					"--pool-id",
+					[]string{"ID of the pool."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.Get{}, &balancer.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}",
 		Resource: "load-balancer",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets the specified shared load balancer for a given account and data center."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.UpdatePool{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}",
 		Resource: "load-balancer-pool",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates a given shared load balancer pool."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+				{
+					"--pool-id",
+					[]string{"ID of the pool to update."},
+				},
+				{
+					"--method",
+					[]string{"The balancing method for this load balancer, either leastConnection or roundRobin."},
+				},
+				{
+					"--persistence",
+					[]string{"The persistence method for this load balancer, either standard or sticky."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.Update{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}",
 		Resource: "load-balancer",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates a given shared load balancer."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer to update."},
+				},
+				{
+					"--name",
+					[]string{"Friendly name for new the load balancer."},
+				},
+				{
+					"--description",
+					[]string{"Description for new the load balancer."},
+				},
+				{
+					"--status",
+					[]string{"Status to create the load balancer with: enabled or disabled."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.GetNodes{}, &[]balancer.Node{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}/nodes",
 		Resource: "load-balancer",
 		Command:  "get-nodes",
+		Help: help.Command{
+			Brief: []string{"Gets the list of nodes configured behind a given shared load balancer pool."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+				{
+					"--pool-id",
+					[]string{"ID of the pool containing the nodes."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.UpdateNodes{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}/nodes",
 		Resource: "load-balancer",
 		Command:  "update-nodes",
+		Help: help.Command{
+			Brief: []string{"Updates the nodes behind a given shared load balancer pool."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer."},
+				},
+				{
+					"--pool-id",
+					[]string{"ID of the pool to update."},
+				},
+				{
+					"--status",
+					[]string{"Status of the node: enabled, disabled or deleted."},
+				},
+				{
+					"--ip-address",
+					[]string{"The internal (private) IP address of the node server."},
+				},
+				{
+					"--private-port",
+					[]string{"The internal (private) port of the node server. Must be a value between 1 and 65535."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.DeletePool{}, new(string), commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}/pools/{PoolId}",
 		Resource: "load-balancer-pool",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a given shared load balancer by ID."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer with the pool to delete."},
+				},
+				{
+					"--pool-id",
+					[]string{"ID of the pool to delete."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&balancer.Delete{}, new(string), commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{DataCenter}/{LoadBalancerId}",
 		Resource: "load-balancer",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a given shared load balancer by ID."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center where the load balancer is."},
+				},
+				{
+					"--load-balancer-id",
+					[]string{"ID of the load balancer to delete."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(nil, &[]customfields.GetRes{}, commands.CommandExcInfo{
