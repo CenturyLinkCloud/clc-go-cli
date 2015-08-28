@@ -1136,30 +1136,119 @@ func init() {
 		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}",
 		Resource: "alert-policy",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates an alert policy in a given account."},
+			Arguments: []help.Argument{
+				{
+					"--name",
+					[]string{"Name of the alert policy."},
+				},
+				{
+					"--actions",
+					[]string{
+						"The actions to perform when the alert is triggered.",
+						"",
+						"Has to be an object with 2 fields: action and settings.",
+						"The only action currently supported by alerts is 'email'.",
+						"The only setting currently supported is the 'recipients' list, which is an array of",
+						"email addresses to be notified when the alert is triggered.",
+					},
+				},
+				{
+					"--triggers",
+					[]string{
+						"The definition of the triggers that fire the alert.",
+						"",
+						"Has to be an object with 3 fields: metric, duration and threshold.",
+						"metric: the metric on which to measure the condition that will trigger the alert: cpu, memory, or disk.",
+						"duration: the length of time in minutes that the condition must exceed the threshold: 00:05:00, 00:10:00, 00:15:00.",
+						"threshold: the threshold that will trigger the alert when the metric equals or exceeds it.",
+						"This number represents a percentage and must be a value between 5.0 - 95.0 that is a multiple of 5.0.",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(nil, &alert.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}",
 		Resource: "alert-policy",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets a list of alert policies within a given account."},
+		},
 	})
 	registerCommandBase(&alert.GetReq{}, &alert.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}/{PolicyId}",
 		Resource: "alert-policy",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets a given alert policy by ID."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the alert policy being queried."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&alert.UpdateReq{}, &alert.Entity{}, commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}/{PolicyId}",
 		Resource: "alert-policy",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates the name of an alert policy in a given account."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the alert policy being updated."},
+				},
+				{
+					"--name",
+					[]string{"Name of the alert policy."},
+				},
+				{
+					"--actions",
+					[]string{
+						"The actions to perform when the alert is triggered.",
+						"",
+						"Has to be an object with 2 fields: action and settings.",
+						"The only action currently supported by alerts is 'email'.",
+						"The only setting currently supported is the 'recipients' list, which is an array of",
+						"email addresses to be notified when the alert is triggered.",
+					},
+				},
+				{
+					"--triggers",
+					[]string{
+						"The definition of the triggers that fire the alert.",
+						"",
+						"Has to be an object with 3 fields: metric, duration and threshold.",
+						"metric: the metric on which to measure the condition that will trigger the alert: cpu, memory, or disk.",
+						"duration: the length of time in minutes that the condition must exceed the threshold: 00:05:00, 00:10:00, 00:15:00.",
+						"threshold: the threshold that will trigger the alert when the metric equals or exceeds it.",
+						"This number represents a percentage and must be a value between 5.0 - 95.0 that is a multiple of 5.0.",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&alert.DeleteReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2/alertPolicies/{accountAlias}/{PolicyId}",
 		Resource: "alert-policy",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a given alert policy by ID."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the alert policy being deleted."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(&affinity.CreateReq{}, &affinity.Entity{}, commands.CommandExcInfo{
