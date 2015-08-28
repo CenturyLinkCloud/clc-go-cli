@@ -33,7 +33,7 @@ func init() {
 				{
 					"--name",
 					[]string{
-						"Name of the server to create. Alphanumeric characters and dashes only.",
+						"Required. Name of the server to create. Alphanumeric characters and dashes only.",
 						"Must be between 1-8 characters depending on the length of the account alias.",
 						"The combination of account alias and server name here must be no more than 10 characters in length.",
 						"This name will be appended with a two digit number and prepended with the datacenter code",
@@ -46,11 +46,11 @@ func init() {
 				},
 				{
 					"--group-id",
-					[]string{"ID of the parent group."},
+					[]string{"Required. ID of the parent group."},
 				},
 				{
 					"--source-server-id",
-					[]string{"ID of the server to use a source."},
+					[]string{"Required. ID of the server to use a source."},
 				},
 				{
 					"--is-managed-os",
@@ -101,7 +101,7 @@ func init() {
 				},
 				{
 					"--cpu",
-					[]string{"Number of processors to configure the server with (1-16). Ignored for bare metal servers."},
+					[]string{"Required. Number of processors to configure the server with (1-16). Ignored for bare metal servers."},
 				},
 				{
 					"--cpu-autoscale-policy-id",
@@ -113,13 +113,13 @@ func init() {
 				{
 					"--memory-gb",
 					[]string{
-						"Number of GB of memory to configure the server with (1-128).",
+						"Required. Number of GB of memory to configure the server with (1-128).",
 						"Ignored for bare metal servers.",
 					},
 				},
 				{
 					"--type",
-					[]string{"Whether to create a standard, hyperscale, or bareMetal server."},
+					[]string{"Required. Whether to create a standard, hyperscale, or bareMetal server."},
 				},
 				{
 					"--storage-type",
@@ -256,7 +256,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server being queried."},
+					[]string{"Required. ID of the server being queried."},
 				},
 			},
 		},
@@ -271,7 +271,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server with the credentials to return."},
+					[]string{"Required. ID of the server with the credentials to return."},
 				},
 			},
 		},
@@ -286,7 +286,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--location-id",
-					[]string{"Data center location identifier."},
+					[]string{"Required. Data center location identifier."},
 				},
 			},
 		},
@@ -301,11 +301,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server being queried."},
+					[]string{"Required. ID of the server being queried."},
 				},
 				{
 					"--public-ip",
-					[]string{"The specific public IP to return details about."},
+					[]string{"Required. The specific public IP to return details about."},
 				},
 			},
 		},
@@ -323,7 +323,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server being queried."},
+					[]string{"Required. ID of the server being queried."},
 				},
 				{
 					"--internal-ip-address",
@@ -335,7 +335,7 @@ func init() {
 				{
 					"--ports",
 					[]string{
-						"The set of ports and protocols to allow access to for the new public IP address.",
+						"Required. The set of ports and protocols to allow access to for the new public IP address.",
 						"Only these specified ports on the respective protocols will be accessible",
 						"when accessing the server using the public IP address claimed here.",
 						"Has to be a list of objects with fields port, portTo and protocol.",
@@ -364,11 +364,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server being queried."},
+					[]string{"Required. ID of the server being queried."},
 				},
 				{
 					"--public-ip",
-					[]string{"The specific public IP to remove."},
+					[]string{"Required. The specific public IP to remove."},
 				},
 			},
 		},
@@ -386,16 +386,16 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server being queried."},
+					[]string{"Required. ID of the server being queried."},
 				},
 				{
 					"--public-ip",
-					[]string{"The specific public IP to update."},
+					[]string{"Required. The specific public IP to update."},
 				},
 				{
 					"--ports",
 					[]string{
-						"The set of ports and protocols to allow access to for the public IP address.",
+						"Required. The set of ports and protocols to allow access to for the public IP address.",
 						"Only these specified ports on the respective protocols will be accessible",
 						"when accessing the server using the public IP address claimed here.",
 						"Has to be a list of objects with fields port, portTo and protocol.",
@@ -421,7 +421,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to perform power on operation on."},
+					[]string{"Required. List of server IDs to perform power on operation on."},
 				},
 			},
 		},
@@ -436,7 +436,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to perform power off operation on."},
+					[]string{"Required. List of server IDs to perform power off operation on."},
 				},
 			},
 		},
@@ -451,7 +451,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to perform pause operation on."},
+					[]string{"Required. List of server IDs to perform pause operation on."},
 				},
 			},
 		},
@@ -466,7 +466,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to perform reset operation on."},
+					[]string{"Required. List of server IDs to perform reset operation on."},
 				},
 			},
 		},
@@ -481,7 +481,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to perform shut-down operation on."},
+					[]string{"Required. List of server IDs to perform shut-down operation on."},
 				},
 			},
 		},
@@ -496,7 +496,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to perform archive operation on."},
+					[]string{"Required. List of server IDs to perform archive operation on."},
 				},
 			},
 		},
@@ -511,11 +511,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the archived server to restore."},
+					[]string{"Required. ID of the archived server to restore."},
 				},
 				{
 					"--target-group-id",
-					[]string{"The unique identifier of the target group to restore the server to."},
+					[]string{"Required. The unique identifier of the target group to restore the server to."},
 				},
 			},
 		},
@@ -530,11 +530,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server names to perform create snapshot operation on."},
+					[]string{"Required. List of server names to perform create snapshot operation on."},
 				},
 				{
 					"--snapshot-expiration-days",
-					[]string{"Number of days to keep the snapshot for (must be between 1 and 10)."},
+					[]string{"Required. Number of days to keep the snapshot for (must be between 1 and 10)."},
 				},
 			},
 		},
@@ -549,11 +549,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server with the snapshot to restore."},
+					[]string{"Required. ID of the server with the snapshot to restore."},
 				},
 				{
 					"--snapshot-id",
-					[]string{"ID of the snapshot to restore."},
+					[]string{"Required. ID of the snapshot to restore."},
 				},
 			},
 		},
@@ -568,11 +568,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server with the snapshot to delete."},
+					[]string{"Required. ID of the server with the snapshot to delete."},
 				},
 				{
 					"--snapshot-id",
-					[]string{"ID of the snapshot to delete."},
+					[]string{"Required. ID of the snapshot to delete."},
 				},
 			},
 		},
@@ -587,7 +587,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to start maintenance mode on."},
+					[]string{"Required. List of server IDs to start maintenance mode on."},
 				},
 			},
 		},
@@ -602,7 +602,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-ids",
-					[]string{"List of server IDs to stop maintenance mode on."},
+					[]string{"Required. List of server IDs to stop maintenance mode on."},
 				},
 			},
 		},
@@ -618,7 +618,7 @@ func init() {
 				{
 					"--name",
 					[]string{
-						"Name of the server to create. Alphanumeric characters and dashes only.",
+						"Required. Name of the server to create. Alphanumeric characters and dashes only.",
 						"Must be between 1-8 characters depending on the length of the account alias.",
 						"The combination of account alias and server name here must be no more than 10 characters in length.",
 						"This name will be appended with a two digit number and prepended with the datacenter code",
@@ -631,7 +631,7 @@ func init() {
 				},
 				{
 					"--group-id",
-					[]string{"ID of the parent group."},
+					[]string{"Required. ID of the parent group."},
 				},
 				{
 					"--primary-dns",
@@ -651,27 +651,27 @@ func init() {
 				{
 					"--root-password",
 					[]string{
-						"Password of administrator or root user on server. This password must match",
+						"Required. Password of administrator or root user on server. This password must match",
 						"the one set on the server being imported or the import will fail.",
 					},
 				},
 				{
 					"--cpu",
 					[]string{
-						"Number of processors to configure the server with (1-16). If this value is different from the one specified in the OVF,",
+						"Required. Number of processors to configure the server with (1-16). If this value is different from the one specified in the OVF,",
 						"the import process will resize the server according to the value specified here.",
 					},
 				},
 				{
 					"--memoryGB",
 					[]string{
-						"Number of GB of memory to configure the server with (1-128). If this value is different from the one specified in the OVF,",
+						"Required. Number of GB of memory to configure the server with (1-128). If this value is different from the one specified in the OVF,",
 						"the import process will resize the server according to the value specified here.",
 					},
 				},
 				{
 					"--type",
-					[]string{"Whether to create standard or hyperscale server"},
+					[]string{"Required. Whether to create standard or hyperscale server"},
 				},
 				{
 					"--storage-type",
@@ -686,12 +686,12 @@ func init() {
 				},
 				{
 					"--ovf-id",
-					[]string{"The identifier of the OVF that defines the server to import."},
+					[]string{"Required. The identifier of the OVF that defines the server to import."},
 				},
 				{
 					"--ovf-os-type",
 					[]string{
-						"The OS type of the server being imported. Currently, the only supported OS types",
+						"Required. The OS type of the server being imported. Currently, the only supported OS types",
 						"are redHat6_64Bit, windows2008R2DataCenter_64bit, and windows2012R2DataCenter_64Bit.",
 					},
 				},
@@ -708,11 +708,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server."},
+					[]string{"Required. ID of the server."},
 				},
 				{
 					"--network-id",
-					[]string{"ID of the network."},
+					[]string{"Required. ID of the network."},
 				},
 				{
 					"--ip-address",
@@ -731,11 +731,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server."},
+					[]string{"Required. ID of the server."},
 				},
 				{
 					"--network-id",
-					[]string{"ID of the network."},
+					[]string{"Required. ID of the network."},
 				},
 			},
 		},
@@ -751,7 +751,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group being queried."},
+					[]string{"Required. ID of the group being queried."},
 				},
 			},
 		},
@@ -766,7 +766,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--name",
-					[]string{"Name of the group to create."},
+					[]string{"Required. Name of the group to create."},
 				},
 				{
 					"--description",
@@ -774,7 +774,7 @@ func init() {
 				},
 				{
 					"--parent-group-id",
-					[]string{"ID of the parent group."},
+					[]string{"Required. ID of the parent group."},
 				},
 				{
 					"--custom-fields",
@@ -793,7 +793,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group to be deleted."},
+					[]string{"Required. ID of the group to be deleted."},
 				},
 			},
 		},
@@ -808,7 +808,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group being queried."},
+					[]string{"Required. ID of the group being queried."},
 				},
 			},
 		},
@@ -826,7 +826,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group being queried."},
+					[]string{"Required. ID of the group being queried."},
 				},
 				{
 					"--type",
@@ -882,7 +882,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group being updated."},
+					[]string{"Required. ID of the group being updated."},
 				},
 				{
 					"--custom-fields",
@@ -922,7 +922,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group to archive."},
+					[]string{"Required. ID of the group to archive."},
 				},
 			},
 		},
@@ -937,11 +937,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"ID of the group to restore."},
+					[]string{"Required. ID of the group to restore."},
 				},
 				{
 					"--target-group-id",
-					[]string{"The unique identifier of the target group to restore the group to."},
+					[]string{"Required. The unique identifier of the target group to restore the group to."},
 				},
 			},
 		},
@@ -966,11 +966,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--group-links",
-					[]string{"Determine whether link collections are returned for each group."},
+					[]string{"Required. Determine whether link collections are returned for each group."},
 				},
 			},
 		},
@@ -989,7 +989,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 			},
 		},
@@ -1005,7 +1005,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 			},
 		},
@@ -1020,11 +1020,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--network",
-					[]string{"ID of the network."},
+					[]string{"Required. ID of the network."},
 				},
 				{
 					"--ip-addresses",
@@ -1050,11 +1050,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--network",
-					[]string{"ID of the network."},
+					[]string{"Required. ID of the network."},
 				},
 				{
 					"--type",
@@ -1079,7 +1079,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 			},
 		},
@@ -1094,19 +1094,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--network",
-					[]string{"ID of the network."},
+					[]string{"Required. ID of the network."},
 				},
 				{
 					"--name",
-					[]string{"User-defined name of the network; the default is the VLAN number combined with the network address."},
+					[]string{"Required. User-defined name of the network; the default is the VLAN number combined with the network address."},
 				},
 				{
 					"--description",
-					[]string{"Description of VLAN, a free text field that defaults to the VLAN number combined with the network address."},
+					[]string{"Required. Description of VLAN, a free text field that defaults to the VLAN number combined with the network address."},
 				},
 			},
 		},
@@ -1121,11 +1121,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--network",
-					[]string{"ID of the network."},
+					[]string{"Required. ID of the network."},
 				},
 			},
 		},
@@ -1141,12 +1141,12 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--name",
-					[]string{"Name of the alert policy."},
+					[]string{"Required. Name of the alert policy."},
 				},
 				{
 					"--actions",
 					[]string{
-						"The actions to perform when the alert is triggered.",
+						"Required. The actions to perform when the alert is triggered.",
 						"",
 						"Has to be an object with 2 fields: action and settings.",
 						"The only action currently supported by alerts is 'email'.",
@@ -1157,7 +1157,7 @@ func init() {
 				{
 					"--triggers",
 					[]string{
-						"The definition of the triggers that fire the alert.",
+						"Required. The definition of the triggers that fire the alert.",
 						"",
 						"Has to be an object with 3 fields: metric, duration and threshold.",
 						"metric: the metric on which to measure the condition that will trigger the alert: cpu, memory, or disk.",
@@ -1188,7 +1188,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the alert policy being queried."},
+					[]string{"Required. ID of the alert policy being queried."},
 				},
 			},
 		},
@@ -1203,16 +1203,16 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the alert policy being updated."},
+					[]string{"Required. ID of the alert policy being updated."},
 				},
 				{
 					"--name",
-					[]string{"Name of the alert policy."},
+					[]string{"Required. Name of the alert policy."},
 				},
 				{
 					"--actions",
 					[]string{
-						"The actions to perform when the alert is triggered.",
+						"Required. The actions to perform when the alert is triggered.",
 						"",
 						"Has to be an object with 2 fields: action and settings.",
 						"The only action currently supported by alerts is 'email'.",
@@ -1223,7 +1223,7 @@ func init() {
 				{
 					"--triggers",
 					[]string{
-						"The definition of the triggers that fire the alert.",
+						"Required. The definition of the triggers that fire the alert.",
 						"",
 						"Has to be an object with 3 fields: metric, duration and threshold.",
 						"metric: the metric on which to measure the condition that will trigger the alert: cpu, memory, or disk.",
@@ -1245,7 +1245,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the alert policy being deleted."},
+					[]string{"Required. ID of the alert policy being deleted."},
 				},
 			},
 		},
@@ -1261,11 +1261,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--name",
-					[]string{"Name of the anti-affinity policy."},
+					[]string{"Required. Name of the anti-affinity policy."},
 				},
 				{
 					"--location",
-					[]string{"Data center location of the anti-affinity policy."},
+					[]string{"Required. Data center location of the anti-affinity policy."},
 				},
 			},
 		},
@@ -1289,7 +1289,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the anti-affinity policy being queried."},
+					[]string{"Required. ID of the anti-affinity policy being queried."},
 				},
 			},
 		},
@@ -1304,11 +1304,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the anti-affinity policy being updated."},
+					[]string{"Required. ID of the anti-affinity policy being updated."},
 				},
 				{
 					"--name",
-					[]string{"Name of the anti-affinity policy."},
+					[]string{"Required. Name of the anti-affinity policy."},
 				},
 			},
 		},
@@ -1323,7 +1323,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the anti-affinity policy being deleted."},
+					[]string{"Required. ID of the anti-affinity policy being deleted."},
 				},
 			},
 		},
@@ -1339,28 +1339,28 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--source-account-alias",
-					[]string{"Short code for a particular account."},
+					[]string{"Required. Short code for a particular account."},
 				},
 				{
 					"--data-center",
-					[]string{"Short string representing the target data center for the new policy."},
+					[]string{"Required. Short string representing the target data center for the new policy."},
 				},
 				{
 					"--destination-account",
-					[]string{"Short code for a particular account."},
+					[]string{"Required. Short code for a particular account."},
 				},
 				{
 					"--source",
-					[]string{"Source addresses for traffic on the originating firewall, specified using CIDR notation, on the originating firewall."},
+					[]string{"Required. Source addresses for traffic on the originating firewall, specified using CIDR notation, on the originating firewall."},
 				},
 				{
 					"--destination",
-					[]string{"Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
+					[]string{"Required. Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
 				},
 				{
 					"--ports",
 					[]string{
-						"Type of ports associated with the policy. Supported ports include: any, icmp, TCP and UDP",
+						"Required. Type of ports associated with the policy. Supported ports include: any, icmp, TCP and UDP",
 						"with single ports (tcp/123, udp/123) and port ranges (tcp/123-456, udp/123-456).",
 						"Some common ports include: tcp/21 (for FTP), tcp/990 (FTPS), tcp/80 (HTTP 80), tcp/8080 (HTTP 8080), tcp/443 (HTTPS 443),",
 						"icmp (PING), tcp/3389 (RDP), and tcp/22 (SSH/SFTP).",
@@ -1382,11 +1382,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--source-account-alias",
-					[]string{"Short code for a particular account."},
+					[]string{"Required. Short code for a particular account."},
 				},
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--destination-account-alias",
@@ -1405,15 +1405,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--source-account-alias",
-					[]string{"Short code for a particular account."},
+					[]string{"Required. Short code for a particular account."},
 				},
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--firewall-policy",
-					[]string{"ID of the firewall policy."},
+					[]string{"Required. ID of the firewall policy."},
 				},
 			},
 		},
@@ -1428,15 +1428,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--source-account-alias",
-					[]string{"Short code for a particular account."},
+					[]string{"Required. Short code for a particular account."},
 				},
 				{
 					"--data-center",
-					[]string{"Short string representing the data center associated with the policy of interest."},
+					[]string{"Required. Short string representing the data center associated with the policy of interest."},
 				},
 				{
 					"--firewall-policy",
-					[]string{"ID of the firewall policy."},
+					[]string{"Required. ID of the firewall policy."},
 				},
 				{
 					"--enabled",
@@ -1444,16 +1444,16 @@ func init() {
 				},
 				{
 					"--source",
-					[]string{"Source addresses for traffic on the originating firewall, specified using CIDR notation."},
+					[]string{"Required. Source addresses for traffic on the originating firewall, specified using CIDR notation."},
 				},
 				{
 					"--destination",
-					[]string{"Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
+					[]string{"Required. Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
 				},
 				{
 					"--ports",
 					[]string{
-						"Type of ports associated with the policy. Supported ports include: any, icmp, TCP and UDP",
+						"Required. Type of ports associated with the policy. Supported ports include: any, icmp, TCP and UDP",
 						"with single ports (tcp/123, udp/123) and port ranges (tcp/123-456, udp/123-456).",
 						"Some common ports include: tcp/21 (for FTP), tcp/990 (FTPS), tcp/80 (HTTP 80), tcp/8080 (HTTP 8080), tcp/443 (HTTPS 443),",
 						"icmp (PING), tcp/3389 (RDP), and tcp/22 (SSH/SFTP).",
@@ -1472,15 +1472,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--source-account-alias",
-					[]string{"Short code for a particular account."},
+					[]string{"Required. Short code for a particular account."},
 				},
 				{
 					"--data-center",
-					[]string{"Short string representing the data center you are querying."},
+					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
 					"--firewall-policy",
-					[]string{"ID of the firewall policy."},
+					[]string{"Required. ID of the firewall policy."},
 				},
 			},
 		},
@@ -1496,15 +1496,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 				{
 					"--port",
-					[]string{"Port to configure on the public-facing side of the load balancer pool. Must be either 80 (HTTP) or 443 (HTTPS)."},
+					[]string{"Required. Port to configure on the public-facing side of the load balancer pool. Must be either 80 (HTTP) or 443 (HTTPS)."},
 				},
 				{
 					"--method",
@@ -1527,15 +1527,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--name",
-					[]string{"Friendly name for new the load balancer."},
+					[]string{"Required. Friendly name for new the load balancer."},
 				},
 				{
 					"--description",
-					[]string{"Description for new the load balancer."},
+					[]string{"Required. Description for new the load balancer."},
 				},
 				{
 					"--status",
@@ -1554,11 +1554,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 			},
 		},
@@ -1573,7 +1573,7 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 			},
 		},
@@ -1588,15 +1588,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 				{
 					"--pool-id",
-					[]string{"ID of the pool."},
+					[]string{"Required. ID of the pool."},
 				},
 			},
 		},
@@ -1611,11 +1611,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 			},
 		},
@@ -1630,15 +1630,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 				{
 					"--pool-id",
-					[]string{"ID of the pool to update."},
+					[]string{"Required. ID of the pool to update."},
 				},
 				{
 					"--method",
@@ -1661,19 +1661,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer to update."},
+					[]string{"Required. ID of the load balancer to update."},
 				},
 				{
 					"--name",
-					[]string{"Friendly name for new the load balancer."},
+					[]string{"Required. Friendly name for new the load balancer."},
 				},
 				{
 					"--description",
-					[]string{"Description for new the load balancer."},
+					[]string{"Required. Description for new the load balancer."},
 				},
 				{
 					"--status",
@@ -1692,15 +1692,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 				{
 					"--pool-id",
-					[]string{"ID of the pool containing the nodes."},
+					[]string{"Required. ID of the pool containing the nodes."},
 				},
 			},
 		},
@@ -1715,15 +1715,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer."},
+					[]string{"Required. ID of the load balancer."},
 				},
 				{
 					"--pool-id",
-					[]string{"ID of the pool to update."},
+					[]string{"Required. ID of the pool to update."},
 				},
 				{
 					"--nodes",
@@ -1749,15 +1749,15 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer with the pool to delete."},
+					[]string{"Required. ID of the load balancer with the pool to delete."},
 				},
 				{
 					"--pool-id",
-					[]string{"ID of the pool to delete."},
+					[]string{"Required. ID of the pool to delete."},
 				},
 			},
 		},
@@ -1772,11 +1772,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--data-center",
-					[]string{"Short string representing the data center where the load balancer is."},
+					[]string{"Required. Short string representing the data center where the load balancer is."},
 				},
 				{
 					"--load-balancer-id",
-					[]string{"ID of the load balancer to delete."},
+					[]string{"Required. ID of the load balancer to delete."},
 				},
 			},
 		},
