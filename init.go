@@ -1186,9 +1186,18 @@ func init() {
 	}))
 	registerCustomCommand(commands.NewWait(commands.CommandExcInfo{
 		Resource: "wait",
+		Help: help.Command{
+			Brief: []string{"Waits for the previous command to complete."},
+		},
 	}))
 	registerCustomCommand(commands.NewLogin(commands.CommandExcInfo{
 		Resource: "login",
+		Help: help.Command{
+			Brief: []string{
+				"Logs the user in by saving his credentials to the config.",
+				"Specify the credentials using the --user and --password options.",
+			},
+		},
 	}))
 }
 
