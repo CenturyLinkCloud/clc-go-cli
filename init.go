@@ -1000,36 +1000,135 @@ func init() {
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}",
 		Resource: "network",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of networks available for a given account in a given data center."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&network.GetReq{}, &network.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}?ipAddresses={IpAddresses}",
 		Resource: "network",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets the details of a specific network in a given data center for a given account."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--network",
+					[]string{"ID of the network."},
+				},
+				{
+					"--ip-addresses",
+					[]string{
+						"Optional component of the query to request details of IP Addresses in a certain state.",
+						"Should be one of the following:",
+						"none: returns details of the network only,",
+						"claimed: returns details of the network as well as information about claimed IP addresses,",
+						"free: returns details of the network as well as information about free IP addresses or",
+						"all: returns details of the network as well as information about all IP addresses.",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&network.ListIpAddresses{}, &[]network.IpAddress{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/ipAddresses?type={Type}",
 		Resource: "network",
 		Command:  "list-ip-addresses",
+		Help: help.Command{
+			Brief: []string{"Gets the list of IP addresses for a network in a given data center for a given account."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--network",
+					[]string{"ID of the network."},
+				},
+				{
+					"--type",
+					[]string{
+						"Optional component of the query to request details of IP Addresses in a certain state.",
+						"Should be one of the following:",
+						"claimed: returns details of the network as well as information about claimed IP addresses,",
+						"free: returns details of the network as well as information about free IP addresses or",
+						"all: returns details of the network as well as information about all IP addresses",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&network.CreateReq{}, &network.Entity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/claim",
 		Resource: "network",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Claims a network for a given account in a given data center."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&network.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}",
 		Resource: "network",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates the attributes of a given Network."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--network",
+					[]string{"ID of the network."},
+				},
+				{
+					"--name",
+					[]string{"User-defined name of the network; the default is the VLAN number combined with the network address."},
+				},
+				{
+					"--description",
+					[]string{"Description of VLAN, a free text field that defaults to the VLAN number combined with the network address."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&network.ReleaseReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/release",
 		Resource: "network",
 		Command:  "release",
+		Help: help.Command{
+			Brief: []string{"Releases a network from a given account in a given data center to a pool for another user to claim."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--network",
+					[]string{"ID of the network."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(&alert.CreateReq{}, &alert.Entity{}, commands.CommandExcInfo{
