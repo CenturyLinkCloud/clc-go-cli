@@ -47,9 +47,9 @@ var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 			Specifies the output format - either 'json', 'text' or 'table'.
 			Defaults to 'json'.
 	--generate-cli-skeleton
-			If specified, the command is not actually executed. Instead, JSON with all of
-			its arguments is returned. All the arguments and options specified along with
-			this option are included in the output.
+			If specified, the command is not actually executed.
+			Instead, all of the specified arguments and options except from this one
+			are returned in JSON format.
 	--from-file
 			Specifies a JSON file to load command arguments and options from. No other
 			arguments or options can be specified.
