@@ -1439,10 +1439,6 @@ func init() {
 					[]string{"ID of the firewall policy."},
 				},
 				{
-					"--destination-account-alias",
-					[]string{"Short code for a particular account."},
-				},
-				{
 					"--enabled",
 					[]string{"Indicates if the policy is enabled (true) or disabled (false)."},
 				},
