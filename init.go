@@ -1389,10 +1389,6 @@ func init() {
 					[]string{"Short string representing the data center you are querying."},
 				},
 				{
-					"--firewall-policy",
-					[]string{"ID of the firewall policy."},
-				},
-				{
 					"--destination-account-alias",
 					[]string{"Short code for a particular account."},
 				},
