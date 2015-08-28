@@ -1334,30 +1334,164 @@ func init() {
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}",
 		Resource: "firewall-policy",
 		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a firewall policy for a given account in a given data center ('intra data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--source-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--data-center",
+					[]string{"Short string representing the target data center for the new policy."},
+				},
+				{
+					"--destination-account",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--source",
+					[]string{"Source addresses for traffic on the originating firewall, specified using CIDR notation, on the originating firewall."},
+				},
+				{
+					"--destination",
+					[]string{"Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
+				},
+				{
+					"--ports",
+					[]string{
+						"Type of ports associated with the policy. Supported ports include: any, icmp, TCP and UDP",
+						"with single ports (tcp/123, udp/123) and port ranges (tcp/123-456, udp/123-456).",
+						"Some common ports include: tcp/21 (for FTP), tcp/990 (FTPS), tcp/80 (HTTP 80), tcp/8080 (HTTP 8080), tcp/443 (HTTPS 443),",
+						"icmp (PING), tcp/3389 (RDP), and tcp/22 (SSH/SFTP).",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&firewall.ListReq{}, &[]firewall.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}?destinationAccount={DestinationAccountAlias}",
 		Resource: "firewall-policy",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{
+				"Gets the list of firewall policies associated with a given account in a given data center ('intra data center firewall policies').",
+				"Users can optionally filter results by requesting policies associated with a second 'destination' account.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--source-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"ID of the firewall policy."},
+				},
+				{
+					"--destination-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&firewall.GetReq{}, &firewall.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets the details of a specific firewall policy associated with a given account in a given data center (an 'intra data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--source-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"ID of the firewall policy."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&firewall.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates a given firewall policy associated with a given account in a given data center (an 'intra data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--source-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--data-center",
+					[]string{"Short string representing the data center associated with the policy of interest."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"ID of the firewall policy."},
+				},
+				{
+					"--destination-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--enabled",
+					[]string{"Indicates if the policy is enabled (true) or disabled (false)."},
+				},
+				{
+					"--source",
+					[]string{"Source addresses for traffic on the originating firewall, specified using CIDR notation."},
+				},
+				{
+					"--destination",
+					[]string{"Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
+				},
+				{
+					"--ports",
+					[]string{
+						"Type of ports associated with the policy. Supported ports include: any, icmp, TCP and UDP",
+						"with single ports (tcp/123, udp/123) and port ranges (tcp/123-456, udp/123-456).",
+						"Some common ports include: tcp/21 (for FTP), tcp/990 (FTPS), tcp/80 (HTTP 80), tcp/8080 (HTTP 8080), tcp/443 (HTTPS 443),",
+						"icmp (PING), tcp/3389 (RDP), and tcp/22 (SSH/SFTP).",
+					},
+				},
+			},
+		},
 	})
 	registerCommandBase(&firewall.DeleteReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "DELETE",
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a firewall policy for a given account in a given data center ('intra data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--source-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"ID of the firewall policy."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(&balancer.CreatePool{}, &balancer.Pool{}, commands.CommandExcInfo{
