@@ -1572,6 +1572,9 @@ func init() {
 		Url:      "https://api.ctl.io/v2/accounts/{accountAlias}/customFields",
 		Resource: "custom-fields",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Retrieves the custom fields defined for a given account."},
+		},
 	})
 
 	registerCustomCommand(commands.NewGroupList(commands.CommandExcInfo{
