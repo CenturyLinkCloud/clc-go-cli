@@ -31,11 +31,11 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	if cmdArg == "--help" {
-		return command_loader.GetCommandsWithDescriptions(resource)
-	}
 	cmd, err := command_loader.LoadCommand(resource, cmdArg)
 	if err != nil {
+		if cmdArg == "--help" {
+			return command_loader.GetCommandsWithDescriptions(resource)
+		}
 		return err.Error()
 	}
 	if cmd.Command() == "" {
