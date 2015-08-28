@@ -952,18 +952,47 @@ func init() {
 		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}",
 		Resource: "data-center",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of data centers that a given account has access to."},
+		},
 	})
 	registerCommandBase(&datacenter.GetReq{}, &datacenter.GetRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}?groupLinks={GroupLinks}",
 		Resource: "data-center",
 		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets the details of a specific data center the account has access to."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+				{
+					"--group-links",
+					[]string{"Determine whether link collections are returned for each group."},
+				},
+			},
+		},
 	})
 	registerCommandBase(&datacenter.GetDCReq{}, &datacenter.GetDCRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}/deploymentCapabilities",
 		Resource: "data-center",
 		Command:  "get-deployment-capabilities",
+		Help: help.Command{
+			Brief: []string{
+				"Gets the list of capabilities that a specific data center supports for a given account,",
+				"including the deployable networks, OS templates, and whether features like",
+				"premium storage and shared load balancer configuration are available.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short string representing the data center you are querying."},
+				},
+			},
+		},
 	})
 
 	registerCommandBase(&network.ListReq{}, &[]network.Entity{}, commands.CommandExcInfo{
