@@ -1730,16 +1730,15 @@ func init() {
 					[]string{"ID of the pool to update."},
 				},
 				{
-					"--status",
-					[]string{"Status of the node: enabled, disabled or deleted."},
-				},
-				{
-					"--ip-address",
-					[]string{"The internal (private) IP address of the node server."},
-				},
-				{
-					"--private-port",
-					[]string{"The internal (private) port of the node server. Must be a value between 1 and 65535."},
+					"--nodes",
+					[]string{
+						"A list of objects each representing a node.",
+						"Each object must have the following fields:",
+						"'ip-address': the internal (private) IP address of the node server;",
+						"'private-port': the internal (private) port of the node server. Must be a value between 1 and 65535.",
+						"The object may optionally have a 'status' field:",
+						"status of the node: enabled, disabled or deleted.",
+					},
 				},
 			},
 		},
