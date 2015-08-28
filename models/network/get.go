@@ -7,7 +7,7 @@ import (
 type GetReq struct {
 	DataCenter  string `valid:"required" URIParam:"yes"`
 	Network     string `valid:"required" URIParam:"yes"`
-	IpAddresses string `URIParam:"yes"`
+	IpAddresses string `URIParam:"yes" oneOf:"none,claimed,free,all"`
 }
 
 func (g *GetReq) Validate() error {
