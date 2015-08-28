@@ -28,12 +28,12 @@ var resourceHelpTemplate = `Available {{.Name}} commands:
 
 var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 
-PARAMETERS:
+{{if .Arguments}}PARAMETERS:
 {{range .Arguments}}
 	{{.Name}}
 {{range .Description}} {{ printf "\t\t" }} {{ . }} {{ printf "\n" }} {{end}}
 {{end}}
-OPTIONS:
+{{end}}OPTIONS:
 
 	--help
 			Shows general help or help for the given resource or command.
