@@ -153,7 +153,7 @@ func login(opts *options.Options, conf *config.Config) string {
 	if err := config.Save(conf); err != nil {
 		return err.Error()
 	}
-	return ""
+	return fmt.Sprintf("Logged in as %s.", opts.User)
 }
 
 func usage() string {
