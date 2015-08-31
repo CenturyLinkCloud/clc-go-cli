@@ -278,14 +278,14 @@ func init() {
 	})
 	registerCommandBase(&server.GetImportsReq{}, &server.GetImportsRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2/vmImport/{accountAlias}/{LocationId}/available",
+		Url:      "https://api.ctl.io/v2/vmImport/{accountAlias}/{DataCenter}/available",
 		Resource: "server",
 		Command:  "get-imports",
 		Help: help.Command{
 			Brief: []string{"Gets the list of available servers that can be imported."},
 			Arguments: []help.Argument{
 				{
-					"--location-id",
+					"--data-center",
 					[]string{"Required. Data center location identifier."},
 				},
 			},

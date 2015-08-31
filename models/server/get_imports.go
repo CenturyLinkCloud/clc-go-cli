@@ -1,7 +1,7 @@
 package server
 
 type GetImportsReq struct {
-	LocationId string `valid:"required" URIParam:"yes"`
+	DataCenter string `valid:"required" URIParam:"yes"`
 }
 
 type GetImportsRes []AvailableImport
