@@ -73,6 +73,13 @@ func run(args []string) string {
 	if options.Help {
 		return cmd.ShowHelp()
 	}
+	conf, err := config.LoadConfig()
+	if err != nil {
+		return err.Error()
+	}
+	if cmd.Resource() == "login" {
+		return login(options, conf)
+	}
 	err = model_loader.LoadModel(parsedArgs, cmd.InputModel())
 	if err != nil {
 		return err.Error()
@@ -84,13 +91,6 @@ func run(args []string) string {
 	err = model_adjuster.ApplyDefaultBehaviour(cmd.InputModel())
 	if err != nil {
 		return err.Error()
-	}
-	conf, err := config.LoadConfig()
-	if err != nil {
-		return err.Error()
-	}
-	if cmd.Resource() == "login" {
-		return login(options, conf)
 	}
 	cn, err := auth.AuthenticateCommand(options, conf)
 	if err != nil {
