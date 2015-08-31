@@ -90,15 +90,7 @@ func run(args []string) string {
 		return err.Error()
 	}
 	if cmd.Resource() == "login" {
-		if options.User == "" || options.Password == "" {
-			return "Both --user and --password options must be specified."
-		}
-		conf.User = options.User
-		conf.Password = options.Password
-		if err = config.Save(conf); err != nil {
-			return err.Error()
-		}
-		return ""
+		return login(options, conf)
 	}
 	cn, err := auth.AuthenticateCommand(options, conf)
 	if err != nil {
@@ -149,6 +141,19 @@ func run(args []string) string {
 		return err.Error()
 	}
 	return output
+}
+
+func login(opts *options.Options, conf *config.Config) string {
+	if opts.User == "" || opts.Password == "" {
+		return "Both --user and --password options must be specified."
+	}
+
+	conf.User = opts.User
+	conf.Password = opts.Password
+	if err := config.Save(conf); err != nil {
+		return err.Error()
+	}
+	return ""
 }
 
 func usage() string {
