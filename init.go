@@ -1264,7 +1264,7 @@ func init() {
 					[]string{"Required. Name of the anti-affinity policy."},
 				},
 				{
-					"--location",
+					"--data-center",
 					[]string{"Required. Data center location of the anti-affinity policy."},
 				},
 			},
