@@ -80,6 +80,7 @@ func run(args []string) string {
 	if cmd.Resource() == "login" {
 		return login(options, conf)
 	}
+	parseDefaultDC(conf, parsedArgs)
 	err = model_loader.LoadModel(parsedArgs, cmd.InputModel())
 	if err != nil {
 		return err.Error()
@@ -154,6 +155,12 @@ func login(opts *options.Options, conf *config.Config) string {
 		return err.Error()
 	}
 	return fmt.Sprintf("Logged in as %s.", opts.User)
+}
+
+func parseDefaultDC(conf *config.Config, args map[string]interface{}) {
+	if _, ok := args["DataCenter"]; !ok && conf.DefaultDataCenter != "" {
+		args["DataCenter"] = conf.DefaultDataCenter
+	}
 }
 
 func usage() string {
