@@ -1815,6 +1815,40 @@ func init() {
 			},
 		},
 	}))
+
+	registerCustomCommand(commands.NewSetDefaultDC(&datacenter.SetDefault{}, commands.CommandExcInfo{
+		Resource: "data-center",
+		Command:  "set-default",
+		Help: help.Command{
+			Brief: []string{
+				"Sets a default data center to work with.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short code for the data center being set."},
+				},
+			},
+		},
+	}))
+	registerCustomCommand(commands.NewUnsetDefaultDC(commands.CommandExcInfo{
+		Resource: "data-center",
+		Command:  "unset-default",
+		Help: help.Command{
+			Brief: []string{
+				"Unsets the default data center.",
+			},
+		},
+	}))
+	registerCustomCommand(commands.NewShowDefaultDC(commands.CommandExcInfo{
+		Resource: "data-center",
+		Command:  "show-default",
+		Help: help.Command{
+			Brief: []string{
+				"Show the default data center set, if any.",
+			},
+		},
+	}))
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
