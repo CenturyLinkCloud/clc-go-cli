@@ -38,6 +38,10 @@ func (sl *ServerList) Execute(cn base.Connection) error {
 	}
 
 	servers := make([]server.GetRes, len(links))
+	if links == nil {
+		sl.Output = servers
+		return nil
+	}
 	done := make(chan error)
 	for i, link := range links {
 		go loadServer(link, servers, i, done, cn)
