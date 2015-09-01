@@ -10,10 +10,10 @@ type SetDefaultDC struct {
 	CommandBase
 }
 
-func NewSetDefaultDC(input interface{}, info CommandExcInfo) *SetDefaultDC {
+func NewSetDefaultDC(info CommandExcInfo) *SetDefaultDC {
 	s := SetDefaultDC{}
 	s.ExcInfo = info
-	s.Input = input
+	s.Input = &datacenter.SetDefault{}
 	return &s
 }
 

@@ -1816,7 +1816,7 @@ func init() {
 		},
 	}))
 
-	registerCustomCommand(commands.NewSetDefaultDC(&datacenter.SetDefault{}, commands.CommandExcInfo{
+	registerCustomCommand(commands.NewSetDefaultDC(commands.CommandExcInfo{
 		Resource: "data-center",
 		Command:  "set-default",
 		Help: help.Command{
