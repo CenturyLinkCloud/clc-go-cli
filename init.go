@@ -1795,6 +1795,19 @@ func init() {
 	registerCustomCommand(commands.NewGroupList(commands.CommandExcInfo{
 		Resource: "group",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of groups of the given data-center or of all data centers."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required unless the --all option is set. A short code of the data center to query."},
+				},
+				{
+					"--all",
+					[]string{"Forces the command to query all of the data centers."},
+				},
+			},
+		},
 	}))
 	registerCustomCommand(commands.NewServerList(commands.CommandExcInfo{
 		Resource: "server",
