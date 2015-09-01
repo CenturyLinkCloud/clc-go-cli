@@ -71,3 +71,11 @@ func (c *CommandBase) InputModel() interface{} {
 func (c *CommandBase) OutputModel() interface{} {
 	return c.Output
 }
+
+func (c *CommandBase) IsOffline() bool {
+	return false
+}
+
+func (c *CommandBase) ExecuteOffline() (string, error) {
+	return "", nil
+}

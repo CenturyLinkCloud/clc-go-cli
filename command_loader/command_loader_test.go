@@ -46,6 +46,14 @@ func (c *command) OutputModel() interface{} {
 	return nil
 }
 
+func (c *command) IsOffline() bool {
+	return false
+}
+
+func (c *command) ExecuteOffline() (string, error) {
+	return "", nil
+}
+
 var cmd1, cmd2, cmd3, cmd4 base.Command
 
 func init() {

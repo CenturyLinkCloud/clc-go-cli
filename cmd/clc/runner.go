@@ -94,6 +94,13 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
+	if cmd.IsOffline() {
+		res, err := cmd.ExecuteOffline()
+		if err != nil {
+			return err.Error()
+		}
+		return res
+	}
 	cn, err := auth.AuthenticateCommand(options, conf)
 	if err != nil {
 		return err.Error()

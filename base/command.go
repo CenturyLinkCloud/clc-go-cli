@@ -9,4 +9,6 @@ type Command interface {
 	ShowHelp() string
 	InputModel() interface{}
 	OutputModel() interface{}
+	IsOffline() bool
+	ExecuteOffline() (string, error)
 }
