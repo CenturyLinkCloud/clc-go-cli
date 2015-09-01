@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -8,21 +9,23 @@ func main() {
 	args := os.Args[1:]
 
 	if len(args) == 1 && args[0] == "--generate" {
-		apiDef, err := ParseApi()
+		logger := NewLogger()
+		parser := NewParser(logger)
+		apiDef, err := parser.ParseApi()
 		if err != nil {
-			showError("Error while parsing API definition")
+			showError("Error while parsing API definition", nil)
 			return
 		}
 		err = StoreApi(apiDef)
 		if err != nil {
-			showError("Error while storing API definition")
+			showError("Error while storing API definition", nil)
 		}
 	}
 	if len(args) != 0 {
-		showError("Ussage: 'integration_tests' or 'integration_tests --generate'")
+		showError("Ussage: 'integration_tests' or 'integration_tests --generate'", nil)
 		return
 	}
-	apiDef, err := LoadApi()
+	_, err := LoadApi()
 	if err != nil {
 		showError("Error while loadin API", err)
 		return
@@ -31,7 +34,7 @@ func main() {
 
 func showError(prefix string, err error) {
 	if err != nil {
-		fmt.Printf("%s: %s", prefix, err.String())
+		fmt.Printf("%s: %s", prefix, err.Error())
 	} else {
 		fmt.Print(prefix)
 	}

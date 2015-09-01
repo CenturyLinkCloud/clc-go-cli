@@ -4,11 +4,11 @@ type ApiDef struct {
 	Method            string
 	Url               string
 	UrlExample        string
-	UrlParameters     []ParameterDef
+	UrlParameters     []*ParameterDef
+	ContentParameters []*ParameterDef
 	ContentExample    string
-	ContentParameters []ParameterDef
 	ResExample        string
-	ResProperties     []ResPropertyDef
+	ResParameters     []*ParameterDef
 }
 
 type ParameterDef struct {
@@ -16,12 +16,5 @@ type ParameterDef struct {
 	Type        string
 	Description string
 	IsRequired  bool
-	Children    map[string]ParameterDef
-}
-
-type ResPropertyDef struct {
-	Name        string
-	Type        string
-	Description string
-	Children    map[string]ResPropertyDef
+	Children    []*ParameterDef
 }
