@@ -50,7 +50,7 @@ func init() {
 				},
 				{
 					"--source-server-id",
-					[]string{"Required. ID of the server to use a source."},
+					[]string{"Required. ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID."},
 				},
 				{
 					"--is-managed-os",
