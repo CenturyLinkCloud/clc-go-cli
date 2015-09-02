@@ -31,6 +31,8 @@ type CreateReq struct {
 	AdditionalDisks        []AddDiskRequest `json:"omitempty"`
 	Ttl                    time.Time        `json:"omitempty"`
 	Packages               []PackageDef     `json:"omitempty"`
+	ConfigurationId        string           `json:"omitempty"`
+	OsType                 string           `json:"omitempty"`
 }
 
 func (c *CreateReq) Validate() error {
@@ -47,6 +49,15 @@ func (c *CreateReq) Validate() error {
 
 	if (c.GroupName == "") == (c.GroupId == "") {
 		return fmt.Errorf("Exactly one parameter from the following: group-id, group-name must be specified.")
+	}
+
+	if c.Type == "bareMetal" {
+		if c.ConfigurationId == "" {
+			return fmt.Errorf("ConfigurationId: required for bare metal servers.")
+		}
+		if c.OsType == "" {
+			return fmt.Errorf("OsType: required for bare metal servers.")
+		}
 	}
 
 	return nil
