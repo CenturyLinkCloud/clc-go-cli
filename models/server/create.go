@@ -7,32 +7,32 @@ import (
 
 type CreateReq struct {
 	Name                   string `valid:"required"`
-	Description            string `json:"omitempty"`
+	Description            string `json:",omitempty"`
 	GroupId                string
-	GroupName              string `json:"omitempty"`
+	GroupName              string `json:",omitempty"`
 	SourceServerId         string
 	TemplateId             string
-	TemplateName           string           `json:"omitempty"`
-	IsManagedOS            bool             `json:"omitempty"`
-	PrimaryDns             string           `json:"omitempty"`
-	SecondaryDns           string           `json:"omitempty"`
-	NetworkId              string           `json:"omitempty"`
-	IpAddress              string           `json:"omitempty"`
-	RootPassword           string           `json:"omitempty"`
-	SourceServerPassword   string           `json:"omitempty"`
+	TemplateName           string           `json:",omitempty"`
+	IsManagedOS            bool             `json:",omitempty"`
+	PrimaryDns             string           `json:",omitempty"`
+	SecondaryDns           string           `json:",omitempty"`
+	NetworkId              string           `json:",omitempty"`
+	IpAddress              string           `json:",omitempty"`
+	RootPassword           string           `json:",omitempty"`
+	SourceServerPassword   string           `json:",omitempty"`
 	Cpu                    int64            `valid:"required"`
-	CpuAutoscalePolicyId   string           `json:"omitempty"`
+	CpuAutoscalePolicyId   string           `json:",omitempty"`
 	MemoryGB               int64            `valid:"required"`
 	Type                   string           `valid:"required" oneOf:"standard,hyperscale,bareMetal"`
-	StorageType            string           `json:"omitempty" oneOf:"standard,premium,hyperscale"`
-	AntiAffinityPolicyId   string           `json:"omitempty"`
-	AntiAffinityPolicyName string           `json:"omitempty"`
-	CustomFields           []CustomFieldDef `json:"omitempty"`
-	AdditionalDisks        []AddDiskRequest `json:"omitempty"`
-	Ttl                    time.Time        `json:"omitempty"`
-	Packages               []PackageDef     `json:"omitempty"`
-	ConfigurationId        string           `json:"omitempty"`
-	OsType                 string           `json:"omitempty"`
+	StorageType            string           `json:",omitempty" oneOf:"standard,premium,hyperscale"`
+	AntiAffinityPolicyId   string           `json:",omitempty"`
+	AntiAffinityPolicyName string           `json:",omitempty"`
+	CustomFields           []CustomFieldDef `json:",omitempty"`
+	AdditionalDisks        []AddDiskRequest `json:",omitempty"`
+	Ttl                    time.Time        `json:",omitempty"`
+	Packages               []PackageDef     `json:",omitempty"`
+	ConfigurationId        string           `json:",omitempty"`
+	OsType                 string           `json:",omitempty"`
 }
 
 func (c *CreateReq) Validate() error {
