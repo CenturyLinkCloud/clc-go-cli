@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const (
+	timeFormat = "2006-01-02 15:04:05"
+)
+
 type CreateReq struct {
 	Name                   string `valid:"required"`
 	Description            string `json:",omitempty"`
@@ -29,7 +33,8 @@ type CreateReq struct {
 	AntiAffinityPolicyName string           `json:",omitempty"`
 	CustomFields           []CustomFieldDef `json:",omitempty"`
 	AdditionalDisks        []AddDiskRequest `json:",omitempty"`
-	Ttl                    time.Time        `json:",omitempty"`
+	Ttl                    time.Time        `json:"-"`
+	TtlString              string           `json:"Ttl,omitempty"`
 	Packages               []PackageDef     `json:",omitempty"`
 	ConfigurationId        string           `json:",omitempty"`
 	OsType                 string           `json:",omitempty"`
@@ -67,7 +72,13 @@ func (c *CreateReq) ApplyDefaultBehaviour() error {
 	if c.TemplateId != "" {
 		c.SourceServerId = c.TemplateId
 	}
+
+	zeroTime := time.Time{}
+	if c.Ttl != zeroTime {
+		c.TtlString = c.Ttl.Format(timeFormat)
+	}
 	return nil
+
 	//TODO: implement searching templates by name
 	//TODO: implement searching groups by names
 }
