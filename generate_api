@@ -3,7 +3,7 @@
 set -e
 
 echo -e "Generating Binary..."
-go build -o ./integration_tests/tests integration_tests/*.go
+go build -o ./out/tests integration_tests/*.go
 
 echo -e "Generating API"
-./integration_tests/tests --generate
+./out/tests -generate -api-path $(readlink -f '.')/integration_tests/api.json

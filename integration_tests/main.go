@@ -1,42 +1,45 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 )
 
 func main() {
-	args := os.Args[1:]
+	var apiPath string
+	flag.StringVar(&apiPath, "api-path", "", "Api path")
+	var generate bool
+	flag.BoolVar(&generate, "generate", false, "Generate API")
 
-	if len(args) == 1 && args[0] == "--generate" {
+	flag.Parse()
+
+	if generate {
 		logger := NewLogger()
 		parser := NewParser(logger)
 		apiDef, err := parser.ParseApi()
 		if err != nil {
-			showError("Error while parsing API definition", nil)
+			showError("Error while parsing API definition", err)
 			return
 		}
-		err = StoreApi(apiDef)
+		err = StoreApi(apiDef, apiPath)
 		if err != nil {
-			showError("Error while storing API definition", nil)
+			showError("Error while storing API definition", err)
 		}
-	}
-	if len(args) != 0 {
-		showError("Ussage: 'integration_tests' or 'integration_tests --generate'", nil)
-		return
-	}
-	_, err := LoadApi()
-	if err != nil {
-		showError("Error while loadin API", err)
-		return
+	} else {
+		_, err := LoadApi(apiPath)
+		if err != nil {
+			showError("Error while loadin API", err)
+			return
+		}
 	}
 }
 
 func showError(prefix string, err error) {
 	if err != nil {
-		fmt.Printf("%s: %s", prefix, err.Error())
+		fmt.Printf("%s: %s\n", prefix, err.Error())
 	} else {
-		fmt.Print(prefix)
+		fmt.Print(prefix + "\n")
 	}
 	os.Exit(1)
 }

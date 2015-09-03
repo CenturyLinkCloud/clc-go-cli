@@ -3,20 +3,19 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"
 )
 
-func StoreApi(api []*ApiDef) error {
-	data, err := json.Marshal(api)
+func StoreApi(api []*ApiDef, apiPath string) error {
+	data, err := json.MarshalIndent(api, "", "    ")
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile("api.json", data, os.ModeExclusive)
+	err = ioutil.WriteFile(apiPath, data, 0664)
 	return err
 }
 
-func LoadApi() ([]*ApiDef, error) {
-	data, err := ioutil.ReadFile("api.json")
+func LoadApi(apiPath string) ([]*ApiDef, error) {
+	data, err := ioutil.ReadFile(apiPath)
 	if err != nil {
 		return nil, err
 	}

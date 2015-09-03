@@ -40,26 +40,21 @@ func (p *parser) ParseApi() ([]*ApiDef, error) {
 	}
 	res := make([]*ApiDef, 0)
 	var parseErr error
-	firstApiSectionId := "alert-policies-create-alert-policy"
-	firstSectionReached := false
 	p.findNode(doc,
 		func(n *html.Node) CheckRes {
 			if parseErr != nil {
 				return CheckResReturn
 			}
-			if p.hasAttr(n.Attr, "id", firstApiSectionId) {
-				firstSectionReached = true
-			}
-			if p.hasAttr(n.Attr, "class", "kb-api-post") && firstSectionReached {
+			if p.hasAttr(n.Attr, "class", "kb-post-content kb-post-content--api") {
 				return CheckResApply
 			}
 			return CheckResContinue
 		},
 		func(n *html.Node) {
-			api, err := p.parseNode(n)
+			api, err := p.parseApiNode(n)
 			if err != nil {
 				parseErr = err
-			} else {
+			} else if api != nil {
 				res = append(res, api)
 			}
 		})
@@ -67,116 +62,183 @@ func (p *parser) ParseApi() ([]*ApiDef, error) {
 	return res, parseErr
 }
 
-func (p *parser) parseNode(n *html.Node) (*ApiDef, error) {
-	p.logger.LogNode("Parsing node", n)
-	var apiSection *html.Node
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if p.hasAttr(c.Attr, "data-api-section", "") {
-			apiSection = c
-			break
-		}
+func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
+	p.logger.LogNode("-----------Parsing node", n)
+	reqSec := p.findNextNode(n.FirstChild, nil, "URL")
+	if reqSec == nil {
+		p.logger.LogNode("Not an API node", n)
+		return nil, nil
 	}
-	if apiSection == nil {
-		return nil, fmt.Errorf("'data-api-section' attribute missed.")
+	resSec := p.findNextNode(reqSec, nil, "Response")
+	if resSec == nil {
+		return nil, fmt.Errorf("Response section not found")
 	}
 
-	parseChildren := func(parameters []*ParameterDef) {
+	parseChildren := func(parameters []*ParameterDef) error {
 		for _, param := range parameters {
 			if param.Type == "complex" {
-				_, param.Children = p.parseTable(apiSection, strings.Title(param.Name+" Definition"))
+				var err error
+				param.Children, err = p.parseTable(reqSec, resSec, strings.Title(param.Name+" Definition"))
+				if err != nil {
+					return err
+				}
 			}
 		}
+		return nil
 	}
 
 	res := &ApiDef{}
-	apiSection, res.Method, res.Url = p.parseUrl(apiSection, "Structure")
-	apiSection, _, res.UrlExample = p.parseUrl(apiSection, "Example")
-	apiSection, res.UrlParameters = p.parseTable(apiSection, "URI Parameters")
-	apiSection, res.ContentParameters = p.parseTable(apiSection, "Content Properties")
-	parseChildren(res.ContentParameters)
-	apiSection, res.ContentExample = p.parseExample(apiSection, "Examples", "Response")
-	apiSection, res.ResParameters = p.parseTable(apiSection, "Entity Definition")
-	parseChildren(res.ResParameters)
-	apiSection, res.ResExample = p.parseExample(apiSection, "Examples", "")
+	var err error
+	res.Method, res.Url, err = p.parseUrl(reqSec, resSec, "Structure")
+	if err != nil {
+		return nil, err
+	}
+	_, res.UrlExample, err = p.parseUrl(reqSec, resSec, "Example")
+	if err != nil {
+		return nil, err
+	}
+	res.UrlParameters, err = p.parseTable(reqSec, resSec, "URI Parameters")
+	if err != nil {
+		return nil, err
+	}
+	res.ContentParameters, err = p.parseTable(reqSec, resSec, "Content Properties")
+	if err != nil {
+		return nil, err
+	}
+	err = parseChildren(res.ContentParameters)
+	if err != nil {
+		return nil, err
+	}
+	res.ContentExample, err = p.parseExample(reqSec, resSec, "Examples")
+	if err != nil {
+		return nil, err
+	}
+	res.ResParameters, err = p.parseTable(resSec, nil, "Entity Definition")
+	if err != nil {
+		return nil, err
+	}
+	err = parseChildren(res.ResParameters)
+	if err != nil {
+		return nil, err
+	}
+	res.ResExample, err = p.parseExample(resSec, nil, "Examples")
 	return res, nil
 }
 
-func (p *parser) parseUrl(n *html.Node, header string) (*html.Node, string, string) {
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		p.logger.LogNode("ParseUrl data", c.FirstChild)
-		if c.FirstChild != nil && c.FirstChild.Data == header {
-			c = c.NextSibling
-			p.logger.LogNode("Parse Url success:", c.FirstChild)
-			res := ""
-			p.findNode(doc,
-				func(n *html.Node) CheckRes {
-					if n.DataAtom == atom.Code {
-						return CheckResApply
-					}
-					return CheckResContinue
-				},
-				func(n *html.Node) {
-					res = n.FirstChild.Data
-				})
-			return c.NextSibling, res[0], res[1]
-		}
+func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (string, string, error) {
+	p.logger.Log("parseUrl called")
+	res, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Pre, atom.Code, 1)
+	if err != nil {
+		return "", "", err
 	}
-	return n, "", ""
+	if res == nil {
+		return "", "", nil
+	}
+	array := strings.Split(res.FirstChild.Data, " ")
+	if len(array) != 2 {
+		return "", "", fmt.Errorf("Incorrect format of url section")
+	}
+	return array[0], array[1], nil
 }
 
-func (p *parser) parseExample(n *html.Node, header, stopAt string) (*html.Node, string) {
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if stopAt != "" && c.LastChild.Data == stopAt {
-			return n, ""
-		}
-		if c.FirstChild != nil && c.FirstChild.Data == header {
-			c = c.NextSibling
-			p.logger.LogNode("Parse Example success:", c)
-			res := ""
-			p.findNode(doc,
-				func(n *html.Node) CheckRes {
-					if n.DataAtom == atom.Code {
-						return CheckResApply
-					}
-					return CheckResContinue
-				},
-				func(n *html.Node) {
-					res = n.FirstChild.Data
-				})
-			return c.NextSibling, res
-		}
+func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) (string, error) {
+	p.logger.Log("parseExample called")
+	res, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Pre, atom.Code, 2)
+	if err != nil {
+		return "", err
 	}
-	return n, ""
+	if res == nil {
+		return "", nil
+	}
+	return res.FirstChild.Data, nil
 }
 
-func (p *parser) parseTable(n *html.Node, header string) (*html.Node, []*ParameterDef) {
+func (p *parser) parseTable(startNode, endNode *html.Node, headerText string) ([]*ParameterDef, error) {
+	p.logger.Log("parseTable called")
+	table, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Table, atom.Table, 1)
+	if err != nil {
+		return nil, err
+	}
+	if table == nil {
+		return nil, nil
+	}
+
 	res := []*ParameterDef{}
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		if c.FirstChild != nil && c.FirstChild.Data == header && c.NextSibling.DataAtom == atom.Table {
-			c = c.NextSibling
 
-			p.logger.Log("Parse Table success: %+v", c)
-			for row := c.LastChild.FirstChild; row != nil; row = row.NextSibling {
-				item := &ParameterDef{}
-				cell := row.FirstChild
-				item.Name = cell.FirstChild.Data
-				cell = cell.NextSibling
-
-				item.Type = cell.FirstChild.Data
-				cell = cell.NextSibling
-
-				item.Description = cell.FirstChild.Data
-				cell = cell.NextSibling
-
-				if cell != nil {
-					item.IsRequired = cell.FirstChild.Data == "Yes"
-				}
-				res = append(res, item)
-			}
-			return c.NextSibling, res
-		}
+	tbody, err := p.findNextNodeByType(table.FirstChild, atom.Tbody, 2)
+	if err != nil {
+		return nil, err
 	}
-	return n, nil
+	p.logger.LogNode("parseTable tbody found", tbody)
+	next := func(n *html.Node) *html.Node {
+		for n = n.NextSibling; n != nil && n.DataAtom != atom.Td; n = n.NextSibling {
+		}
+		p.logger.LogNode("parseTable cell found", n)
+		return n
+	}
+	for row := tbody.FirstChild; row != nil; row = row.NextSibling {
+		if row.DataAtom != atom.Tr {
+			continue
+		}
+
+		p.logger.LogNode("parseTable row found", row)
+		item := &ParameterDef{}
+		cell := next(row.FirstChild)
+		item.Name = cell.FirstChild.Data
+		cell = next(cell)
+
+		item.Type = cell.FirstChild.Data
+		cell = next(cell)
+
+		item.Description = cell.FirstChild.Data
+		cell = next(cell)
+
+		if cell != nil {
+			item.IsRequired = cell.FirstChild.Data == "Yes"
+		}
+		res = append(res, item)
+	}
+	if len(res) == 0 {
+		return nil, fmt.Errorf("Empty table parsed")
+	}
+	return res, nil
+}
+
+func (p *parser) findNodeByHeader(startNode, endNode *html.Node, headerText string, containerType, elemType atom.Atom, containerMaxRemoteness int) (*html.Node, error) {
+	header := p.findNextNode(startNode, endNode, headerText)
+	if header != nil {
+		p.logger.LogNode("findNodeByHeader header found:", header)
+
+		//if next node is paragraf we don't need to return error, because this is a valid case
+		//just return nil
+		_, err := p.findNextNodeByType(header, atom.P, 1)
+		if err == nil {
+			return nil, nil
+		}
+		container, err := p.findNextNodeByType(header, containerType, containerMaxRemoteness)
+		if err != nil {
+			return nil, err
+		}
+		p.logger.LogNode("findNodeByHeader container:", container)
+		var res *html.Node
+		p.findNode(container,
+			func(n *html.Node) CheckRes {
+				if n.DataAtom == elemType {
+					return CheckResApply
+				}
+				return CheckResContinue
+			},
+			func(n *html.Node) {
+				p.logger.LogNode("findNodeByHeader target found:", n.FirstChild)
+				res = n
+			})
+		if res == nil {
+			return nil, fmt.Errorf("Node %v not found", elemType)
+		}
+		return res, nil
+	}
+	p.logger.Log("findNodeByHeader header not found %s", headerText)
+	return nil, nil
 }
 
 func (p *parser) hasAttr(attrs []html.Attribute, key, val string) bool {
@@ -194,6 +256,32 @@ func (p *parser) hasAttr(attrs []html.Attribute, key, val string) bool {
 		}
 	}
 	return false
+}
+
+func (p *parser) findNextNode(startNode, endNode *html.Node, text string) *html.Node {
+	for c := startNode.NextSibling; c != endNode; c = c.NextSibling {
+		if c.FirstChild != nil && c.FirstChild.Data == text {
+			return c
+		}
+	}
+	return nil
+}
+
+func (p *parser) findNextNodeByType(n *html.Node, nodeType atom.Atom, maxNodeRemotenes int) (*html.Node, error) {
+	var c *html.Node
+	i := 0
+	for c = n.NextSibling; c != nil && c.DataAtom != nodeType && i < maxNodeRemotenes; c = c.NextSibling {
+		if c.Type == html.ElementNode {
+			i++
+		}
+	}
+	if i == maxNodeRemotenes {
+		return nil, fmt.Errorf("Next node with type %v and maxRemoteness %d not found", nodeType, maxNodeRemotenes)
+	}
+	if c == nil {
+		return nil, fmt.Errorf("Next node with type %v not found", nodeType)
+	}
+	return c, nil
 }
 
 func (p *parser) findNode(n *html.Node, checker func(*html.Node) CheckRes, action func(*html.Node)) {
