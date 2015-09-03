@@ -35,7 +35,7 @@ You need to be authenticated with a username and password in order to execute CL
 
 ### Set up the configuration file
 
-The program uses a configuration file with the following path: `$HOME/.clc/config.yml`. One is created automatically on the first execution of any command. The file is in YAML format. The following fields count:
+The program uses a configuration file located at `$HOME/.clc/config.yml` on Linux/Unix/Mac and `C:\Users\%username%` on Windows. One is created automatically on the first execution of any command. The file is in YAML format. The following fields count:
 
 * `user` and `password`: the credentials used for authentication.
 * `defaultformat`: a default output format, either `json`, `table` or `text`.
