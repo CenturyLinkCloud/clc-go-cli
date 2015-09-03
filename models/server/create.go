@@ -17,7 +17,7 @@ type CreateReq struct {
 	SourceServerId         string
 	TemplateId             string
 	TemplateName           string           `json:",omitempty"`
-	IsManagedOS            bool             `json:",omitempty"`
+	IsManagedOs            bool             `json:",omitempty"`
 	IsManagedBackup        bool             `json:",omitempty"`
 	PrimaryDns             string           `json:",omitempty"`
 	SecondaryDns           string           `json:",omitempty"`
@@ -27,7 +27,7 @@ type CreateReq struct {
 	SourceServerPassword   string           `json:",omitempty"`
 	Cpu                    int64            `valid:"required"`
 	CpuAutoscalePolicyId   string           `json:",omitempty"`
-	MemoryGB               int64            `valid:"required"`
+	MemoryGb               int64            `valid:"required"`
 	Type                   string           `valid:"required" oneOf:"standard,hyperscale,bareMetal"`
 	StorageType            string           `json:",omitempty" oneOf:"standard,premium,hyperscale"`
 	AntiAffinityPolicyId   string           `json:",omitempty"`

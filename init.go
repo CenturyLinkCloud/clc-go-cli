@@ -663,7 +663,7 @@ func init() {
 					},
 				},
 				{
-					"--memoryGB",
+					"--memory-gb",
 					[]string{
 						"Required. Number of GB of memory to configure the server with (1-128). If this value is different from the one specified in the OVF,",
 						"the import process will resize the server according to the value specified here.",
