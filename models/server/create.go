@@ -18,6 +18,7 @@ type CreateReq struct {
 	TemplateId             string
 	TemplateName           string           `json:",omitempty"`
 	IsManagedOS            bool             `json:",omitempty"`
+	IsManagedBackup        bool             `json:",omitempty"`
 	PrimaryDns             string           `json:",omitempty"`
 	SecondaryDns           string           `json:",omitempty"`
 	NetworkId              string           `json:",omitempty"`
