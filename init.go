@@ -50,7 +50,7 @@ func init() {
 				},
 				{
 					"--source-server-id",
-					[]string{"Required. ID of the server to use a source."},
+					[]string{"Required. ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID."},
 				},
 				{
 					"--is-managed-os",
@@ -156,14 +156,14 @@ func init() {
 				{
 					"--configuration-id",
 					[]string{
-						"Specifies the identifier for the specific configuration type of bare metal server to deploy.",
+						"Only required for bare metal servers. Specifies the identifier for the specific configuration type of bare metal server to deploy.",
 						"Ignored for standard and hyperscale servers.",
 					},
 				},
 				{
 					"--os-type",
 					[]string{
-						"Specifies the OS to provision with the bare metal server. Currently, the only supported OS types",
+						"Only required for bare metal servers. Specifies the OS to provision with the bare metal server. Currently, the only supported OS types",
 						"are redHat6_64Bit, centOS6_64Bit, windows2012R2Standard_64Bit.",
 						"Ignored for standard and hyperscale servers.",
 					},

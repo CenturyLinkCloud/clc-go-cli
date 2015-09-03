@@ -5,32 +5,39 @@ import (
 	"time"
 )
 
+const (
+	timeFormat = "2006-01-02 15:04:05"
+)
+
 type CreateReq struct {
 	Name                   string `valid:"required"`
-	Description            string `json:"omitempty"`
+	Description            string `json:",omitempty"`
 	GroupId                string
-	GroupName              string `json:"omitempty"`
+	GroupName              string `json:",omitempty"`
 	SourceServerId         string
 	TemplateId             string
-	TemplateName           string           `json:"omitempty"`
-	IsManagedOS            bool             `json:"omitempty"`
-	PrimaryDns             string           `json:"omitempty"`
-	SecondaryDns           string           `json:"omitempty"`
-	NetworkId              string           `json:"omitempty"`
-	IpAddress              string           `json:"omitempty"`
-	RootPassword           string           `json:"omitempty"`
-	SourceServerPassword   string           `json:"omitempty"`
+	TemplateName           string           `json:",omitempty"`
+	IsManagedOS            bool             `json:",omitempty"`
+	PrimaryDns             string           `json:",omitempty"`
+	SecondaryDns           string           `json:",omitempty"`
+	NetworkId              string           `json:",omitempty"`
+	IpAddress              string           `json:",omitempty"`
+	RootPassword           string           `json:",omitempty"`
+	SourceServerPassword   string           `json:",omitempty"`
 	Cpu                    int64            `valid:"required"`
-	CpuAutoscalePolicyId   string           `json:"omitempty"`
+	CpuAutoscalePolicyId   string           `json:",omitempty"`
 	MemoryGB               int64            `valid:"required"`
 	Type                   string           `valid:"required" oneOf:"standard,hyperscale,bareMetal"`
-	StorageType            string           `json:"omitempty" oneOf:"standard,premium,hyperscale"`
-	AntiAffinityPolicyId   string           `json:"omitempty"`
-	AntiAffinityPolicyName string           `json:"omitempty"`
-	CustomFields           []CustomFieldDef `json:"omitempty"`
-	AdditionalDisks        []AddDiskRequest `json:"omitempty"`
-	Ttl                    time.Time        `json:"omitempty"`
-	Packages               []PackageDef     `json:"omitempty"`
+	StorageType            string           `json:",omitempty" oneOf:"standard,premium,hyperscale"`
+	AntiAffinityPolicyId   string           `json:",omitempty"`
+	AntiAffinityPolicyName string           `json:",omitempty"`
+	CustomFields           []CustomFieldDef `json:",omitempty"`
+	AdditionalDisks        []AddDiskRequest `json:",omitempty"`
+	Ttl                    time.Time        `json:"-"`
+	TtlString              string           `json:"Ttl,omitempty"`
+	Packages               []PackageDef     `json:",omitempty"`
+	ConfigurationId        string           `json:",omitempty"`
+	OsType                 string           `json:",omitempty"`
 }
 
 func (c *CreateReq) Validate() error {
@@ -49,6 +56,15 @@ func (c *CreateReq) Validate() error {
 		return fmt.Errorf("Exactly one parameter from the following: group-id, group-name must be specified.")
 	}
 
+	if c.Type == "bareMetal" {
+		if c.ConfigurationId == "" {
+			return fmt.Errorf("ConfigurationId: required for bare metal servers.")
+		}
+		if c.OsType == "" {
+			return fmt.Errorf("OsType: required for bare metal servers.")
+		}
+	}
+
 	return nil
 }
 
@@ -56,7 +72,13 @@ func (c *CreateReq) ApplyDefaultBehaviour() error {
 	if c.TemplateId != "" {
 		c.SourceServerId = c.TemplateId
 	}
+
+	zeroTime := time.Time{}
+	if c.Ttl != zeroTime {
+		c.TtlString = c.Ttl.Format(timeFormat)
+	}
 	return nil
+
 	//TODO: implement searching templates by name
 	//TODO: implement searching groups by names
 }
