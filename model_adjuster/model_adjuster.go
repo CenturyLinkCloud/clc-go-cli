@@ -10,3 +10,12 @@ func ApplyDefaultBehaviour(model interface{}) error {
 	}
 	return nil
 }
+
+func InferID(model interface{}, cn base.Connection) error {
+	if named, ok := model.(base.IDInferable); ok {
+		if err := named.InferID(cn); err != nil {
+			return err
+		}
+	}
+	return nil
+}
