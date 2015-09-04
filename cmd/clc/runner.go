@@ -105,6 +105,10 @@ func run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
+	err = model_adjuster.InferID(cmd.InputModel(), cn)
+	if err != nil {
+		return err.Error()
+	}
 	err = cmd.Execute(cn)
 	if err != nil {
 		return err.Error()
