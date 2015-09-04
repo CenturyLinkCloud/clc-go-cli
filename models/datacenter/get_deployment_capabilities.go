@@ -7,8 +7,10 @@ type GetDCReq struct {
 type GetDCRes struct {
 	SupportsPremiumStorage     bool
 	SupportsSharedLoadBalancer bool
+	SupportsBareMetalServers   bool
 	DeployableNetworks         []DeployableNetwork
 	Templates                  []Template
+	ImportableOsTypes          []ImportableOSType
 }
 
 type DeployableNetwork struct {
@@ -25,4 +27,12 @@ type Template struct {
 	Capabilities       []string
 	ReservedDrivePaths []string
 	DrivePathLength    int64
+}
+
+type ImportableOSType struct {
+	Id                 int64
+	Description        string
+	LabProductCode     string
+	PremiumProductCode string
+	Type               string
 }
