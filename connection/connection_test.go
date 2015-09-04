@@ -21,6 +21,11 @@ type requestWithURIParams struct {
 	param3 string
 }
 
+type requestWithURIParamsComposed struct {
+	requestWithURIParams
+	param4 string `URIParam:"yes"`
+}
+
 var serveMux *http.ServeMux
 var server *httptest.Server
 
@@ -123,6 +128,19 @@ func TestExtractURIParams(t *testing.T) {
 	uri = "http://some-url/{param3}?x=y&param1={param1}&param2={param2}"
 	got = connection.ExtractURIParams(uri, r)
 	expected = "http://some-url/{param3}?x=y&param1=1&param2=2"
+
+	if got != expected {
+		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
+	}
+
+	composed := requestWithURIParamsComposed{
+		param4: "4",
+	}
+	composed.param1 = "1"
+	composed.param3 = "3"
+	uri = "http://some-url?x=y&param1={param1}&param2={param2}&p={param4}&p3={param3}"
+	got = connection.ExtractURIParams(uri, composed)
+	expected = "http://some-url?x=y&param1=1&param2=&p=4&p3={param3}"
 
 	if got != expected {
 		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)

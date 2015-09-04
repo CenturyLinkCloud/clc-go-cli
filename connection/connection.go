@@ -74,9 +74,13 @@ func ExtractURIParams(uri string, model interface{}) string {
 	var newURI = uri
 	for i := 0; i < meta.NumField(); i++ {
 		fieldMeta := meta.Field(i)
+		field := value.FieldByName(fieldMeta.Name)
+		if field.Kind() == reflect.Struct {
+			newURI = ExtractURIParams(newURI, field.Interface())
+			continue
+		}
 		stub := fmt.Sprintf("{%s}", fieldMeta.Name)
 		if fieldMeta.Tag.Get("URIParam") != "" && strings.Contains(uri, stub) {
-			field := value.FieldByName(fieldMeta.Name)
 			if field.Kind() != reflect.String {
 				panic("Fields marked by URIParam tag must be strings.")
 			}
