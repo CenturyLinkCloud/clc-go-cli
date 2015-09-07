@@ -1,6 +1,6 @@
 package affinity
 
 type UpdateReq struct {
-	Policy
-	Name string `valid:"required"`
+	Policy `argument:"composed"`
+	Name   string `valid:"required"`
 }
