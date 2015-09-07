@@ -47,12 +47,20 @@ func (c *CommandBase) Arguments() []string {
 		return []string{}
 	}
 
-	args := []string{}
-	n := meta.NumField()
-	for i := 0; i < n; i++ {
-		f := meta.FieldByIndex([]int{i})
-		args = append(args, parser.DenormalizePropertyName(f.Name))
+	var args []string
+	var collectArgs func(meta reflect.Type)
+	collectArgs = func(meta reflect.Type) {
+		n := meta.NumField()
+		for i := 0; i < n; i++ {
+			f := meta.FieldByIndex([]int{i})
+			if f.Tag.Get("argument") == "composed" {
+				collectArgs(f.Type)
+			} else {
+				args = append(args, parser.DenormalizePropertyName(f.Name))
+			}
+		}
 	}
+	collectArgs(meta)
 	return args
 }
 
