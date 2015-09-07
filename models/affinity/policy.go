@@ -10,6 +10,10 @@ type Policy struct {
 	PolicyName string
 }
 
+var (
+	policiesURL = "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}"
+)
+
 func (p *Policy) Validate() error {
 	if (p.PolicyId == "") == (p.PolicyName == "") {
 		return fmt.Errorf("Exactly one of the policy-id and policy-name parameters must be specified")
@@ -22,9 +26,8 @@ func (p *Policy) InferID(cn base.Connection) error {
 		return nil
 	}
 
-	url := "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}"
 	policies := &ListRes{}
-	err := cn.ExecuteRequest("GET", url, nil, policies)
+	err := cn.ExecuteRequest("GET", policiesURL, nil, policies)
 	if err != nil {
 		return err
 	}
@@ -45,4 +48,22 @@ func (p *Policy) InferID(cn base.Connection) error {
 	default:
 		return fmt.Errorf("There are more than one policy with name '%s'. Please, specify an ID.", p.PolicyName)
 	}
+}
+
+func (p *Policy) GetNames(cn base.Connection, name string) ([]string, error) {
+	if name != "PolicyName" {
+		return nil, nil
+	}
+
+	policies := &ListRes{}
+	err := cn.ExecuteRequest("GET", policiesURL, nil, policies)
+	if err != nil {
+		return nil, err
+	}
+
+	names := []string{}
+	for _, policy := range policies.Items {
+		names = append(names, policy.Name)
+	}
+	return names, nil
 }
