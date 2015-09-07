@@ -54,20 +54,22 @@ func Run(args []string) string {
 		return ""
 	}
 
+	conf, err := config.LoadConfig()
+	if err != nil {
+		conf = &config.Config{}
+	}
+
 	last := args[len(args)-1]
 	_, err = options.ExtractFrom(parsed)
 	if err != nil {
 		if last == "--output" {
 			return "json table text"
 		} else if last == "--profile" {
-			conf, err := config.LoadConfig()
-			if err == nil {
-				opts := []string{}
-				for k := range conf.Profiles {
-					opts = append(opts, k)
-				}
-				return strings.Join(opts, " ")
+			profiles := []string{}
+			for k := range conf.Profiles {
+				profiles = append(profiles, k)
 			}
+			return strings.Join(profiles, " ")
 		}
 		return ""
 	}
