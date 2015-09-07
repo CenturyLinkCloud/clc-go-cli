@@ -77,9 +77,9 @@ func Run(args []string) string {
 		key := parser.NormalizePropertyName(last)
 		if hasArg(cmd.InputModel(), key) {
 			// Looking for enums.
-			opts, exist := model_validator.FieldOptions(cmd.InputModel(), key)
+			enum, exist := model_validator.FieldOptions(cmd.InputModel(), key)
 			if exist {
-				return strings.Join(opts, " ")
+				return strings.Join(enum, " ")
 			}
 			return ""
 		}
