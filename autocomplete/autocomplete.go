@@ -1,6 +1,7 @@
 package autocomplete
 
 import (
+	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 	"github.com/centurylinkcloud/clc-go-cli/config"
@@ -60,7 +61,7 @@ func Run(args []string) string {
 	}
 
 	last := args[len(args)-1]
-	_, err = options.ExtractFrom(parsed)
+	opts, err := options.ExtractFrom(parsed)
 	if err != nil {
 		if last == "--output" {
 			return "json table text"
@@ -80,6 +81,19 @@ func Run(args []string) string {
 			enum, exist := model_validator.FieldOptions(cmd.InputModel(), key)
 			if exist {
 				return strings.Join(enum, " ")
+			}
+
+			// Resolving API-related property names.
+			if inferable, ok := cmd.InputModel().(base.IDInferable); ok {
+				cn, err := auth.AuthenticateCommand(opts, conf)
+				if err != nil {
+					return ""
+				}
+
+				names, err := inferable.GetNames(cn, key)
+				if err == nil && names != nil {
+					return strings.Join(names, " ")
+				}
 			}
 			return ""
 		}
