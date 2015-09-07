@@ -53,6 +53,10 @@ func (c *CommandBase) Arguments() []string {
 		n := meta.NumField()
 		for i := 0; i < n; i++ {
 			f := meta.FieldByIndex([]int{i})
+			if f.Tag.Get("argument") == "ignore" {
+				continue
+			}
+
 			if f.Tag.Get("argument") == "composed" {
 				collectArgs(f.Type)
 			} else {
