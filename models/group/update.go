@@ -7,8 +7,8 @@ import (
 )
 
 type UpdateReq struct {
-	GroupId        string `valid:"required" URIParam:"yes"`
-	PatchOperation []GroupPatchOperation
+	GroupId        string                `valid:"required" URIParam:"yes"`
+	PatchOperation []GroupPatchOperation `argument:"ignore"`
 
 	CustomFields  []server.CustomFieldDef
 	Name          string

@@ -6,8 +6,8 @@ import (
 )
 
 type UpdateReq struct {
-	ServerId       string `valid:"required" URIParam:"true"`
-	PatchOperation []ServerPatchOperation
+	ServerId       string                 `valid:"required" URIParam:"true"`
+	PatchOperation []ServerPatchOperation `argument:"ignore"`
 
 	Cpu          int64
 	Memory       int64
