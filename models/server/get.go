@@ -21,6 +21,6 @@ type GetRes struct {
 	Details     Details
 	Type        string
 	StorageType string
-	ChangeInfo  ChangeInfo
+	ChangeInfo  models.ChangeInfo
 	Links       []models.LinkEntity
 }

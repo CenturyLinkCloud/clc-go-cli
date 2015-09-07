@@ -4,7 +4,6 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
-	"time"
 )
 
 type Disk struct {
@@ -58,11 +57,4 @@ type IPAddresses struct {
 type Snapshot struct {
 	Name  string
 	Links []models.LinkEntity
-}
-
-type ChangeInfo struct {
-	CreatedDate  time.Time
-	CreatedBy    string
-	ModifiedData time.Time
-	ModifiedBy   string
 }
