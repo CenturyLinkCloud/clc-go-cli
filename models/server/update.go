@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 )
 
 type UpdateReq struct {
@@ -12,7 +13,7 @@ type UpdateReq struct {
 	Cpu          int64
 	Memory       int64
 	RootPassword []string
-	CustomFields []CustomFieldDef
+	CustomFields []customfields.Def
 	Description  string
 	GroupId      string
 	Disks        UpdateDisksDescription

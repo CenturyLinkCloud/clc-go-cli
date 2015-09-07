@@ -2,6 +2,7 @@ package group
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
+	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
@@ -16,5 +17,5 @@ type Entity struct {
 	Groups        []Entity
 	Links         []models.LinkEntity
 	ChangeInfo    server.ChangeInfo
-	CustromFields []server.CustomFieldDef
+	CustromFields []customfields.Def
 }

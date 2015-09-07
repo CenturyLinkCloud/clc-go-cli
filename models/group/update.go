@@ -3,14 +3,14 @@ package group
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/models/server"
+	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 )
 
 type UpdateReq struct {
 	GroupId        string                `valid:"required" URIParam:"yes"`
 	PatchOperation []GroupPatchOperation `argument:"ignore"`
 
-	CustomFields  []server.CustomFieldDef
+	CustomFields  []customfields.Def
 	Name          string
 	Description   string
 	ParentGroupId string
