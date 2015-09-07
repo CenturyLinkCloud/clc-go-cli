@@ -1,5 +1,5 @@
 package affinity
 
 type GetReq struct {
-	Policy `argument:"composed"`
+	Policy `argument:"composed" URIParam:"PolicyId"`
 }

@@ -1,5 +1,5 @@
 package affinity
 
 type DeleteReq struct {
-	Policy `argument:"composed"`
+	Policy `argument:"composed" URIParam:"PolicyId"`
 }

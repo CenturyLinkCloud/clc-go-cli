@@ -6,7 +6,7 @@ import (
 )
 
 type Policy struct {
-	PolicyId   string `URIParam:"yes"`
+	PolicyId   string
 	PolicyName string
 }
 
