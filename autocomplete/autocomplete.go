@@ -12,26 +12,30 @@ import (
 	"strings"
 )
 
+const (
+	SEP = " "
+)
+
 func Run(args []string) string {
 	if len(args) == 0 {
-		return strings.Join(command_loader.GetResources(), " ")
+		return strings.Join(command_loader.GetResources(), SEP)
 	}
 	resource, err := command_loader.LoadResource(args[0])
 	if err != nil {
 		if len(args) == 1 {
-			return strings.Join(command_loader.GetResources(), " ")
+			return strings.Join(command_loader.GetResources(), SEP)
 		}
 		return ""
 	}
 	if len(args) == 1 {
-		return strings.Join(command_loader.GetCommands(resource), " ")
+		return strings.Join(command_loader.GetCommands(resource), SEP)
 	}
 
 	cmdArg := args[1]
 	cmd, err := command_loader.LoadCommand(resource, cmdArg)
 	if err != nil {
 		if len(args) == 2 {
-			return strings.Join(command_loader.GetCommands(resource), " ")
+			return strings.Join(command_loader.GetCommands(resource), SEP)
 		}
 		return ""
 	}
@@ -43,7 +47,7 @@ func Run(args []string) string {
 		arguments = args[2:]
 	}
 	if len(arguments) == 0 {
-		return strings.Join(optionsAndArguments(cmd), " ")
+		return strings.Join(optionsAndArguments(cmd), SEP)
 	}
 
 	parsed, err := parser.ParseArguments(arguments)
@@ -64,13 +68,13 @@ func Run(args []string) string {
 	opts, err := options.ExtractFrom(parsed)
 	if err != nil {
 		if last == "--output" {
-			return "json table text"
+			return strings.Join([]string{"json", "table", "text"}, SEP)
 		} else if last == "--profile" {
 			profiles := []string{}
 			for k := range conf.Profiles {
 				profiles = append(profiles, k)
 			}
-			return strings.Join(profiles, " ")
+			return strings.Join(profiles, SEP)
 		}
 		return ""
 	}
@@ -80,7 +84,7 @@ func Run(args []string) string {
 			// Looking for enums.
 			enum, exist := model_validator.FieldOptions(cmd.InputModel(), key)
 			if exist {
-				return strings.Join(enum, " ")
+				return strings.Join(enum, SEP)
 			}
 
 			// Resolving API-related property names.
@@ -92,13 +96,13 @@ func Run(args []string) string {
 
 				names, err := inferable.GetNames(cn, key)
 				if err == nil && names != nil {
-					return strings.Join(names, " ")
+					return strings.Join(names, SEP)
 				}
 			}
 			return ""
 		}
 	}
-	return strings.Join(optionsAndArguments(cmd), " ")
+	return strings.Join(optionsAndArguments(cmd), SEP)
 }
 
 func optionsAndArguments(command base.Command) []string {

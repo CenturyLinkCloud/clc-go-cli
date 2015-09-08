@@ -22,21 +22,21 @@ func TestResourceAutocomplete(t *testing.T) {
 	sort.Strings(resources)
 
 	args := []string{""}
-	opts := strings.Split(autocomplete.Run(args), " ")
+	opts := strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, resources) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", resources, opts)
 	}
 
 	args = []string{"serve"}
-	opts = strings.Split(autocomplete.Run(args), " ")
+	opts = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, resources) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", resources, opts)
 	}
 
 	args = []string{"a"}
-	opts = strings.Split(autocomplete.Run(args), " ")
+	opts = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, resources) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", resources, opts)
@@ -48,14 +48,14 @@ func TestCommandAutocomplete(t *testing.T) {
 	sort.Strings(commands)
 
 	args := []string{"server"}
-	opts := strings.Split(autocomplete.Run(args), " ")
+	opts := strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, commands) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", commands, opts)
 	}
 
 	args = []string{"server", "cr"}
-	opts = strings.Split(autocomplete.Run(args), " ")
+	opts = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, commands) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", commands, opts)
@@ -63,7 +63,7 @@ func TestCommandAutocomplete(t *testing.T) {
 
 	args = []string{"serv", "create"}
 	commands = []string{""}
-	opts = strings.Split(autocomplete.Run(args), " ")
+	opts = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(opts)
 	if !reflect.DeepEqual(opts, commands) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", commands, opts)
@@ -78,35 +78,35 @@ func TestArgumentsAutocomplete(t *testing.T) {
 	sort.Strings(arguments)
 
 	args := []string{"server", "create"}
-	got := strings.Split(autocomplete.Run(args), " ")
+	got := strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--user", "test-user"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--cpu", "0"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--trace"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "not", "valid", "arguments"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	arguments = []string{""}
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
@@ -114,35 +114,35 @@ func TestArgumentsAutocomplete(t *testing.T) {
 	}
 
 	args = []string{"server", "create", "--user"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--from-file"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--trace", "--from-file"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--cpu"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
 	args = []string{"server", "create", "--cpu", "0", "--memory-gb"}
-	got = strings.Split(autocomplete.Run(args), " ")
+	got = strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
@@ -152,7 +152,7 @@ func TestArgumentsAutocomplete(t *testing.T) {
 func TestEnumerablesAutocomplete(t *testing.T) {
 	args := []string{"server", "create", "--type"}
 	expected, _ := model_validator.FieldOptions(&server.CreateReq{}, "Type")
-	got := strings.Split(autocomplete.Run(args), " ")
+	got := strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
 	}
@@ -160,7 +160,7 @@ func TestEnumerablesAutocomplete(t *testing.T) {
 
 func TestOutputOptionAutocomplete(t *testing.T) {
 	args := []string{"server", "create", "--output"}
-	expected := "json table text"
+	expected := strings.Join([]string{"json", "table", "text"}, autocomplete.SEP)
 	got := autocomplete.Run(args)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
@@ -201,7 +201,7 @@ func TestProfileOptionAutocomplete(t *testing.T) {
 
 	args := []string{"server", "create", "--profile"}
 	expected := []string{"Default", "Empty", "Profile2"}
-	got := strings.Split(autocomplete.Run(args), " ")
+	got := strings.Split(autocomplete.Run(args), autocomplete.SEP)
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)
