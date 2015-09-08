@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	SEP = " "
+	SEP = "\n"
 )
 
 func Run(args []string) string {
