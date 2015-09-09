@@ -1289,7 +1289,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the anti-affinity policy being queried."},
+					[]string{"Required unless --policy-name is specified. ID of the anti-affinity policy being queried."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the anti-affinity policy being queried."},
 				},
 			},
 		},
@@ -1304,7 +1308,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the anti-affinity policy being updated."},
+					[]string{"Required unless --policy-name is specified. ID of the anti-affinity policy being updated."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the anti-affinity policy being updated."},
 				},
 				{
 					"--name",
@@ -1323,7 +1331,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the anti-affinity policy being deleted."},
+					[]string{"Required unless --policy-name is specified. ID of the anti-affinity policy being deleted."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the anti-affinity policy being deleted."},
 				},
 			},
 		},
