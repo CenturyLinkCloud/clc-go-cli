@@ -50,8 +50,8 @@ func (p *Policy) InferID(cn base.Connection) error {
 	}
 }
 
-func (p *Policy) GetNames(cn base.Connection, name string) ([]string, error) {
-	if name != "PolicyName" {
+func (p *Policy) GetNames(cn base.Connection, property string) ([]string, error) {
+	if property != "PolicyName" {
 		return nil, nil
 	}
 

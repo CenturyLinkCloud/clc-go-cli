@@ -7,6 +7,6 @@ type IDInferable interface {
 	// been infered from names.
 	InferID(cn Connection) error
 	// GetNames exists for the purpose of getting the list of names of entities.
-	// The name argument is a field that points to an entity name.
-	GetNames(cn Connection, name string) ([]string, error)
+	// The property argument is a field that points to an entity name.
+	GetNames(cn Connection, property string) ([]string, error)
 }
