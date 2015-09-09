@@ -751,7 +751,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being queried."},
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
 				},
 			},
 		},
@@ -774,7 +778,11 @@ func init() {
 				},
 				{
 					"--parent-group-id",
-					[]string{"Required. ID of the parent group."},
+					[]string{"Required unless --parent-group-name is specified. ID of the parent group."},
+				},
+				{
+					"--parent-group-name",
+					[]string{"Required unless --parent-group-id is specified. Name of the parent group."},
 				},
 				{
 					"--custom-fields",
@@ -793,7 +801,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group to be deleted."},
+					[]string{"Required unless --group-name is specified. ID of the group being deleted."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being deleted."},
 				},
 			},
 		},
@@ -808,7 +820,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being queried."},
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
 				},
 			},
 		},
@@ -826,7 +842,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being queried."},
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
 				},
 				{
 					"--type",
@@ -882,7 +902,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being updated."},
+					[]string{"Required unless --group-name is specified. ID of the group being updated."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being updated."},
 				},
 				{
 					"--custom-fields",
@@ -909,6 +933,10 @@ func init() {
 					"--parent-group-id",
 					[]string{"The group identifier for the new parent group."},
 				},
+				{
+					"--parent-group-name",
+					[]string{"The group name for the new parent group (an alternative way to identify it)."},
+				},
 			},
 		},
 	})
@@ -922,7 +950,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group to archive."},
+					[]string{"Required unless --group-name is specified. ID of the group to archive."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group to archive."},
 				},
 			},
 		},
@@ -937,11 +969,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group to restore."},
+					[]string{"Required unless --group-name is specified. ID of the group to restore."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group to restore."},
 				},
 				{
 					"--target-group-id",
-					[]string{"Required. The unique identifier of the target group to restore the group to."},
+					[]string{"Required unless --target-group-name is specified. The unique identifier of the target group to restore the group to."},
+				},
+				{
+					"--target-group-name",
+					[]string{"Required unless --target-group-id is specified. The name of the target group to restore the group to."},
 				},
 			},
 		},
