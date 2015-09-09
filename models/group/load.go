@@ -54,6 +54,53 @@ func Load(cn base.Connection, dataCenter string) ([]Entity, error) {
 	}
 }
 
+func IDByName(cn base.Connection, dataCenter string, name string) (string, error) {
+	groups, err := Load(cn, dataCenter)
+	if err != nil {
+		return "", err
+	}
+
+	matched := []string{}
+	var searchForID func(groups []Entity)
+	searchForID = func(groups []Entity) {
+		for _, group := range groups {
+			if group.Name == name {
+				matched = append(matched, group.Id)
+			}
+			searchForID(group.Groups)
+		}
+	}
+	searchForID(groups)
+
+	switch len(matched) {
+	case 0:
+		return "", fmt.Errorf("There are no groups with name '%s'", name)
+	case 1:
+		return matched[0], nil
+	default:
+		return "", fmt.Errorf("There are more than one group with name '%s'. Please, specify an ID.", name)
+	}
+}
+
+func GetNames(cn base.Connection, dataCenter string) ([]string, error) {
+	var names []string
+	groups, err := Load(cn, dataCenter)
+	if err != nil {
+		return nil, err
+	}
+
+	var collectNames func(groups []Entity)
+	collectNames = func(groups []Entity) {
+		for _, group := range groups {
+			names = append(names, group.Name)
+			collectNames(group.Groups)
+		}
+	}
+	collectNames(groups)
+
+	return names, nil
+}
+
 func loadGroups(ref datacenter.GetRes, groups []Entity, dcnumber int, cn base.Connection, done chan<- error) {
 	// Get detailed DC info.
 	link, err := models.GetLink(ref.Links, "self")
