@@ -1,5 +1,5 @@
 package group
 
 type GetReq struct {
-	GroupId string `valid:"required" URIParam:"yes"`
+	Group `URIParam:"GroupId" argument:"composed"`
 }

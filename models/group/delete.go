@@ -1,5 +1,5 @@
 package group
 
 type DeleteReq struct {
-	GroupId string `valid:"required" URIParam:"yes"`
+	Group `argument:"composed" URIParam:"GroupId"`
 }
