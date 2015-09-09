@@ -1188,10 +1188,10 @@ func init() {
 					[]string{
 						"Required. The actions to perform when the alert is triggered.",
 						"",
-						"Has to be an object with 2 fields: action and settings.",
+						"Has to be a list of objects with 2 fields in each: action and settings.",
 						"The only action currently supported by alerts is 'email'.",
-						"The only setting currently supported is the 'recipients' list, which is an array of",
-						"email addresses to be notified when the alert is triggered.",
+						"The only settings value supported currently is an object with the 'recipients' field,",
+						"which is an array of email addresses to be notified when the alert is triggered.",
 					},
 				},
 				{
@@ -1199,7 +1199,7 @@ func init() {
 					[]string{
 						"Required. The definition of the triggers that fire the alert.",
 						"",
-						"Has to be an object with 3 fields: metric, duration and threshold.",
+						"Has to be a list of objects with 3 fields each: metric, duration and threshold.",
 						"metric: the metric on which to measure the condition that will trigger the alert: cpu, memory, or disk.",
 						"duration: the length of time in minutes that the condition must exceed the threshold: 00:05:00, 00:10:00, 00:15:00.",
 						"threshold: the threshold that will trigger the alert when the metric equals or exceeds it.",
