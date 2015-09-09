@@ -130,6 +130,9 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 	if isStruct(field) {
 		argStruct, err := parseStruct(arg)
 		if err != nil {
+			if _, ok := err.(ParseObjWrongTypeError); ok {
+				return fmt.Errorf("Type mismatch: %s must be an object.", key)
+			}
 			return err
 		}
 		for k, v := range argStruct {
@@ -146,6 +149,9 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 	} else if isSlice(field) {
 		argSlice, err := parseSlice(arg)
 		if err != nil {
+			if _, ok := err.(ParseObjWrongTypeError); ok {
+				return fmt.Errorf("Type mismatch: %s must be an array.", key)
+			}
 			return err
 		}
 		for _, v := range argSlice {
@@ -184,15 +190,21 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 	if argMap, isMap := arg.(map[string]interface{}); isMap {
 		return argMap, nil
 	}
+
+	argString, isString := arg.(string)
+	if !isString {
+		return nil, ParseObjWrongTypeError{}
+	}
+
 	parsed := make(map[string]interface{}, 0)
-	if err := json.Unmarshal([]byte(arg.(string)), &parsed); err == nil {
+	if err := json.Unmarshal([]byte(argString), &parsed); err == nil {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	if parsed, err := parser.ParseObject(arg.(string)); err == nil {
+	if parsed, err := parser.ParseObject(argString); err == nil {
 		return parsed, nil
 	}
-	return nil, fmt.Errorf("`%s` must be object specified either in JSON or in key=value,.. format.", arg.(string))
+	return nil, fmt.Errorf("`%s` must be object specified either in JSON or in key=value,.. format.", argString)
 }
 
 // Parses an object of type []interface{} either from JSON.
@@ -202,12 +214,18 @@ func parseSlice(arg interface{}) ([]interface{}, error) {
 	if argSlice, isSlice := arg.([]interface{}); isSlice {
 		return argSlice, nil
 	}
+
+	argString, isString := arg.(string)
+	if !isString {
+		return nil, ParseObjWrongTypeError{}
+	}
+
 	parsed := make([]interface{}, 0)
-	if err := json.Unmarshal([]byte(arg.(string)), &parsed); err == nil {
+	if err := json.Unmarshal([]byte(argString), &parsed); err == nil {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	return nil, fmt.Errorf("`%s` must be array specified either in JSON or in key=value,.. format.", arg.(string))
+	return nil, fmt.Errorf("`%s` must be array specified either in JSON or in key=value,.. format.", argString)
 }
 
 func getEmplySliceType(slice reflect.Value) reflect.Value {
