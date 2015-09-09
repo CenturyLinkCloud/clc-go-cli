@@ -1228,7 +1228,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the alert policy being queried."},
+					[]string{"Required unless --policy-name is specified. ID of the alert policy being queried."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the alert policy being queried."},
 				},
 			},
 		},
@@ -1243,7 +1247,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the alert policy being updated."},
+					[]string{"Required unless --policy-name is specified. ID of the alert policy being updated."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the alert policy being updated."},
 				},
 				{
 					"--name",
@@ -1285,7 +1293,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the alert policy being deleted."},
+					[]string{"Required unless --policy-name is specified. ID of the alert policy being deleted."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the alert policy being deleted."},
 				},
 			},
 		},

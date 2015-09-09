@@ -1,5 +1,5 @@
 package alert
 
 type DeleteReq struct {
-	PolicyId string `valid:"required" URIParam:"yes"`
+	Policy `argument:"composed" URIParam:"PolicyId"`
 }

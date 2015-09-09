@@ -1,14 +1,19 @@
 package alert
 
 type UpdateReq struct {
-	PolicyId string `valid:"required" URIParam:"yes"`
+	Policy   `argument:"composed" URIParam:"PolicyId"`
 	Name     string `valid:"required"`
 	Actions  []Action
 	Triggers []Trigger
 }
 
 func (u *UpdateReq) Validate() error {
-	err := validateActions(u.Actions)
+	err := u.Policy.Validate()
+	if err != nil {
+		return err
+	}
+
+	err = validateActions(u.Actions)
 	if err != nil {
 		return err
 	}
