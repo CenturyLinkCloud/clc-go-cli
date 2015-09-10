@@ -1564,7 +1564,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--port",
@@ -1622,7 +1626,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 			},
 		},
@@ -1656,7 +1664,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1679,7 +1691,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 			},
 		},
@@ -1698,7 +1714,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1729,7 +1749,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer to update."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer to update."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer to update."},
 				},
 				{
 					"--name",
@@ -1760,7 +1784,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1783,7 +1811,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1817,7 +1849,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer with the pool to delete."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer with the pool to delete."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer with the pool to delete."},
 				},
 				{
 					"--pool-id",
@@ -1840,7 +1876,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer to delete."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer to delete."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer to delete."},
 				},
 			},
 		},

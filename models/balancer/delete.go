@@ -1,6 +1,5 @@
 package balancer
 
 type Delete struct {
-	DataCenter     string `valid:"required" URIParam:"yes"`
-	LoadBalancerId string `valid:"required" URIParam:"yes"`
+	LoadBalancer `argument:"composed" URIParam:"LoadBalancerId,DataCenter"`
 }
