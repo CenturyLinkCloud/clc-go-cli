@@ -16,7 +16,6 @@ type CreateReq struct {
 	GroupId                string
 	GroupName              string `json:",omitempty"`
 	SourceServerId         string
-	TemplateId             string
 	TemplateName           string             `json:",omitempty"`
 	IsManagedOs            bool               `json:",omitempty"`
 	IsManagedBackup        bool               `json:",omitempty"`
@@ -43,7 +42,7 @@ type CreateReq struct {
 }
 
 func (c *CreateReq) Validate() error {
-	serverIdValues := []string{c.SourceServerId, c.TemplateId, c.TemplateName}
+	serverIdValues := []string{c.SourceServerId, c.TemplateName}
 	numNonEmpty := 0
 	for _, item := range serverIdValues {
 		if item != "" {
@@ -51,7 +50,7 @@ func (c *CreateReq) Validate() error {
 		}
 	}
 	if numNonEmpty > 1 || numNonEmpty == 0 {
-		return fmt.Errorf("Exactly one parameter from the following: source-server-id, source-server-name, template-id, template-name must be specified.")
+		return fmt.Errorf("Exactly one parameter from the following: source-server-id, source-server-name, template-name must be specified.")
 	}
 
 	if (c.GroupName == "") == (c.GroupId == "") {
@@ -71,8 +70,8 @@ func (c *CreateReq) Validate() error {
 }
 
 func (c *CreateReq) ApplyDefaultBehaviour() error {
-	if c.TemplateId != "" {
-		c.SourceServerId = c.TemplateId
+	if c.TemplateName != "" {
+		c.SourceServerId = c.TemplateName
 	}
 
 	zeroTime := time.Time{}
