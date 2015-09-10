@@ -1052,7 +1052,7 @@ func init() {
 	})
 	registerCommandBase(&network.GetReq{}, &network.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}?ipAddresses={IpAddresses}",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}?ipAddresses={IpAddresses}",
 		Resource: "network",
 		Command:  "get",
 		Help: help.Command{
@@ -1063,8 +1063,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--ip-addresses",
@@ -1082,7 +1086,7 @@ func init() {
 	})
 	registerCommandBase(&network.ListIpAddresses{}, &[]network.IpAddress{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/ipAddresses?type={Type}",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}/ipAddresses?type={Type}",
 		Resource: "network",
 		Command:  "list-ip-addresses",
 		Help: help.Command{
@@ -1093,8 +1097,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--type",
@@ -1126,7 +1134,7 @@ func init() {
 	})
 	registerCommandBase(&network.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}",
 		Resource: "network",
 		Command:  "update",
 		Help: help.Command{
@@ -1137,8 +1145,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--name",
@@ -1153,7 +1165,7 @@ func init() {
 	})
 	registerCommandBase(&network.ReleaseReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "POST",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/release",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}/release",
 		Resource: "network",
 		Command:  "release",
 		Help: help.Command{
@@ -1164,8 +1176,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 			},
 		},
