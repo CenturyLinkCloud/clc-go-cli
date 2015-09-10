@@ -14,8 +14,8 @@ func main() {
 
 	flag.Parse()
 
+	logger := NewLogger()
 	if generate {
-		logger := NewLogger()
 		parser := NewParser(logger)
 		apiDef, err := parser.ParseApi()
 		if err != nil {
@@ -27,10 +27,16 @@ func main() {
 			showError("Error while storing API definition", err)
 		}
 	} else {
-		_, err := LoadApi(apiPath)
+		api, err := LoadApi(apiPath)
 		if err != nil {
 			showError("Error while loadin API", err)
 			return
+		}
+		logger.Log("Api def loaded, count: %d", len(api))
+		runner := NewRunner(api, logger)
+		err = runner.RunTests()
+		if err != nil {
+			showError("", err)
 		}
 	}
 }

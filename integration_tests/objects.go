@@ -6,8 +6,8 @@ type ApiDef struct {
 	UrlExample        string
 	UrlParameters     []*ParameterDef
 	ContentParameters []*ParameterDef
-	ContentExample    string
-	ResExample        string
+	ContentExample    interface{}
+	ResExample        interface{}
 	ResParameters     []*ParameterDef
 }
 

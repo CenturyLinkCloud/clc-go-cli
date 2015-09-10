@@ -18,8 +18,10 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
 
+const OriginalBaseUrl = "https://api.ctl.io/v2/"
+
 //this made a variable instead of a constant for testing purpoises
-var BaseUrl = "https://api.tier3.com/v2/"
+var BaseUrl = OriginalBaseUrl
 
 type connection struct {
 	bearerToken  string
@@ -105,6 +107,9 @@ func FilterQuery(raw string) string {
 }
 
 func (cn *connection) prepareRequest(verb string, url string, reqModel interface{}) (req *http.Request, err error) {
+	if BaseUrl != OriginalBaseUrl {
+		url = strings.Replace(url, OriginalBaseUrl, BaseUrl, -1)
+	}
 	var inputData io.Reader
 	if reqModel != nil {
 		if verb == "POST" || verb == "PUT" || verb == "PATCH" {

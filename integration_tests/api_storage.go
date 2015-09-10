@@ -20,6 +20,6 @@ func LoadApi(apiPath string) ([]*ApiDef, error) {
 		return nil, err
 	}
 	var api []*ApiDef
-	err = json.Unmarshal(data, api)
+	err = json.Unmarshal(data, &api)
 	return api, err
 }

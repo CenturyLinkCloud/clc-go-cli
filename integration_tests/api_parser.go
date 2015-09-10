@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
@@ -59,7 +60,11 @@ func (p *parser) ParseApi() ([]*ApiDef, error) {
 			}
 		})
 
-	return res, parseErr
+	if parseErr != nil {
+		return nil, parseErr
+	}
+	err = p.postProcess(res)
+	return res, err
 }
 
 func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
@@ -138,19 +143,35 @@ func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (str
 	if len(array) != 2 {
 		return "", "", fmt.Errorf("Incorrect format of url section")
 	}
-	return array[0], array[1], nil
+	return array[0], strings.TrimSpace(array[1]), nil
 }
 
-func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) (string, error) {
+func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) (interface{}, error) {
 	p.logger.Log("parseExample called")
 	res, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Pre, atom.Code, 2)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if res == nil {
-		return "", nil
+		return nil, nil
 	}
-	return res.FirstChild.Data, nil
+	content := ""
+	for n := res.FirstChild; n != nil; n = n.NextSibling {
+		if n.Type == html.TextNode {
+			content += n.Data
+		}
+	}
+	if content == "" {
+		return nil, nil
+	}
+	data := new(interface{})
+	err = json.Unmarshal([]byte(content), data)
+	if err != nil && err.Error() == "invalid character '}' looking for beginning of object key string" {
+		i := strings.LastIndex(content, ",")
+		content = content[:i] + content[i+1:]
+		err = json.Unmarshal([]byte(content), data)
+	}
+	return *data, err
 }
 
 func (p *parser) parseTable(startNode, endNode *html.Node, headerText string) ([]*ParameterDef, error) {
@@ -296,4 +317,50 @@ func (p *parser) findNode(n *html.Node, checker func(*html.Node) CheckRes, actio
 			p.findNode(c, checker, action)
 		}
 	}
+}
+
+func (p *parser) postProcess(api []*ApiDef) error {
+	indexToDelete := make([]bool, len(api))
+	for i := 0; i < len(api); i++ {
+		for j := i + 1; j < len(api); j++ {
+			if api[i].Url == api[j].Url && api[i].Method == api[j].Method {
+				if api[i].ContentParameters == nil && api[j].ContentParameters != nil {
+					indexToDelete[i] = true
+				} else if api[j].ContentParameters == nil && api[i].ContentParameters != nil {
+					indexToDelete[j] = true
+				} else {
+					indexToDelete[i] = true
+					//return fmt.Errorf("Same API found, but can't decide what wersion to delete, api1: %#v, api2: %#v", api[i], api[j])
+				}
+			}
+		}
+	}
+
+	j := 0
+	for i := 0; i < len(api); i++ {
+		if indexToDelete[i] {
+			j--
+		} else if i != j {
+			api[j] = api[i]
+		}
+		j++
+	}
+	api = api[0:j]
+
+	convertDateParams := func(params []*ParameterDef, example interface{}) {
+		for _, p := range params {
+			if p.Type == "dateTime" {
+				if exampleMap, ok := example.(map[string]interface{}); ok {
+					exampleMap[p.Name] = strings.Replace(exampleMap[p.Name].(string), "T", " ", -1)
+					exampleMap[p.Name] = strings.Replace(exampleMap[p.Name].(string), "Z", "", -1)
+				}
+			}
+		}
+	}
+	for _, apiDef := range api {
+		convertDateParams(apiDef.ContentParameters, apiDef.ContentExample)
+		convertDateParams(apiDef.ResParameters, apiDef.ResExample)
+	}
+
+	return nil
 }
