@@ -6,6 +6,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/model_validator"
+	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
@@ -94,6 +95,7 @@ func Run(args []string) string {
 					return ""
 				}
 
+				datacenter.ApplyDefault(inferable, conf)
 				names, err := inferable.GetNames(cn, key)
 				if err == nil && names != nil {
 					return strings.Join(names, SEP)
