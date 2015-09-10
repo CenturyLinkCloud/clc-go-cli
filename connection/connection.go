@@ -92,12 +92,14 @@ func ExtractURIParams(uri string, model interface{}) string {
 			if field.Kind() != reflect.Struct {
 				panic("Fields marked by URIParam tag with a field name must be structs.")
 			}
-			subField := field.FieldByName(uriTag)
-			if subField.Kind() != reflect.String {
-				panic("Fields pointed to by a URIParam tag must be strings.")
+			for _, tag := range strings.Split(uriTag, ",") {
+				subField := field.FieldByName(tag)
+				if subField.Kind() != reflect.String {
+					panic("Fields pointed to by a URIParam tag must be strings.")
+				}
+				stub := fmt.Sprintf("{%s}", tag)
+				newURI = strings.Replace(newURI, stub, subField.String(), 1)
 			}
-			stub := fmt.Sprintf("{%s}", uriTag)
-			newURI = strings.Replace(newURI, stub, subField.String(), 1)
 		}
 	}
 	return newURI
