@@ -15,16 +15,22 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
 
-type requestWithURIParams struct {
-	param1 string `URIParam:"yes"`
-	param2 string `URIParam:"yes"`
-	param3 string
-}
+type (
+	requestWithURIParams struct {
+		param1 string `URIParam:"yes"`
+		param2 string `URIParam:"yes"`
+		param3 string
+	}
 
-type requestWithURIParamsComposed struct {
-	requestWithURIParams `URIParam:"param3"`
-	param4               string `URIParam:"yes"`
-}
+	requestWithURIParamsComposed struct {
+		requestWithURIParams `URIParam:"param3"`
+		param4               string `URIParam:"yes"`
+	}
+
+	requestWithMultipleURIParamsComposed struct {
+		requestWithURIParams `URIParam:"param2,param3"`
+	}
+)
 
 var serveMux *http.ServeMux
 var server *httptest.Server
@@ -142,6 +148,16 @@ func TestExtractURIParams(t *testing.T) {
 	got = connection.ExtractURIParams(uri, composed)
 	expected = "http://some-url?x=y&param1={param1}&param2={param2}&p=4&p3=3"
 
+	if got != expected {
+		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
+	}
+
+	composedM := requestWithMultipleURIParamsComposed{}
+	composedM.param2 = "2"
+	composedM.param3 = "3"
+	uri = "http://some-url?x=y&param1={param1}&param2={param2}&p={param4}&p3={param3}"
+	got = connection.ExtractURIParams(uri, composedM)
+	expected = "http://some-url?x=y&param1={param1}&param2=2&p={param4}&p3=3"
 	if got != expected {
 		t.Errorf("\nInvalid result.\nExpected: %s\nGot:%s", expected, got)
 	}
