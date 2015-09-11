@@ -141,7 +141,7 @@ func TestArgumentsAutocomplete(t *testing.T) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", arguments, got)
 	}
 
-	args = []string{"server", "create", "--cpu", "0", "--memoryGB"}
+	args = []string{"server", "create", "--cpu", "0", "--memory-gb"}
 	got = strings.Split(autocomplete.Run(args), " ")
 	sort.Strings(got)
 	if !reflect.DeepEqual(got, arguments) {

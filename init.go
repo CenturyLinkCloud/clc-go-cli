@@ -50,7 +50,7 @@ func init() {
 				},
 				{
 					"--source-server-id",
-					[]string{"Required. ID of the server to use a source."},
+					[]string{"Required. ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID."},
 				},
 				{
 					"--is-managed-os",
@@ -156,14 +156,14 @@ func init() {
 				{
 					"--configuration-id",
 					[]string{
-						"Specifies the identifier for the specific configuration type of bare metal server to deploy.",
+						"Only required for bare metal servers. Specifies the identifier for the specific configuration type of bare metal server to deploy.",
 						"Ignored for standard and hyperscale servers.",
 					},
 				},
 				{
 					"--os-type",
 					[]string{
-						"Specifies the OS to provision with the bare metal server. Currently, the only supported OS types",
+						"Only required for bare metal servers. Specifies the OS to provision with the bare metal server. Currently, the only supported OS types",
 						"are redHat6_64Bit, centOS6_64Bit, windows2012R2Standard_64Bit.",
 						"Ignored for standard and hyperscale servers.",
 					},
@@ -278,14 +278,14 @@ func init() {
 	})
 	registerCommandBase(&server.GetImportsReq{}, &server.GetImportsRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2/vmImport/{accountAlias}/{LocationId}/available",
+		Url:      "https://api.ctl.io/v2/vmImport/{accountAlias}/{DataCenter}/available",
 		Resource: "server",
 		Command:  "get-imports",
 		Help: help.Command{
 			Brief: []string{"Gets the list of available servers that can be imported."},
 			Arguments: []help.Argument{
 				{
-					"--location-id",
+					"--data-center",
 					[]string{"Required. Data center location identifier."},
 				},
 			},
@@ -663,7 +663,7 @@ func init() {
 					},
 				},
 				{
-					"--memoryGB",
+					"--memory-gb",
 					[]string{
 						"Required. Number of GB of memory to configure the server with (1-128). If this value is different from the one specified in the OVF,",
 						"the import process will resize the server according to the value specified here.",
@@ -1264,7 +1264,7 @@ func init() {
 					[]string{"Required. Name of the anti-affinity policy."},
 				},
 				{
-					"--location",
+					"--data-center",
 					[]string{"Required. Data center location of the anti-affinity policy."},
 				},
 			},
@@ -1795,10 +1795,36 @@ func init() {
 	registerCustomCommand(commands.NewGroupList(commands.CommandExcInfo{
 		Resource: "group",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of groups of the given data-center or of all data centers."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required unless the --all option is set. A short code of the data center to query."},
+				},
+				{
+					"--all",
+					[]string{"Forces the command to query all of the data centers."},
+				},
+			},
+		},
 	}))
 	registerCustomCommand(commands.NewServerList(commands.CommandExcInfo{
 		Resource: "server",
 		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Gets the list of servers of the given data-center or of all data centers."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required unless the --all option is set. A short code of the data center to query."},
+				},
+				{
+					"--all",
+					[]string{"Forces the command to query all of the data centers."},
+				},
+			},
+		},
 	}))
 	registerCustomCommand(commands.NewWait(commands.CommandExcInfo{
 		Resource: "wait",
@@ -1812,6 +1838,40 @@ func init() {
 			Brief: []string{
 				"Logs the user in by saving his credentials to the config.",
 				"Specify the credentials using the --user and --password options.",
+			},
+		},
+	}))
+
+	registerCustomCommand(commands.NewSetDefaultDC(commands.CommandExcInfo{
+		Resource: "data-center",
+		Command:  "set-default",
+		Help: help.Command{
+			Brief: []string{
+				"Sets a default data center to work with.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Short code for the data center being set."},
+				},
+			},
+		},
+	}))
+	registerCustomCommand(commands.NewUnsetDefaultDC(commands.CommandExcInfo{
+		Resource: "data-center",
+		Command:  "unset-default",
+		Help: help.Command{
+			Brief: []string{
+				"Unsets the default data center.",
+			},
+		},
+	}))
+	registerCustomCommand(commands.NewShowDefaultDC(commands.CommandExcInfo{
+		Resource: "data-center",
+		Command:  "show-default",
+		Help: help.Command{
+			Brief: []string{
+				"Show the default data center set, if any.",
 			},
 		},
 	}))

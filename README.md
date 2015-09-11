@@ -35,22 +35,51 @@ You need to be authenticated with a username and password in order to execute CL
 
 ### Set up the configuration file
 
-The program uses a configuration file with the following path: `$HOME/.clc/config.yml`. One is created automatically on the first execution of any command. The file is in YAML format. The following fields count:
+The program uses a configuration file located at `$HOME/.clc/config.yml` on Linux/Unix/Mac and `C:\Users\%username%` on Windows. One is created automatically on the first execution of any command. The file is in YAML format. The following fields count:
 
 * `user` and `password`: the credentials used for authentication.
 * `defaultformat`: a default output format, either `json`, `table` or `text`.
 * `profiles`: a hash of alternative credentials.
+* `defaultdatacenter`: a short code for a data center to be queried by default when executing commands that depend on it.
 
-An example of a profile entry:
+An example of a configuration file:
 
 ```
+user: bob
+password: passw0rd
+defaultformat: "table"
+defaultdatacenter: "CA1"
 profiles:
   alice:
     username: alice
     passwod: pa33w0rd
 ```
 
-Choose it either via a `--profile` option or `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+Choose a profile either via a `--profile` option or `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+
+### Specify a default data center
+
+A number of commands require a data center to be specified (via the `--data-center` option) what limits entities (groups, servers, policies, etc) operated upon to only those belonging to this data center.
+
+There is a possibility to set a default one so that you do not need to specify it explicitly with every command.
+
+You can either set a data center in the config using the `defaultdatacenter` field or execute a command:
+
+```
+clc data-center set-default --data-center <a-short-code-for-a-data-center>
+```
+
+You can query the current default with:
+
+```
+clc data-center show-default
+```
+
+Or unset it using:
+
+```
+clc data-center unset-default
+```
 
 ### Enjoy the tool
 
@@ -69,7 +98,13 @@ clc data-center get-deployment-capabilities --data-center <data-center> --query 
 Search for the root group id of the data center under consideration:
 
 ```
-clc group list --filter location-id=<data-center> --query id --output text
+clc group list --all --filter location-id=<data-center> --query id --output text
+```
+
+Or, the same thing can be accomplished by issuing:
+
+```
+clc group list --data-center <data-center> --query id --output text
 ```
 
 Get the list of subgroups. Use a "SubGroup" alias for subgroups ids in the output:
@@ -93,7 +128,7 @@ clc wait
 Query only servers with status "active" and see the output as a table:
 
 ```
-clc server list --filter status=active --output table
+clc server list --all --filter status=active --output table
 ```
 
 Increase the server's CPUs count and log the HTTP request/response data:

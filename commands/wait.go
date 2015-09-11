@@ -28,7 +28,8 @@ func NewWait(info CommandExcInfo) *Wait {
 }
 
 func (w *Wait) Execute(cn base.Connection) error {
-	w.Output = "Nothing to wait for."
+	nothing := "Nothing to wait for."
+	w.Output = &nothing
 	bytes, err := state.LoadLastResult()
 	if err != nil {
 		return nil

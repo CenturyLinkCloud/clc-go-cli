@@ -21,25 +21,44 @@ type GroupList struct {
 func NewGroupList(info CommandExcInfo) *GroupList {
 	g := GroupList{}
 	g.ExcInfo = info
+	g.Input = &group.List{}
 	return &g
 }
 
 func (g *GroupList) Execute(cn base.Connection) error {
 	var err error
+	var code string
+	input := g.Input.(*group.List)
 
-	g.Output, err = GetGroups(cn)
+	code = input.DataCenter
+	if input.All.Set {
+		code = "all"
+	}
+
+	g.Output, err = GetGroups(cn, code)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetGroups(cn base.Connection) ([]group.Entity, error) {
+func GetGroups(cn base.Connection, code string) ([]group.Entity, error) {
 	datacenters := []datacenter.GetRes{}
-	dcURL := fmt.Sprintf("%s/v2/datacenters/{accountAlias}", BaseURL)
-	err := cn.ExecuteRequest("GET", dcURL, nil, &datacenters)
-	if err != nil {
-		return nil, err
+
+	if code == "all" {
+		dcURL := fmt.Sprintf("%s/v2/datacenters/{accountAlias}", BaseURL)
+		err := cn.ExecuteRequest("GET", dcURL, nil, &datacenters)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		dc := datacenter.GetRes{}
+		dcURL := fmt.Sprintf("%s/v2/datacenters/{accountAlias}/%s?groupLinks=true", BaseURL, code)
+		err := cn.ExecuteRequest("GET", dcURL, nil, &dc)
+		if err != nil {
+			return nil, err
+		}
+		datacenters = append(datacenters, dc)
 	}
 
 	done := make(chan error)

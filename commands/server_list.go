@@ -20,13 +20,21 @@ type ServerList struct {
 func NewServerList(info CommandExcInfo) *ServerList {
 	sl := ServerList{}
 	sl.ExcInfo = info
+	sl.Input = &server.List{}
 	return &sl
 }
 
 func (sl *ServerList) Execute(cn base.Connection) error {
 	var links []models.LinkEntity
+	var code string
+	input := sl.Input.(*server.List)
 
-	groups, err := GetGroups(cn)
+	code = input.DataCenter
+	if input.All.Set {
+		code = "all"
+	}
+
+	groups, err := GetGroups(cn, code)
 	if err != nil {
 		return err
 	}
@@ -38,6 +46,10 @@ func (sl *ServerList) Execute(cn base.Connection) error {
 	}
 
 	servers := make([]server.GetRes, len(links))
+	if links == nil {
+		sl.Output = servers
+		return nil
+	}
 	done := make(chan error)
 	for i, link := range links {
 		go loadServer(link, servers, i, done, cn)

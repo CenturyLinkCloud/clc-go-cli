@@ -2,6 +2,7 @@ package model_loader_test
 
 import (
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 	"reflect"
 	"testing"
@@ -23,6 +24,7 @@ type testModel struct {
 	FieldDateTime time.Time
 	FieldObject   testFieldObject
 	FieldArray    []testFieldObject
+	FieldNil      base.NilField
 }
 
 type testFieldObject struct {
@@ -74,15 +76,9 @@ var testCases = []modelLoaderTestCase{
 	// Handles nil values.
 	{
 		args: map[string]interface{}{
-			"FieldString":   nil,
-			"FieldInt":      nil,
-			"FieldFloat":    nil,
-			"FieldBool":     nil,
-			"FieldDateTime": nil,
-			"FieldObject":   nil,
-			"FieldArray":    nil,
+			"FieldNil": nil,
 		},
-		res: testModel{},
+		res: testModel{FieldNil: base.NilField{Set: true}},
 	},
 	// Parses JSON and loads it into object field.
 	{
@@ -221,6 +217,13 @@ var testCases = []modelLoaderTestCase{
 			"FieldDateTime": "2012 04 05",
 		},
 		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DD hh:mm:ss` format.",
+	},
+	// Does not accept any values for base.NilField's.
+	{
+		args: map[string]interface{}{
+			"FieldNil": "",
+		},
+		err: "FieldNil does not accept any value.",
 	},
 }
 

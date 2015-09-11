@@ -9,6 +9,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/model_adjuster"
 	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 	"github.com/centurylinkcloud/clc-go-cli/model_validator"
+	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"github.com/centurylinkcloud/clc-go-cli/state"
@@ -73,10 +74,18 @@ func Run(args []string) string {
 	if options.Help {
 		return cmd.ShowHelp()
 	}
+	conf, err := config.LoadConfig()
+	if err != nil {
+		return err.Error()
+	}
+	if cmd.Resource() == "login" {
+		return login(options, conf)
+	}
 	err = model_loader.LoadModel(parsedArgs, cmd.InputModel())
 	if err != nil {
 		return err.Error()
 	}
+	datacenter.ApplyDefault(cmd.InputModel(), conf)
 	err = model_validator.ValidateModel(cmd.InputModel())
 	if err != nil {
 		return err.Error()
@@ -85,20 +94,12 @@ func Run(args []string) string {
 	if err != nil {
 		return err.Error()
 	}
-	conf, err := config.LoadConfig()
-	if err != nil {
-		return err.Error()
-	}
-	if cmd.Resource() == "login" {
-		if options.User == "" || options.Password == "" {
-			return "Both --user and --password options must be specified."
-		}
-		conf.User = options.User
-		conf.Password = options.Password
-		if err = config.Save(conf); err != nil {
+	if cmd.IsOffline() {
+		res, err := cmd.ExecuteOffline()
+		if err != nil {
 			return err.Error()
 		}
-		return ""
+		return res
 	}
 	cn, err := auth.AuthenticateCommand(options, conf)
 	if err != nil {
@@ -149,6 +150,19 @@ func Run(args []string) string {
 		return err.Error()
 	}
 	return output
+}
+
+func login(opts *options.Options, conf *config.Config) string {
+	if opts.User == "" || opts.Password == "" {
+		return "Both --user and --password options must be specified."
+	}
+
+	conf.User = opts.User
+	conf.Password = opts.Password
+	if err := config.Save(conf); err != nil {
+		return err.Error()
+	}
+	return fmt.Sprintf("Logged in as %s.", opts.User)
 }
 
 func usage() string {

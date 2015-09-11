@@ -84,7 +84,7 @@ var GetPath = func() (string, error) {
 		return "", err
 	}
 
-	return path.Join(u.HomeDir, ".clc"), nil
+	return path.Join(u.HomeDir, CONFIG_FOLDER_NAME), nil
 }
 
 func CreateIfNotExists() error {

@@ -1,6 +1,6 @@
 package affinity
 
 type CreateReq struct {
-	Name     string `valid:"required"`
-	Location string `valid:"required"`
+	Name       string `valid:"required"`
+	DataCenter string `valid:"required" json:"Location"`
 }

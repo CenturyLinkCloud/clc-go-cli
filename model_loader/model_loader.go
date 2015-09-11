@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	valid "github.com/asaskevich/govalidator"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
 	"time"
@@ -35,9 +36,6 @@ func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error 
 }
 
 func loadValue(key string, arg interface{}, field reflect.Value) error {
-	if arg == nil {
-		return nil
-	}
 	switch field.Interface().(type) {
 	case int64:
 		var argInt int64
@@ -122,6 +120,12 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 		}
 		field.SetString(arg.(string))
 		return nil
+	case base.NilField:
+		if arg == nil {
+			field.FieldByName("Set").SetBool(true)
+			return nil
+		}
+		return fmt.Errorf("%s does not accept any value.", key)
 	}
 	if isStruct(field) {
 		argStruct, err := parseStruct(arg)
