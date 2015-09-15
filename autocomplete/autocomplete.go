@@ -1,7 +1,9 @@
 package autocomplete
 
 import (
+	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/auth"
+	"github.com/centurylinkcloud/clc-go-cli/autocomplete/cache"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 	"github.com/centurylinkcloud/clc-go-cli/config"
@@ -11,6 +13,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
 	"strings"
+	"time"
 )
 
 const (
@@ -96,8 +99,25 @@ func Run(args []string) string {
 				}
 
 				datacenter.ApplyDefault(inferable, conf)
-				names, err := inferable.GetNames(cn, key)
-				if err == nil && names != nil {
+
+				// Due to the fact API requests may take a long time we cache
+				// the results for some short amount of time.
+				names, inCache := cache.Get(cacheKey(resource, cmd.Command(), key))
+				if !inCache {
+					stop := make(chan bool)
+					// The following routine repeatdly sends dots to stdout
+					// what may serve as a waiting indicator in shells that
+					// support such kind of interaction. The output may be
+					// supressed in those that do not.
+					go wait(stop)
+					names, err = inferable.GetNames(cn, key)
+					stop <- true
+					if err != nil {
+						return ""
+					}
+					cache.Put(cacheKey(resource, cmd.Command(), key), names)
+				}
+				if names != nil {
 					return strings.Join(names, SEP)
 				}
 			}
@@ -119,4 +139,31 @@ func hasArg(m interface{}, f string) bool {
 		return true
 	}
 	return false
+}
+
+func cacheKey(r, c, k string) string {
+	return fmt.Sprintf("%s-%s-%s", r, c, k)
+}
+
+func wait(stop <-chan bool) {
+	printed := 0
+	for {
+		select {
+		case <-stop:
+			for printed > 0 {
+				fmt.Print("\b \b")
+				printed -= 1
+			}
+			return
+		default:
+			if printed < 3 {
+				fmt.Print(".")
+				printed += 1
+			} else {
+				fmt.Print("\b\b\b   \b\b\b")
+				printed = 0
+			}
+			time.Sleep(time.Millisecond * 500)
+		}
+	}
 }

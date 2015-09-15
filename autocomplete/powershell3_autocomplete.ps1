@@ -1,8 +1,9 @@
 $Completion_clc = {
- 
+
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
-    (invoke-expression "$parameterName --generate-bash-completion").Split("`n") |
+    invoke-expression "$parameterName --generate-bash-completion" *>$null
+    (Get-Content C:\Users\$env:username\clc\completion).Split("`n") |
     ForEach-Object {
         if ($_ -like '* *') {
             "'$_'"
