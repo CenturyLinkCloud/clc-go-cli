@@ -60,6 +60,42 @@ func Load(cn base.Connection, dataCenter string) ([]Entity, error) {
 	}
 }
 
+func IDByName(cn base.Connection, dataCenter string, name string) (string, error) {
+	networks, err := Load(cn, dataCenter)
+	if err != nil {
+		return "", err
+	}
+
+	matched := []string{}
+	for _, n := range networks {
+		if n.Name == name {
+			matched = append(matched, n.Id)
+		}
+	}
+
+	switch len(matched) {
+	case 0:
+		return "", fmt.Errorf("There are no networks with name %s in %s.", name, dataCenter)
+	case 1:
+		return matched[0], nil
+	default:
+		return "", fmt.Errorf("There are more than one network with name %s in %s", name, dataCenter)
+	}
+}
+
+func GetNames(cn base.Connection, dataCenter string) ([]string, error) {
+	networks, err := Load(cn, dataCenter)
+	if err != nil {
+		return nil, err
+	}
+
+	names := []string{}
+	for _, n := range networks {
+		names = append(names, n.Name)
+	}
+	return names, nil
+}
+
 func load(cn base.Connection, dataCenter string, done chan<- loadResult) {
 	networks := []Entity{}
 	URL := fmt.Sprintf("%s/v2-experimental/networks/{accountAlias}/%s", base.URL, dataCenter)
