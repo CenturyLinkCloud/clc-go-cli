@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"time"
 )
@@ -70,16 +71,25 @@ func (c *CreateReq) Validate() error {
 }
 
 func (c *CreateReq) ApplyDefaultBehaviour() error {
-	if c.TemplateName != "" {
-		c.SourceServerId = c.TemplateName
-	}
-
 	zeroTime := time.Time{}
 	if c.Ttl != zeroTime {
 		c.TtlString = c.Ttl.Format(timeFormat)
 	}
 	return nil
 
-	//TODO: implement searching templates by name
 	//TODO: implement searching groups by names
+}
+
+func (c *CreateReq) InferID(cn base.Connection) error {
+	if c.TemplateName != "" {
+		c.SourceServerId = c.TemplateName
+	}
+	return nil
+}
+
+func (c *CreateReq) GetNames(cn base.Connection, property string) ([]string, error) {
+	if property == "TemplateName" {
+		return LoadTemplates(cn)
+	}
+	return nil, nil
 }
