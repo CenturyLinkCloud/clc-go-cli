@@ -5,6 +5,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
+	"github.com/centurylinkcloud/clc-go-cli/models/network"
 )
 
 type Import struct {
@@ -15,6 +16,7 @@ type Import struct {
 	PrimaryDns   string             `json:",omitempty"`
 	SecondaryDns string             `json:",omitempty"`
 	NetworkId    string             `json:",omitempty"`
+	NetworkName  string             `json:"-"`
 	RootPassword string             `valid:"required"`
 	Cpu          int64              `valid:"required"`
 	MemoryGb     int64              `valid:"required"`
@@ -29,6 +31,10 @@ func (i *Import) Validate() error {
 	if (i.GroupId == "") == (i.GroupName == "") {
 		return fmt.Errorf("Exactly one of the parameters group-id and group-name must be specified")
 	}
+
+	if i.NetworkId != "" && i.NetworkName != "" {
+		return fmt.Errorf("Only one of the parameters network-id and network-name may be specified.")
+	}
 	return nil
 }
 
@@ -41,6 +47,15 @@ func (i *Import) InferID(cn base.Connection) error {
 		}
 		i.GroupId = g.GroupId
 	}
+
+	if i.NetworkName != "" {
+		n := &network.Network{NetworkName: i.NetworkName}
+		err := n.InferID(cn)
+		if err != nil {
+			return err
+		}
+		i.NetworkId = n.NetworkId
+	}
 	return nil
 }
 
@@ -48,6 +63,8 @@ func (i *Import) GetNames(cn base.Connection, property string) ([]string, error)
 	switch property {
 	case "GroupName":
 		return group.GetNames(cn, "all")
+	case "NetworkName":
+		return network.GetNames(cn, "all")
 	default:
 		return nil, nil
 	}

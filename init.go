@@ -729,6 +729,12 @@ func init() {
 					},
 				},
 				{
+					"--network-name",
+					[]string{
+						"Name of the network to which to deploy the server. An alternative way to identify the network.",
+					},
+				},
+				{
 					"--root-password",
 					[]string{
 						"Required. Password of administrator or root user on server. This password must match",
