@@ -25,3 +25,11 @@ func WriteToFile(data []byte, name string, perm os.FileMode) error {
 	}
 	return ioutil.WriteFile(path.Join(p, name), data, perm)
 }
+
+func GetFileInfo(name string) (os.FileInfo, error) {
+	p, err := config.GetPath()
+	if err != nil {
+		return nil, err
+	}
+	return os.Stat(path.Join(p, name))
+}
