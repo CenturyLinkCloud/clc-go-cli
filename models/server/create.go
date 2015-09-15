@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"time"
@@ -59,6 +60,10 @@ func (c *CreateReq) Validate() error {
 		return fmt.Errorf("Exactly one parameter from the following: group-id, group-name must be specified.")
 	}
 
+	if (c.AntiAffinityPolicyId == "") == (c.AntiAffinityPolicyName == "") {
+		return fmt.Errorf("Exactly one parameter from the following: anti-affinity-policy-id, anti-affinity-policy-name must be specified.")
+	}
+
 	if c.Type == "bareMetal" {
 		if c.ConfigurationId == "" {
 			return fmt.Errorf("ConfigurationId: required for bare metal servers.")
@@ -94,6 +99,15 @@ func (c *CreateReq) InferID(cn base.Connection) error {
 		}
 		c.GroupId = g.GroupId
 	}
+
+	if c.AntiAffinityPolicyName != "" {
+		p := &affinity.Policy{PolicyName: c.AntiAffinityPolicyName}
+		err := p.InferID(cn)
+		if err != nil {
+			return err
+		}
+		c.AntiAffinityPolicyId = p.PolicyId
+	}
 	return nil
 }
 
@@ -103,6 +117,9 @@ func (c *CreateReq) GetNames(cn base.Connection, property string) ([]string, err
 		return LoadTemplates(cn)
 	case "GroupName":
 		return group.GetNames(cn, "all")
+	case "AntiAffinityPolicyName":
+		p := &affinity.Policy{}
+		return p.GetNames(cn, "PolicyName")
 	}
 	return nil, nil
 }

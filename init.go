@@ -152,6 +152,12 @@ func init() {
 					},
 				},
 				{
+					"--anti-affinity-policy-name",
+					[]string{
+						"Name of the Anti-Affinity policy. An alternative way to identify the policy.",
+					},
+				},
+				{
 					"--custom-fields",
 					[]string{"Collection of custom field ID-value pairs to set for the server."},
 				},
