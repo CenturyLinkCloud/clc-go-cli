@@ -82,8 +82,6 @@ func (c *CreateReq) ApplyDefaultBehaviour() error {
 		c.TtlString = c.Ttl.Format(timeFormat)
 	}
 	return nil
-
-	//TODO: implement searching groups by names
 }
 
 func (c *CreateReq) InferID(cn base.Connection) error {
