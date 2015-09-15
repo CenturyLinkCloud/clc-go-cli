@@ -10,9 +10,9 @@ func SaveLastResult(r interface{}) error {
 	if err != nil {
 		return err
 	}
-	return writeToFile([]byte(str), ".last_result", 0777)
+	return WriteToFile([]byte(str), ".last_result", 0777)
 }
 
 func LoadLastResult() ([]byte, error) {
-	return readFromFile(".last_result")
+	return ReadFromFile(".last_result")
 }
