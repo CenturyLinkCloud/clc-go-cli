@@ -6,6 +6,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
+	"github.com/centurylinkcloud/clc-go-cli/models/network"
 	"time"
 )
 
@@ -25,6 +26,7 @@ type CreateReq struct {
 	PrimaryDns             string             `json:",omitempty"`
 	SecondaryDns           string             `json:",omitempty"`
 	NetworkId              string             `json:",omitempty"`
+	NetworkName            string             `json:",omitempty"`
 	IpAddress              string             `json:",omitempty"`
 	RootPassword           string             `json:",omitempty"`
 	SourceServerPassword   string             `json:",omitempty"`
@@ -58,6 +60,10 @@ func (c *CreateReq) Validate() error {
 
 	if (c.GroupName == "") == (c.GroupId == "") {
 		return fmt.Errorf("Exactly one parameter from the following: group-id, group-name must be specified.")
+	}
+
+	if c.NetworkName != "" && c.NetworkId != "" {
+		return fmt.Errorf("Only one parameter from the following: network-id, network-name may be specified.")
 	}
 
 	if c.AntiAffinityPolicyId != "" && c.AntiAffinityPolicyName != "" {
@@ -98,6 +104,15 @@ func (c *CreateReq) InferID(cn base.Connection) error {
 		c.GroupId = g.GroupId
 	}
 
+	if c.NetworkName != "" {
+		n := &network.Network{NetworkName: c.NetworkName}
+		err := n.InferID(cn)
+		if err != nil {
+			return err
+		}
+		c.NetworkId = n.NetworkId
+	}
+
 	if c.AntiAffinityPolicyName != "" {
 		p := &affinity.Policy{PolicyName: c.AntiAffinityPolicyName}
 		err := p.InferID(cn)
@@ -118,6 +133,8 @@ func (c *CreateReq) GetNames(cn base.Connection, property string) ([]string, err
 	case "AntiAffinityPolicyName":
 		p := &affinity.Policy{}
 		return p.GetNames(cn, "PolicyName")
+	case "NetworkName":
+		return network.GetNames(cn, "all")
 	}
 	return nil, nil
 }

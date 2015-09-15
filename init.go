@@ -96,6 +96,12 @@ func init() {
 					},
 				},
 				{
+					"--network-name",
+					[]string{
+						"Name of the network to which to deploy the server. An alternative way to identify the network.",
+					},
+				},
+				{
 					"--ip-address",
 					[]string{
 						"IP address to assign to the server. If not provided, one will be assigned automatically.",
