@@ -231,7 +231,7 @@ func init() {
 					[]string{"The amount of CPU cores to set for the given server."},
 				},
 				{
-					"--memory",
+					"--memory-gb",
 					[]string{"The amount of memory (in GB) to set for the given server."},
 				},
 				{
