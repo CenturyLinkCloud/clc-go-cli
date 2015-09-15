@@ -20,6 +20,7 @@ type CreateReq struct {
 	GroupId                string
 	GroupName              string `json:",omitempty"`
 	SourceServerId         string
+	SourceServerName       string             `json:"-"`
 	TemplateName           string             `json:",omitempty"`
 	IsManagedOs            bool               `json:",omitempty"`
 	IsManagedBackup        bool               `json:",omitempty"`
@@ -47,7 +48,7 @@ type CreateReq struct {
 }
 
 func (c *CreateReq) Validate() error {
-	serverIdValues := []string{c.SourceServerId, c.TemplateName}
+	serverIdValues := []string{c.SourceServerId, c.SourceServerName, c.TemplateName}
 	numNonEmpty := 0
 	for _, item := range serverIdValues {
 		if item != "" {
@@ -95,6 +96,15 @@ func (c *CreateReq) InferID(cn base.Connection) error {
 		c.SourceServerId = c.TemplateName
 	}
 
+	if c.SourceServerName != "" {
+		s := &Server{ServerName: c.SourceServerName}
+		err := s.InferID(cn)
+		if err != nil {
+			return err
+		}
+		c.SourceServerId = s.ServerId
+	}
+
 	if c.GroupName != "" {
 		g := &group.Group{GroupName: c.GroupName}
 		err := g.InferID(cn)
@@ -128,6 +138,8 @@ func (c *CreateReq) GetNames(cn base.Connection, property string) ([]string, err
 	switch property {
 	case "TemplateName":
 		return LoadTemplates(cn)
+	case "SourceServerName":
+		return GetNames(cn, "all")
 	case "GroupName":
 		return group.GetNames(cn, "all")
 	case "AntiAffinityPolicyName":

@@ -55,14 +55,20 @@ func init() {
 				{
 					"--source-server-id",
 					[]string{
-						"Required unless --template-name is specified. ID of the server to use a source.",
+						"Required unless --template-name or --source-server-name is specified. ID of the server to use as a source.",
 						"Actually, it may be the name of a template, or when cloning, an existing server ID.",
+					},
+				},
+				{
+					"--source-server-name",
+					[]string{
+						"Required unless --source-server-id or --template-name is specified. Name of the server to use as a source.",
 					},
 				},
 				{
 					"--template-name",
 					[]string{
-						"Required unless --source-server-id is specified. A possible substitution for --source-server-id.",
+						"Required unless --source-server-id or --source-server-name is specified. A template to create the server from.",
 						"If autocomplete is turned on, available template names are shown as options.",
 					},
 				},
