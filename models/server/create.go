@@ -60,8 +60,8 @@ func (c *CreateReq) Validate() error {
 		return fmt.Errorf("Exactly one parameter from the following: group-id, group-name must be specified.")
 	}
 
-	if (c.AntiAffinityPolicyId == "") == (c.AntiAffinityPolicyName == "") {
-		return fmt.Errorf("Exactly one parameter from the following: anti-affinity-policy-id, anti-affinity-policy-name must be specified.")
+	if c.AntiAffinityPolicyId != "" && c.AntiAffinityPolicyName != "" {
+		return fmt.Errorf("Only one parameter from the following: anti-affinity-policy-id, anti-affinity-policy-name may be specified.")
 	}
 
 	if c.Type == "bareMetal" {
