@@ -201,7 +201,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server to be deleted."},
+					[]string{"Required unless --server-name is specified. ID of the server to be deleted."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server to be deleted."},
 				},
 			},
 		},
@@ -214,6 +218,14 @@ func init() {
 		Help: help.Command{
 			Brief: []string{"Changes the amount of CPU cores, memory (in GB), server credentials, custom fields, description, disks and server's group."},
 			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. ID of the server being updated."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being updated."},
+				},
 				{
 					"--cpu",
 					[]string{"The amount of CPU cores to set for the given server."},
@@ -276,7 +288,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 			},
 		},
@@ -291,7 +307,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server with the credentials to return."},
+					[]string{"Required unless --server-name is specified. ID of the server with the credentials to return."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server with the credentials to return."},
 				},
 			},
 		},
@@ -321,7 +341,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--public-ip",
@@ -343,7 +367,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--internal-ip-address",
@@ -384,7 +412,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--public-ip",
@@ -406,7 +438,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--public-ip",
@@ -569,7 +605,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server with the snapshot to restore."},
+					[]string{"Required unless --server-name is specified. ID of the server with the snapshot to restore."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server with the snapshot to restore."},
 				},
 				{
 					"--snapshot-id",
@@ -588,7 +628,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server with the snapshot to delete."},
+					[]string{"Required unless --server-name is specified. ID of the server with the snapshot to delete."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server with the snapshot to delete."},
 				},
 				{
 					"--snapshot-id",
@@ -728,9 +772,12 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
 				},
 				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server."},
+				}, {
 					"--network-id",
 					[]string{"Required. ID of the network."},
 				},
@@ -751,7 +798,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server."},
 				},
 				{
 					"--network-id",

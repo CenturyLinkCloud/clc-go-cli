@@ -1,6 +1,6 @@
 package server
 
 type RevertToSnapshotReq struct {
-	ServerId   string `valid:"required" URIParam:"yes"`
+	Server     `argument:"composed" URIParam:"ServerId"`
 	SnapshotId string `valid:"required" URIParam:"yes"`
 }

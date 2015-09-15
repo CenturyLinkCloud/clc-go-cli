@@ -6,7 +6,7 @@ import (
 )
 
 type AddIPAddressReq struct {
-	ServerId string `valid:"required" URIParam:"true"`
+	Server `argument:"composed" URIParam:"ServerId"`
 
 	InternalIpAddress  string
 	Ports              []models.PortRestriction
@@ -14,6 +14,10 @@ type AddIPAddressReq struct {
 }
 
 func (ar *AddIPAddressReq) Validate() error {
+	err := ar.Server.Validate()
+	if err != nil {
+		return err
+	}
 	if len(ar.Ports) == 0 {
 		return fmt.Errorf("Ports: non-zero value required.")
 	}

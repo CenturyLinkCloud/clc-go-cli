@@ -7,7 +7,7 @@ import (
 )
 
 type UpdateReq struct {
-	ServerId       string                 `valid:"required" URIParam:"true"`
+	Server         `argument:"composed" URIParam:"ServerId"`
 	PatchOperation []ServerPatchOperation `argument:"ignore"`
 
 	Cpu          int64
@@ -49,6 +49,10 @@ func (ur *UpdateReq) MarshalJSON() ([]byte, error) {
 }
 
 func (ur *UpdateReq) Validate() error {
+	err := ur.Server.Validate()
+	if err != nil {
+		return err
+	}
 	if len(ur.PatchOperation) != 0 {
 		return fmt.Errorf("Invalid property: patch-operation")
 	}

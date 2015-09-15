@@ -52,6 +52,42 @@ func Load(cn base.Connection, dataCenter string) ([]GetRes, error) {
 	}
 }
 
+func IDByName(cn base.Connection, name string) (string, error) {
+	servers, err := Load(cn, "all")
+	if err != nil {
+		return "", err
+	}
+
+	matched := []string{}
+	for _, s := range servers {
+		if s.Name == name {
+			matched = append(matched, s.Id)
+		}
+	}
+
+	switch len(matched) {
+	case 0:
+		return "", fmt.Errorf("There are no servers with name %s.", name)
+	case 1:
+		return matched[0], nil
+	default:
+		return "", fmt.Errorf("There is more than one server with name %s. Please, specify an ID.", name)
+	}
+}
+
+func GetNames(cn base.Connection, dataCenter string) ([]string, error) {
+	servers, err := Load(cn, "all")
+	if err != nil {
+		return nil, err
+	}
+
+	names := []string{}
+	for _, s := range servers {
+		names = append(names, s.Name)
+	}
+	return names, nil
+}
+
 func extractServers(g group.Entity, servers *[]models.LinkEntity) error {
 	if g.ServersCount == 0 {
 		return nil
