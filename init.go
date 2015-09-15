@@ -46,7 +46,11 @@ func init() {
 				},
 				{
 					"--group-id",
-					[]string{"Required. ID of the parent group."},
+					[]string{"Required unless --group-name is specified. ID of the parent group."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the parent group."},
 				},
 				{
 					"--source-server-id",

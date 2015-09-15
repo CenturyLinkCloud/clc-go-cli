@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
+	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"time"
 )
 
@@ -84,12 +85,27 @@ func (c *CreateReq) InferID(cn base.Connection) error {
 	if c.TemplateName != "" {
 		c.SourceServerId = c.TemplateName
 	}
+
+	if c.GroupName != "" {
+		g := &group.Group{GroupName: c.GroupName}
+		err := g.InferID(cn)
+		if err != nil {
+			return err
+		}
+		c.GroupId = g.GroupId
+	}
 	return nil
 }
 
 func (c *CreateReq) GetNames(cn base.Connection, property string) ([]string, error) {
 	if property == "TemplateName" {
 		return LoadTemplates(cn)
+	}
+	switch property {
+	case "TemplateName":
+		return LoadTemplates(cn)
+	case "GroupName":
+		return group.GetNames(cn, "all")
 	}
 	return nil, nil
 }
