@@ -98,9 +98,6 @@ func (c *CreateReq) InferID(cn base.Connection) error {
 }
 
 func (c *CreateReq) GetNames(cn base.Connection, property string) ([]string, error) {
-	if property == "TemplateName" {
-		return LoadTemplates(cn)
-	}
 	switch property {
 	case "TemplateName":
 		return LoadTemplates(cn)
