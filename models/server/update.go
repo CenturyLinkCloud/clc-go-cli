@@ -13,7 +13,7 @@ type UpdateReq struct {
 	PatchOperation []ServerPatchOperation `argument:"ignore"`
 
 	Cpu          int64
-	Memory       int64
+	MemoryGb     int64
 	RootPassword []string
 	CustomFields []customfields.Def
 	Description  string
@@ -59,7 +59,7 @@ func (ur *UpdateReq) Validate() error {
 	if len(ur.PatchOperation) != 0 {
 		return fmt.Errorf("Invalid property: patch-operation")
 	}
-	if ur.Cpu < 0 || ur.Memory < 0 {
+	if ur.Cpu < 0 || ur.MemoryGb < 0 {
 		return fmt.Errorf("cpu and memory must be positive integers.")
 	}
 	if len(ur.RootPassword) != 0 && len(ur.RootPassword) != 2 {
@@ -68,7 +68,7 @@ func (ur *UpdateReq) Validate() error {
 	var any int64
 	values := []int64{
 		ur.Cpu,
-		ur.Memory,
+		ur.MemoryGb,
 		int64(len(ur.RootPassword)),
 		int64(len(ur.CustomFields)),
 		int64(len(ur.Description)),
@@ -98,11 +98,11 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if ur.Memory != 0 {
+	if ur.MemoryGb != 0 {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "memory",
-			Value:  ur.Memory,
+			Value:  ur.MemoryGb,
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
