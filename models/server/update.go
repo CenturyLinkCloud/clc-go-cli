@@ -3,7 +3,9 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
+	"github.com/centurylinkcloud/clc-go-cli/models/group"
 )
 
 type UpdateReq struct {
@@ -16,6 +18,7 @@ type UpdateReq struct {
 	CustomFields []customfields.Def
 	Description  string
 	GroupId      string
+	GroupName    string
 	Disks        UpdateDisksDescription
 }
 
@@ -70,6 +73,7 @@ func (ur *UpdateReq) Validate() error {
 		int64(len(ur.CustomFields)),
 		int64(len(ur.Description)),
 		int64(len(ur.GroupId)),
+		int64(len(ur.GroupName)),
 		int64(len(ur.Disks.Add)),
 		int64(len(ur.Disks.Keep)),
 	}
@@ -77,7 +81,10 @@ func (ur *UpdateReq) Validate() error {
 		any += v
 	}
 	if any == 0 {
-		return fmt.Errorf("At least one of the cpu, memory, root-password, custom-fields, description, group-id, disks must be provided.")
+		return fmt.Errorf("At least one of the cpu, memory, root-password, custom-fields, description, group-id, group-name, disks must be provided.")
+	}
+	if ur.GroupId != "" && ur.GroupName != "" {
+		return fmt.Errorf("Only one of group-id and group-name may be specified")
 	}
 	return nil
 }
@@ -126,7 +133,7 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if ur.GroupId != "" {
+	if ur.GroupId != "" || ur.GroupName != "" {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "groupId",
@@ -143,4 +150,42 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
 	return nil
+}
+
+func (u *UpdateReq) InferID(cn base.Connection) error {
+	err := u.Server.InferID(cn)
+	if err != nil {
+		return err
+	}
+
+	if u.GroupName != "" {
+		var patch *ServerPatchOperation
+		patched := false
+		for i, op := range u.PatchOperation {
+			if op.Member == "groupId" {
+				patched = true
+				patch = &u.PatchOperation[i]
+				break
+			}
+		}
+		if patched {
+			ID, err := group.IDByName(cn, "all", u.GroupName)
+			if err != nil {
+				return err
+			}
+			patch.Value = ID
+		}
+	}
+	return nil
+}
+
+func (u *UpdateReq) GetNames(cn base.Connection, property string) ([]string, error) {
+	switch property {
+	case "ServerName":
+		return u.Server.GetNames(cn, "ServerName")
+	case "GroupName":
+		return group.GetNames(cn, "all")
+	default:
+		return nil, nil
+	}
 }

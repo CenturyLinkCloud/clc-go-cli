@@ -277,6 +277,10 @@ func init() {
 					[]string{"The unique identifier of the group to set as the parent."},
 				},
 				{
+					"--group-name",
+					[]string{"The name of the group to set as the parent. An alternative way to identify the group."},
+				},
+				{
 					"--disks",
 					[]string{
 						"A list of information for all disks to be on the server including type (raw or partition), size, and path",
