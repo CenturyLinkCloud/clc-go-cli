@@ -115,12 +115,11 @@ func (c *CreateReq) InferID(cn base.Connection) error {
 	}
 
 	if c.NetworkName != "" {
-		n := &network.Network{NetworkName: c.NetworkName}
-		err := n.InferID(cn)
+		ID, err := network.IDByName(cn, "all", c.NetworkName)
 		if err != nil {
 			return err
 		}
-		c.NetworkId = n.NetworkId
+		c.NetworkId = ID
 	}
 
 	if c.AntiAffinityPolicyName != "" {

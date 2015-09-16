@@ -49,12 +49,11 @@ func (i *Import) InferID(cn base.Connection) error {
 	}
 
 	if i.NetworkName != "" {
-		n := &network.Network{NetworkName: i.NetworkName}
-		err := n.InferID(cn)
+		ID, err := network.IDByName(cn, "all", i.NetworkName)
 		if err != nil {
 			return err
 		}
-		i.NetworkId = n.NetworkId
+		i.NetworkId = ID
 	}
 	return nil
 }
