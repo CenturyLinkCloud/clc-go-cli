@@ -81,6 +81,17 @@ Or unset it using:
 clc data-center unset-default
 ```
 
+### Identify entities by ID or by name
+
+There is a great deal of commands that depend on the instances of certain entities, such as `server`, `group`, `network`.
+A common pattern for specyfing such entities in the command line is `--<entity>-id`, like `--server-id` or `--load-balancer-id`.
+
+Alternatively, a name of an entity can be specified (the common pattern is `--<entity>-name`). This approach has some important subtleties to mention:
+
+* You can't specify both an ID and a name for the same entity.
+* If there is more than one entity with the specified name, an error occurs.
+* Autocomplete, if turned on, works for names and does **not** work for IDs. See [the Autocomplete section](#autocomplete-for-entity-names) for details.
+
 ### Enjoy the tool
 
 Below are some examples of CLI commands so that you can faster get to use it efficiently.
@@ -167,6 +178,16 @@ copies the `bash_autocomplete` contents into `~/.bash_completion/clc` and update
 Only v3 support is provided because previous versions do not support custom autocomplete handlers. PowerShell v3 is distributed as a part of Windows Management Framework 3.0, which can be downloaded [from here](http://www.microsoft.com/en-us/download/details.aspx?id=34595). You can check the version by typing `$PSVersionTable.PSVersion`.
 
 To turn on autocomplete execute `.\powershell3_autocomplete.ps1`. You can find the file in the release tarball for Windows.
+
+### Autocomplete for entity names
+
+Entity names is a special item in the autocomplete list because options are fetched from the server. Therefore such kind of autocomplete only works under certain circumstances and the process may take a relatively long time.
+Below are the things you should be aware of:
+
+* The functionality does not work until the user has been authenticated. Authentication is needed to perform API requests.
+* Since options are generated on the fly as the user enters a command, an entity name lookup for the data-center-dependent commands is only made within the default data center. If there is no default set, no options are to appear.
+* In bash, a waiting indicator in the form of dot rotation is shown for the time options are being fetched after the Tab has been pressed. Windows PowerShell does not support such kind of interaction: in it, the input is simply blocked until the options have arrived.
+* A cache is implemented to avoid making long subsequent requests to the server. The cache entry lifetime is 30 seconds.
 
 ## Getting Help
 
