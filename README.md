@@ -40,7 +40,7 @@ The program uses a configuration file located at `$HOME/.clc/config.yml` on Linu
 * `user` and `password`: the credentials used for authentication.
 * `defaultformat`: a default output format, either `json`, `table` or `text`.
 * `profiles`: a hash of alternative credentials.
-* `defaultdatacenter`: a short code for a data center to be queried by default when executing commands that depend on it.
+* `defaultdatacenter`: a short code for a default data center. See [the corresponding section](#specify-a-default-data-center).
 
 An example of a configuration file:
 
