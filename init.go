@@ -799,9 +799,14 @@ func init() {
 				{
 					"--server-name",
 					[]string{"Required unless --server-id is specified. Name of the server."},
-				}, {
+				},
+				{
 					"--network-id",
-					[]string{"Required. ID of the network."},
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--ip-address",
@@ -828,7 +833,11 @@ func init() {
 				},
 				{
 					"--network-id",
-					[]string{"Required. ID of the network."},
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 			},
 		},
