@@ -27,7 +27,7 @@ type connection struct {
 	logger       *log.Logger
 }
 
-var NewConnection = func(username string, password string, logger *log.Logger) (base.Connection, error) {
+var NewConnection = func(username, password, accountAlias string, logger *log.Logger) (base.Connection, error) {
 	cn := &connection{
 		logger: logger,
 	}
@@ -39,8 +39,11 @@ var NewConnection = func(username string, password string, logger *log.Logger) (
 		return nil, err
 	}
 	cn.bearerToken = loginRes.BearerToken
-	cn.accountAlias = loginRes.AccountAlias
-	cn.logger.Printf("Updating connection. Bearer: %s, Alias: %s", cn.bearerToken, cn.accountAlias)
+	if accountAlias == "" {
+		accountAlias = loginRes.AccountAlias
+	}
+	cn.accountAlias = accountAlias
+	cn.logger.Printf("Updating connection. Bearer: %s, Alias: %s", cn.bearerToken, accountAlias)
 	return cn, nil
 }
 

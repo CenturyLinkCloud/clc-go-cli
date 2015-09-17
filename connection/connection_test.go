@@ -70,14 +70,14 @@ func addHandler(t *testing.T, url string, reqModel, resModel interface{}) {
 	})
 }
 
-func newConnection(t *testing.T, registerHandler bool) (base.Connection, error) {
+func newConnection(t *testing.T, registerHandler bool, accountAlias string) (base.Connection, error) {
 	if registerHandler {
 		resModel := &authentication.LoginRes{AccountAlias: "ALIAS", BearerToken: "token"}
 		reqModel := &authentication.LoginReq{Username: "user", Password: "password"}
 		addHandler(t, "/authentication/login", reqModel, resModel)
 	}
 	logger := log.New(os.Stdout, "", log.LstdFlags)
-	return connection.NewConnection("user", "password", logger)
+	return connection.NewConnection("user", "password", accountAlias, logger)
 }
 
 type testReqModel struct {
@@ -91,7 +91,8 @@ type testResModel struct {
 func TestNewConnection(t *testing.T) {
 	initTest()
 	defer finishTest()
-	cn, err := newConnection(t, true)
+	// Test with default account alias.
+	cn, err := newConnection(t, true, "")
 	if err != nil {
 		t.Error(err)
 	}
@@ -107,12 +108,29 @@ func TestNewConnection(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
+	// Test with a custom account alias.
+	cn, err = newConnection(t, false, "CUSTOM")
+	if err != nil {
+		t.Error(err)
+	}
+	serveMux.HandleFunc("/some-url/CUSTOM", func(w http.ResponseWriter, req *http.Request) {
+		if h, ok := req.Header["Authorization"]; !ok || len(h) == 0 || h[0] != "Bearer token" {
+			t.Errorf("Incorrect request: bearer token not found, headers: %#v", req.Header)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(""))
+	})
+	err = cn.ExecuteRequest("GET", connection.BaseUrl+"some-url/{accountAlias}", nil, nil)
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func TestNewConnectionError(t *testing.T) {
 	initTest()
 	defer finishTest()
-	_, err := newConnection(t, false)
+	_, err := newConnection(t, false, "")
 	if err == nil || err.Error() != "Error occured while sending request to API. Status code: 404." {
 		t.Errorf("Unexpected error: %s", err)
 	}
