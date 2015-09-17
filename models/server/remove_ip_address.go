@@ -1,6 +1,6 @@
 package server
 
 type RemoveIPAddressReq struct {
-	ServerId string `valid:"required" URIParam:"yes"`
+	Server   `argument:"composed" URIParam:"ServerId"`
 	PublicIp string `valid:"required" URIParam:"yes"`
 }

@@ -11,7 +11,7 @@ const (
 )
 
 type GetStatsReq struct {
-	GroupId        string `valid:"required" URIParam:"yes"`
+	Group          `argument:"composed" URIParam:"GroupId"`
 	Start          string `URIParam:"yes"`
 	End            string `URIParam:"yes"`
 	SampleInterval string `URIParam:"yes"`

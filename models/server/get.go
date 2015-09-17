@@ -5,7 +5,7 @@ import (
 )
 
 type GetReq struct {
-	ServerId string `valid:"required" URIParam:"yes"`
+	Server `argument:"composed" URIParam:"ServerId"`
 }
 
 type GetRes struct {
@@ -20,6 +20,6 @@ type GetRes struct {
 	Details     Details
 	Type        string
 	StorageType string
-	ChangeInfo  ChangeInfo
+	ChangeInfo  models.ChangeInfo
 	Links       []models.LinkEntity
 }

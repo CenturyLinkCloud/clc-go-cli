@@ -46,11 +46,31 @@ func init() {
 				},
 				{
 					"--group-id",
-					[]string{"Required. ID of the parent group."},
+					[]string{"Required unless --group-name is specified. ID of the parent group."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the parent group."},
 				},
 				{
 					"--source-server-id",
-					[]string{"Required. ID of the server to use a source. May be the ID of a template, or when cloning, an existing server ID."},
+					[]string{
+						"Required unless --template-name or --source-server-name is specified. ID of the server to use as a source.",
+						"Actually, it may be the name of a template, or when cloning, an existing server ID.",
+					},
+				},
+				{
+					"--source-server-name",
+					[]string{
+						"Required unless --source-server-id or --template-name is specified. Name of the server to use as a source.",
+					},
+				},
+				{
+					"--template-name",
+					[]string{
+						"Required unless --source-server-id or --source-server-name is specified. A template to create the server from.",
+						"If autocomplete is turned on, available template names are shown as options.",
+					},
 				},
 				{
 					"--is-managed-os",
@@ -79,6 +99,12 @@ func init() {
 					[]string{
 						"ID of the network to which to deploy the server. If not provided, a network will be chosen automatically.",
 						"If your account has not yet been assigned a network, leave this blank and one will be assigned automatically.",
+					},
+				},
+				{
+					"--network-name",
+					[]string{
+						"Name of the network to which to deploy the server. An alternative way to identify the network.",
 					},
 				},
 				{
@@ -138,6 +164,12 @@ func init() {
 					},
 				},
 				{
+					"--anti-affinity-policy-name",
+					[]string{
+						"Name of the Anti-Affinity policy. An alternative way to identify the policy.",
+					},
+				},
+				{
 					"--custom-fields",
 					[]string{"Collection of custom field ID-value pairs to set for the server."},
 				},
@@ -181,7 +213,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server to be deleted."},
+					[]string{"Required unless --server-name is specified. ID of the server to be deleted."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server to be deleted."},
 				},
 			},
 		},
@@ -195,11 +231,19 @@ func init() {
 			Brief: []string{"Changes the amount of CPU cores, memory (in GB), server credentials, custom fields, description, disks and server's group."},
 			Arguments: []help.Argument{
 				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. ID of the server being updated."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being updated."},
+				},
+				{
 					"--cpu",
 					[]string{"The amount of CPU cores to set for the given server."},
 				},
 				{
-					"--memory",
+					"--memory-gb",
 					[]string{"The amount of memory (in GB) to set for the given server."},
 				},
 				{
@@ -233,6 +277,10 @@ func init() {
 					[]string{"The unique identifier of the group to set as the parent."},
 				},
 				{
+					"--group-name",
+					[]string{"The name of the group to set as the parent. An alternative way to identify the group."},
+				},
+				{
 					"--disks",
 					[]string{
 						"A list of information for all disks to be on the server including type (raw or partition), size, and path",
@@ -256,7 +304,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 			},
 		},
@@ -271,7 +323,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server with the credentials to return."},
+					[]string{"Required unless --server-name is specified. ID of the server with the credentials to return."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server with the credentials to return."},
 				},
 			},
 		},
@@ -301,7 +357,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--public-ip",
@@ -323,7 +383,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--internal-ip-address",
@@ -364,7 +428,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--public-ip",
@@ -386,7 +454,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server being queried."},
+					[]string{"Required unless --server-name is specified. ID of the server being queried."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server being queried."},
 				},
 				{
 					"--public-ip",
@@ -549,7 +621,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server with the snapshot to restore."},
+					[]string{"Required unless --server-name is specified. ID of the server with the snapshot to restore."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server with the snapshot to restore."},
 				},
 				{
 					"--snapshot-id",
@@ -568,7 +644,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server with the snapshot to delete."},
+					[]string{"Required unless --server-name is specified. ID of the server with the snapshot to delete."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server with the snapshot to delete."},
 				},
 				{
 					"--snapshot-id",
@@ -631,7 +711,11 @@ func init() {
 				},
 				{
 					"--group-id",
-					[]string{"Required. ID of the parent group."},
+					[]string{"Required unless --group-name is specified. ID of the parent group."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the parent group."},
 				},
 				{
 					"--primary-dns",
@@ -646,6 +730,12 @@ func init() {
 					[]string{
 						"ID of the network to which to deploy the server. If not provided, a network will be chosen automatically.",
 						"If your account has not yet been assigned a network, leave this blank and one will be assigned automatically.",
+					},
+				},
+				{
+					"--network-name",
+					[]string{
+						"Name of the network to which to deploy the server. An alternative way to identify the network.",
 					},
 				},
 				{
@@ -708,11 +798,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server."},
 				},
 				{
 					"--network-id",
-					[]string{"Required. ID of the network."},
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--ip-address",
@@ -731,11 +829,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"Required. ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. Name of the server."},
 				},
 				{
 					"--network-id",
-					[]string{"Required. ID of the network."},
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 			},
 		},
@@ -751,7 +857,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being queried."},
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
 				},
 			},
 		},
@@ -774,7 +884,11 @@ func init() {
 				},
 				{
 					"--parent-group-id",
-					[]string{"Required. ID of the parent group."},
+					[]string{"Required unless --parent-group-name is specified. ID of the parent group."},
+				},
+				{
+					"--parent-group-name",
+					[]string{"Required unless --parent-group-id is specified. Name of the parent group."},
 				},
 				{
 					"--custom-fields",
@@ -793,7 +907,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group to be deleted."},
+					[]string{"Required unless --group-name is specified. ID of the group being deleted."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being deleted."},
 				},
 			},
 		},
@@ -808,7 +926,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being queried."},
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
 				},
 			},
 		},
@@ -826,7 +948,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being queried."},
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
 				},
 				{
 					"--type",
@@ -882,7 +1008,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group being updated."},
+					[]string{"Required unless --group-name is specified. ID of the group being updated."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being updated."},
 				},
 				{
 					"--custom-fields",
@@ -909,6 +1039,10 @@ func init() {
 					"--parent-group-id",
 					[]string{"The group identifier for the new parent group."},
 				},
+				{
+					"--parent-group-name",
+					[]string{"The group name for the new parent group (an alternative way to identify it)."},
+				},
 			},
 		},
 	})
@@ -922,7 +1056,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group to archive."},
+					[]string{"Required unless --group-name is specified. ID of the group to archive."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group to archive."},
 				},
 			},
 		},
@@ -937,11 +1075,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--group-id",
-					[]string{"Required. ID of the group to restore."},
+					[]string{"Required unless --group-name is specified. ID of the group to restore."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group to restore."},
 				},
 				{
 					"--target-group-id",
-					[]string{"Required. The unique identifier of the target group to restore the group to."},
+					[]string{"Required unless --target-group-name is specified. The unique identifier of the target group to restore the group to."},
+				},
+				{
+					"--target-group-name",
+					[]string{"Required unless --target-group-id is specified. The name of the target group to restore the group to."},
 				},
 			},
 		},
@@ -1012,7 +1158,7 @@ func init() {
 	})
 	registerCommandBase(&network.GetReq{}, &network.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}?ipAddresses={IpAddresses}",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}?ipAddresses={IpAddresses}",
 		Resource: "network",
 		Command:  "get",
 		Help: help.Command{
@@ -1023,8 +1169,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--ip-addresses",
@@ -1042,7 +1192,7 @@ func init() {
 	})
 	registerCommandBase(&network.ListIpAddresses{}, &[]network.IpAddress{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/ipAddresses?type={Type}",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}/ipAddresses?type={Type}",
 		Resource: "network",
 		Command:  "list-ip-addresses",
 		Help: help.Command{
@@ -1053,8 +1203,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--type",
@@ -1086,7 +1240,7 @@ func init() {
 	})
 	registerCommandBase(&network.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}",
 		Resource: "network",
 		Command:  "update",
 		Help: help.Command{
@@ -1097,8 +1251,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 				{
 					"--name",
@@ -1113,7 +1271,7 @@ func init() {
 	})
 	registerCommandBase(&network.ReleaseReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "POST",
-		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{Network}/release",
+		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/{NetworkId}/release",
 		Resource: "network",
 		Command:  "release",
 		Help: help.Command{
@@ -1124,8 +1282,12 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--network",
-					[]string{"Required. ID of the network."},
+					"--network-id",
+					[]string{"Required unless --network-name is specified. ID of the network."},
+				},
+				{
+					"--network-name",
+					[]string{"Required unless --network-id is specified. Name of the network."},
 				},
 			},
 		},
@@ -1148,10 +1310,10 @@ func init() {
 					[]string{
 						"Required. The actions to perform when the alert is triggered.",
 						"",
-						"Has to be an object with 2 fields: action and settings.",
+						"Has to be a list of objects with 2 fields in each: action and settings.",
 						"The only action currently supported by alerts is 'email'.",
-						"The only setting currently supported is the 'recipients' list, which is an array of",
-						"email addresses to be notified when the alert is triggered.",
+						"The only settings value supported currently is an object with the 'recipients' field,",
+						"which is an array of email addresses to be notified when the alert is triggered.",
 					},
 				},
 				{
@@ -1159,7 +1321,7 @@ func init() {
 					[]string{
 						"Required. The definition of the triggers that fire the alert.",
 						"",
-						"Has to be an object with 3 fields: metric, duration and threshold.",
+						"Has to be a list of objects with 3 fields each: metric, duration and threshold.",
 						"metric: the metric on which to measure the condition that will trigger the alert: cpu, memory, or disk.",
 						"duration: the length of time in minutes that the condition must exceed the threshold: 00:05:00, 00:10:00, 00:15:00.",
 						"threshold: the threshold that will trigger the alert when the metric equals or exceeds it.",
@@ -1188,7 +1350,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the alert policy being queried."},
+					[]string{"Required unless --policy-name is specified. ID of the alert policy being queried."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the alert policy being queried."},
 				},
 			},
 		},
@@ -1203,7 +1369,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the alert policy being updated."},
+					[]string{"Required unless --policy-name is specified. ID of the alert policy being updated."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the alert policy being updated."},
 				},
 				{
 					"--name",
@@ -1245,7 +1415,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the alert policy being deleted."},
+					[]string{"Required unless --policy-name is specified. ID of the alert policy being deleted."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the alert policy being deleted."},
 				},
 			},
 		},
@@ -1289,7 +1463,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the anti-affinity policy being queried."},
+					[]string{"Required unless --policy-name is specified. ID of the anti-affinity policy being queried."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the anti-affinity policy being queried."},
 				},
 			},
 		},
@@ -1304,7 +1482,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the anti-affinity policy being updated."},
+					[]string{"Required unless --policy-name is specified. ID of the anti-affinity policy being updated."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the anti-affinity policy being updated."},
 				},
 				{
 					"--name",
@@ -1323,7 +1505,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"Required. ID of the anti-affinity policy being deleted."},
+					[]string{"Required unless --policy-name is specified. ID of the anti-affinity policy being deleted."},
+				},
+				{
+					"--policy-name",
+					[]string{"Required unless --policy-id is specified. Name of the anti-affinity policy being deleted."},
 				},
 			},
 		},
@@ -1500,7 +1686,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--port",
@@ -1558,7 +1748,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 			},
 		},
@@ -1592,7 +1786,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1615,7 +1813,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 			},
 		},
@@ -1634,7 +1836,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1665,7 +1871,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer to update."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer to update."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer to update."},
 				},
 				{
 					"--name",
@@ -1696,7 +1906,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1719,7 +1933,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer."},
 				},
 				{
 					"--pool-id",
@@ -1753,7 +1971,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer with the pool to delete."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer with the pool to delete."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer with the pool to delete."},
 				},
 				{
 					"--pool-id",
@@ -1776,7 +1998,11 @@ func init() {
 				},
 				{
 					"--load-balancer-id",
-					[]string{"Required. ID of the load balancer to delete."},
+					[]string{"Required unless --load-balancer-name is specified. ID of the load balancer to delete."},
+				},
+				{
+					"--load-balancer-name",
+					[]string{"Required unless --load-balancer-id is specified. Name of the load balancer to delete."},
 				},
 			},
 		},
@@ -1839,6 +2065,7 @@ func init() {
 				"Logs the user in by saving his credentials to the config.",
 				"Specify the credentials using the --user and --password options.",
 			},
+			NoEnvVars: true,
 		},
 	}))
 

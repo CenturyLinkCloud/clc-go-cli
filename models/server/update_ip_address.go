@@ -6,7 +6,7 @@ import (
 )
 
 type UpdateIPAddressReq struct {
-	ServerId string `json:"-" valid:"required" URIParam:"yes"`
+	Server   `json:"-" argument:"composed" URIParam:"ServerId"`
 	PublicIp string `json:"-" valid:"required" URIParam:"yes"`
 
 	Ports              []models.PortRestriction
@@ -14,6 +14,10 @@ type UpdateIPAddressReq struct {
 }
 
 func (ur *UpdateIPAddressReq) Validate() error {
+	err := ur.Server.Validate()
+	if err != nil {
+		return err
+	}
 	if len(ur.Ports) == 0 {
 		return fmt.Errorf("Ports: non-zero value required")
 	}

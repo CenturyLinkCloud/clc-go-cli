@@ -5,7 +5,7 @@ import (
 )
 
 type GetIPAddressReq struct {
-	ServerId string `valid:"required" URIParam:"yes"`
+	Server   `argument:"composed" URIParam:"ServerId"`
 	PublicIp string `valid:"required" URIParam:"yes"`
 }
 

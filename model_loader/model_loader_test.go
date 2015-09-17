@@ -30,6 +30,7 @@ type testModel struct {
 type testFieldObject struct {
 	FieldString      string
 	FieldInnerObject testFieldInnerObject
+	FieldInnerArray  []testFieldObject
 }
 
 type testFieldInnerObject struct {
@@ -128,6 +129,19 @@ var testCases = []modelLoaderTestCase{
 				FieldString: "some string",
 			},
 		},
+	},
+	// Fails to load JSON if it is of the wrong structure.
+	{
+		args: map[string]interface{}{
+			"FieldObject": `{"FieldInnerObject":[{"FieldString":"some string"}]}`,
+		},
+		err: "Type mismatch: FieldInnerObject must be an object.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldArray": `[{"FieldInnerArray":{"FieldString":"some string"}}]`,
+		},
+		err: "Type mismatch: FieldInnerArray must be an array.",
 	},
 	// Fails to load string into object field if it is neither valid JSON nor k1=v1,.. notation.
 	{

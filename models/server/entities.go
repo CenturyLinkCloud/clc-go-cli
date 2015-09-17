@@ -3,20 +3,8 @@ package server
 import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
-	"time"
+	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 )
-
-type FullCustomFieldDef struct {
-	Id           string
-	Value        string
-	Name         string
-	DisplayValue string
-}
-
-type CustomFieldDef struct {
-	Id    string
-	Value string
-}
 
 type Disk struct {
 	Id             string
@@ -58,7 +46,7 @@ type Details struct {
 	Disks             []Disk
 	Partitions        []Partition
 	Snapshots         []Snapshot
-	CustomFields      []FullCustomFieldDef
+	CustomFields      []customfields.FullDef
 }
 
 type IPAddresses struct {
@@ -69,11 +57,4 @@ type IPAddresses struct {
 type Snapshot struct {
 	Name  string
 	Links []models.LinkEntity
-}
-
-type ChangeInfo struct {
-	CreatedDate  time.Time
-	CreatedBy    string
-	ModifiedDate time.Time
-	ModifiedBy   string
 }

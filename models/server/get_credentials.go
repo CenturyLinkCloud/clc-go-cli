@@ -1,7 +1,7 @@
 package server
 
 type GetCredentialsReq struct {
-	ServerId string `valid:"required" URIParam:"true"`
+	Server `argument:"composed" URIParam:"ServerId"`
 }
 
 type GetCredentialsRes struct {

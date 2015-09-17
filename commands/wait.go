@@ -51,12 +51,12 @@ func (w *Wait) Execute(cn base.Connection) error {
 	if len(links) > 0 {
 		for _, link := range links {
 			if link.Rel == "status" {
-				w.Output = ping(cn, fmt.Sprintf("%s%s", BaseURL, link.Href))
+				w.Output = ping(cn, fmt.Sprintf("%s%s", base.URL, link.Href))
 				return nil
 			}
 		}
 	} else if status.URI != "" {
-		w.Output = ping(cn, fmt.Sprintf("%s%s", BaseURL, status.URI))
+		w.Output = ping(cn, fmt.Sprintf("%s%s", base.URL, status.URI))
 	}
 	return nil
 }

@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-func readFromFile(name string) ([]byte, error) {
+func ReadFromFile(name string) ([]byte, error) {
 	p, err := config.GetPath()
 	if err != nil {
 		return nil, err
@@ -15,7 +15,7 @@ func readFromFile(name string) ([]byte, error) {
 	return ioutil.ReadFile(path.Join(p, name))
 }
 
-func writeToFile(data []byte, name string, perm os.FileMode) error {
+func WriteToFile(data []byte, name string, perm os.FileMode) error {
 	if err := config.CreateIfNotExists(); err != nil {
 		return err
 	}
@@ -24,4 +24,12 @@ func writeToFile(data []byte, name string, perm os.FileMode) error {
 		return err
 	}
 	return ioutil.WriteFile(path.Join(p, name), data, perm)
+}
+
+func GetFileInfo(name string) (os.FileInfo, error) {
+	p, err := config.GetPath()
+	if err != nil {
+		return nil, err
+	}
+	return os.Stat(path.Join(p, name))
 }

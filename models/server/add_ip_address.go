@@ -6,7 +6,7 @@ import (
 )
 
 type AddIPAddressReq struct {
-	ServerId string `json:"-" valid:"required" URIParam:"true"`
+	Server `json:"-" argument:"composed" URIParam:"ServerId"`
 
 	InternalIpAddress  string                     `json:",omitempty"`
 	Ports              []models.PortRestriction   `json:",omitempty"`
@@ -14,6 +14,10 @@ type AddIPAddressReq struct {
 }
 
 func (ar *AddIPAddressReq) Validate() error {
+	err := ar.Server.Validate()
+	if err != nil {
+		return err
+	}
 	if len(ar.Ports) == 0 {
 		return fmt.Errorf("Ports: non-zero value required.")
 	}

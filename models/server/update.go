@@ -3,18 +3,22 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
+	"github.com/centurylinkcloud/clc-go-cli/models/group"
 )
 
 type UpdateReq struct {
-	ServerId       string `valid:"required" URIParam:"true"`
-	PatchOperation []ServerPatchOperation
+	Server         `argument:"composed" URIParam:"ServerId"`
+	PatchOperation []ServerPatchOperation `argument:"ignore"`
 
 	Cpu          int64
-	Memory       int64
+	MemoryGb     int64
 	RootPassword []string
-	CustomFields []CustomFieldDef
+	CustomFields []customfields.Def
 	Description  string
 	GroupId      string
+	GroupName    string
 	Disks        UpdateDisksDescription
 }
 
@@ -48,10 +52,14 @@ func (ur *UpdateReq) MarshalJSON() ([]byte, error) {
 }
 
 func (ur *UpdateReq) Validate() error {
+	err := ur.Server.Validate()
+	if err != nil {
+		return err
+	}
 	if len(ur.PatchOperation) != 0 {
 		return fmt.Errorf("Invalid property: patch-operation")
 	}
-	if ur.Cpu < 0 || ur.Memory < 0 {
+	if ur.Cpu < 0 || ur.MemoryGb < 0 {
 		return fmt.Errorf("cpu and memory must be positive integers.")
 	}
 	if len(ur.RootPassword) != 0 && len(ur.RootPassword) != 2 {
@@ -60,11 +68,12 @@ func (ur *UpdateReq) Validate() error {
 	var any int64
 	values := []int64{
 		ur.Cpu,
-		ur.Memory,
+		ur.MemoryGb,
 		int64(len(ur.RootPassword)),
 		int64(len(ur.CustomFields)),
 		int64(len(ur.Description)),
 		int64(len(ur.GroupId)),
+		int64(len(ur.GroupName)),
 		int64(len(ur.Disks.Add)),
 		int64(len(ur.Disks.Keep)),
 	}
@@ -72,7 +81,10 @@ func (ur *UpdateReq) Validate() error {
 		any += v
 	}
 	if any == 0 {
-		return fmt.Errorf("At least one of the cpu, memory, root-password, custom-fields, description, group-id, disks must be provided.")
+		return fmt.Errorf("At least one of the cpu, memory, root-password, custom-fields, description, group-id, group-name, disks must be provided.")
+	}
+	if ur.GroupId != "" && ur.GroupName != "" {
+		return fmt.Errorf("Only one of group-id and group-name may be specified")
 	}
 	return nil
 }
@@ -86,11 +98,11 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if ur.Memory != 0 {
+	if ur.MemoryGb != 0 {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "memory",
-			Value:  ur.Memory,
+			Value:  ur.MemoryGb,
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
@@ -121,7 +133,7 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if ur.GroupId != "" {
+	if ur.GroupId != "" || ur.GroupName != "" {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "groupId",
@@ -138,4 +150,42 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
 	return nil
+}
+
+func (u *UpdateReq) InferID(cn base.Connection) error {
+	err := u.Server.InferID(cn)
+	if err != nil {
+		return err
+	}
+
+	if u.GroupName != "" {
+		var patch *ServerPatchOperation
+		patched := false
+		for i, op := range u.PatchOperation {
+			if op.Member == "groupId" {
+				patched = true
+				patch = &u.PatchOperation[i]
+				break
+			}
+		}
+		if patched {
+			ID, err := group.IDByName(cn, "all", u.GroupName)
+			if err != nil {
+				return err
+			}
+			patch.Value = ID
+		}
+	}
+	return nil
+}
+
+func (u *UpdateReq) GetNames(cn base.Connection, property string) ([]string, error) {
+	switch property {
+	case "ServerName":
+		return u.Server.GetNames(cn, "ServerName")
+	case "GroupName":
+		return group.GetNames(cn, "all")
+	default:
+		return nil, nil
+	}
 }

@@ -13,6 +13,7 @@ type Resource struct {
 type Command struct {
 	Brief     []string
 	Arguments []Argument
+	NoEnvVars bool
 }
 
 type Argument struct {
@@ -74,14 +75,14 @@ var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 			<,<=,>,>= 	comparison operators, can be used with numbers and strings
 	--trace
 			If specified, prints out all the HTTP request/response data.
-
+{{if .NoEnvVars}}{{else}}
 ENVIRONMENT VARIABLES:
 
 	CLC_USER	Specifies a user name for the account.
 	CLC_PASSWORD	Specifies the password for the given user.
 	CLC_PROFILE	Specifies a profile to use (one from the config file).
 	CLC_TRACE	If specified (any non-empty value fits), prints out all the HTTP request/response data.
-`
+{{end}}`
 
 func ForCommand(cmd Command) string {
 	tmpl, err := template.New("command help").Parse(commandHelpTemplate)

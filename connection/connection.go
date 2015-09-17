@@ -76,13 +76,32 @@ func ExtractURIParams(uri string, model interface{}) string {
 	var newURI = uri
 	for i := 0; i < meta.NumField(); i++ {
 		fieldMeta := meta.Field(i)
-		stub := fmt.Sprintf("{%s}", fieldMeta.Name)
-		if fieldMeta.Tag.Get("URIParam") != "" && strings.Contains(uri, stub) {
-			field := value.FieldByName(fieldMeta.Name)
+		uriTag := fieldMeta.Tag.Get("URIParam")
+		if uriTag == "" {
+			continue
+		}
+
+		field := value.FieldByIndex([]int{i})
+		if uriTag == "yes" {
 			if field.Kind() != reflect.String {
-				panic("Fields marked by URIParam tag must be strings.")
+				panic("Fields marked by URIParam tag with value 'yes' must be strings.")
 			}
-			newURI = strings.Replace(newURI, stub, field.String(), 1)
+			stub := fmt.Sprintf("{%s}", fieldMeta.Name)
+			if strings.Contains(uri, stub) {
+				newURI = strings.Replace(newURI, stub, field.String(), 1)
+			}
+		} else {
+			if field.Kind() != reflect.Struct {
+				panic("Fields marked by URIParam tag with a field name must be structs.")
+			}
+			for _, tag := range strings.Split(uriTag, ",") {
+				subField := field.FieldByName(tag)
+				if subField.Kind() != reflect.String {
+					panic("Fields pointed to by a URIParam tag must be strings.")
+				}
+				stub := fmt.Sprintf("{%s}", tag)
+				newURI = strings.Replace(newURI, stub, subField.String(), 1)
+			}
 		}
 	}
 	return newURI
