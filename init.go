@@ -2065,6 +2065,7 @@ func init() {
 				"Logs the user in by saving his credentials to the config.",
 				"Specify the credentials using the --user and --password options.",
 			},
+			NoEnvVars: true,
 		},
 	}))
 
