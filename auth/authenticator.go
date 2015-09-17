@@ -48,7 +48,7 @@ func AuthenticateCommand(opt *options.Options, conf *config.Config) (cn base.Con
 			if c.user == "" || c.password == "" {
 				return nil, errors.New(c.err)
 			}
-			return connection.NewConnection(c.user, c.password, logger)
+			return connection.NewConnection(c.user, c.password, opt.AccountAlias, logger)
 		}
 	}
 
