@@ -23,14 +23,30 @@ func (l *Login) InputModel() interface{} {
 }
 
 func (l *Login) Login(opts *options.Options, conf *config.Config) string {
-	if opts.User == "" || opts.Password == "" {
+	if opts.User == "" && opts.Password == "" && opts.Profile == "" {
+		return "Either a profile or a user and a password must be specified."
+	}
+
+	if (opts.User == "") != (opts.Password == "") {
 		return "Both --user and --password options must be specified."
 	}
 
-	conf.User = opts.User
-	conf.Password = opts.Password
+	var user, password string
+	if opts.User != "" {
+		user, password = opts.User, opts.Password
+	} else {
+		var profile config.Profile
+		ok := false
+		if profile, ok = conf.Profiles[opts.Profile]; !ok {
+			return fmt.Sprintf("Profile %s does not exist.", opts.Profile)
+		}
+		user, password = profile.User, profile.Password
+	}
+
+	conf.User = user
+	conf.Password = password
 	if err := config.Save(conf); err != nil {
 		return err.Error()
 	}
-	return fmt.Sprintf("Logged in as %s.", opts.User)
+	return fmt.Sprintf("Logged in as %s.", user)
 }
