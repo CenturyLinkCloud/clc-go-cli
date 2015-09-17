@@ -41,7 +41,7 @@ type CreateReq struct {
 	CustomFields           []customfields.Def `json:",omitempty"`
 	AdditionalDisks        []AddDiskRequest   `json:",omitempty"`
 	Ttl                    time.Time          `json:"-"`
-	TtlString              string             `json:"Ttl,omitempty"`
+	TtlString              string             `json:"Ttl,omitempty" argument:"ignore"`
 	Packages               []PackageDef       `json:",omitempty"`
 	ConfigurationId        string             `json:",omitempty"`
 	OsType                 string             `json:",omitempty"`
