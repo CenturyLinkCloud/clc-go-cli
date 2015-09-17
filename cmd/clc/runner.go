@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
+	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/formatter_provider"
 	"github.com/centurylinkcloud/clc-go-cli/model_adjuster"
@@ -79,7 +80,7 @@ func run(args []string) string {
 		return err.Error()
 	}
 	if cmd.Resource() == "login" {
-		return login(options, conf)
+		return cmd.(*commands.Login).Login(options, conf)
 	}
 	err = model_loader.LoadModel(parsedArgs, cmd.InputModel())
 	if err != nil {
@@ -154,19 +155,6 @@ func run(args []string) string {
 		return err.Error()
 	}
 	return output
-}
-
-func login(opts *options.Options, conf *config.Config) string {
-	if opts.User == "" || opts.Password == "" {
-		return "Both --user and --password options must be specified."
-	}
-
-	conf.User = opts.User
-	conf.Password = opts.Password
-	if err := config.Save(conf); err != nil {
-		return err.Error()
-	}
-	return fmt.Sprintf("Logged in as %s.", opts.User)
 }
 
 func usage() string {
