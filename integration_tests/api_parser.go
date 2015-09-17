@@ -347,20 +347,5 @@ func (p *parser) postProcess(api []*ApiDef) error {
 	}
 	api = api[0:j]
 
-	convertDateParams := func(params []*ParameterDef, example interface{}) {
-		for _, p := range params {
-			if p.Type == "dateTime" {
-				if exampleMap, ok := example.(map[string]interface{}); ok {
-					exampleMap[p.Name] = strings.Replace(exampleMap[p.Name].(string), "T", " ", -1)
-					exampleMap[p.Name] = strings.Replace(exampleMap[p.Name].(string), "Z", "", -1)
-				}
-			}
-		}
-	}
-	for _, apiDef := range api {
-		convertDateParams(apiDef.ContentParameters, apiDef.ContentExample)
-		convertDateParams(apiDef.ResParameters, apiDef.ResExample)
-	}
-
 	return nil
 }

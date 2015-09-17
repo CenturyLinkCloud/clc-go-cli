@@ -3934,7 +3934,10 @@
                 "Children": null
             }
         ],
-        "ContentExample": null,
+        "ContentExample": [
+            "WA1ALIASWB01",
+            "WA1ALIASWB02"
+        ],
         "ResExample": [
             {
                 "isQueued": true,
@@ -4667,18 +4670,18 @@
     },
     {
         "Method": "POST",
-        "Url": "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/networks",
+        "Url": "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/networks",
         "UrlExample": "https://api.ctl.io/v2/servers/ALIAS/WA1ALIASSERV0101/networks",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "serverId",
+                "Name": "ServerId",
                 "Type": "string",
                 "Description": "ID of the server",
                 "IsRequired": true,
@@ -4980,6 +4983,7 @@
             "groupId": "2a5c0b9662cf4fc8bf6180f139facdc0",
             "ipAddress": "10.123.456.12",
             "isManagedOS": false,
+            "isManagedBackup": false,
             "memoryGB": 4,
             "name": "web",
             "networkId": "d51ef9f58f244205922eab9d240b126f",

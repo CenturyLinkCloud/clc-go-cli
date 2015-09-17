@@ -6,11 +6,16 @@ import (
 	"time"
 )
 
-type CustomFieldDef struct {
+type FullCustomFieldDef struct {
 	Id           string
 	Value        string
 	Name         string
 	DisplayValue string
+}
+
+type CustomFieldDef struct {
+	Id    string
+	Value string
 }
 
 type Disk struct {
@@ -41,7 +46,7 @@ type PackageDef struct {
 }
 
 type Details struct {
-	IPAddresses       []IPAddresses
+	IpAddresses       []IPAddresses
 	AlertPolicies     []alert.AlertPolicy
 	Cpu               int64
 	DiskCount         int64
@@ -53,11 +58,11 @@ type Details struct {
 	Disks             []Disk
 	Partitions        []Partition
 	Snapshots         []Snapshot
-	CustomFields      []CustomFieldDef
+	CustomFields      []FullCustomFieldDef
 }
 
 type IPAddresses struct {
-	Public   string
+	Public   string `json:",omitempty"`
 	Internal string
 }
 
@@ -69,6 +74,6 @@ type Snapshot struct {
 type ChangeInfo struct {
 	CreatedDate  time.Time
 	CreatedBy    string
-	ModifiedData time.Time
+	ModifiedDate time.Time
 	ModifiedBy   string
 }

@@ -7,6 +7,6 @@ import (
 type ServerRes struct {
 	Server       string
 	IsQueued     bool
-	ErrorMessage string
-	Links        []models.LinkEntity
+	ErrorMessage string              `json:",omitempty"`
+	Links        []models.LinkEntity `json:",omitempty"`
 }

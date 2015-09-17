@@ -7,7 +7,7 @@ type Import struct {
 	PrimaryDns   string           `json:",omitempty"`
 	SecondaryDns string           `json:",omitempty"`
 	NetworkId    string           `json:",omitempty"`
-	RootPassword string           `valid:"required"`
+	RootPassword string           `json:"password" valid:"required"`
 	Cpu          int64            `valid:"required"`
 	MemoryGb     int64            `valid:"required"`
 	Type         string           `valid:"required" oneOf:"standard,hyperscale"`

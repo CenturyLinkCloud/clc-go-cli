@@ -13,9 +13,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	//"sort"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 type Runner interface {
@@ -26,9 +26,7 @@ func NewRunner(api []*ApiDef, logger Logger) Runner {
 	r := &runner{}
 	r.logger = logger
 	r.api = api
-	r.serveMux = http.NewServeMux()
-	r.server = httptest.NewServer(r.serveMux)
-	connection.BaseUrl = r.server.URL + "/"
+	r.addServeMux()
 	return r
 }
 
@@ -39,12 +37,20 @@ type runner struct {
 	server   *httptest.Server
 }
 
+func (r *runner) addServeMux() {
+	baseMux := http.NewServeMux()
+	r.serveMux = http.NewServeMux()
+	r.server = httptest.NewServer(baseMux)
+	connection.BaseUrl = r.server.URL + "/"
+
+	baseMux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		req.URL.Path = strings.ToLower(req.URL.Path)
+		r.serveMux.ServeHTTP(w, req)
+	}))
+}
+
 func (r *runner) RunTests() error {
 	os.Setenv("CLC_TRACE", "true")
-	err := r.addLoginHandler()
-	if err != nil {
-		return err
-	}
 	for _, command := range cli.AllCommands {
 		if cmdBase, ok := command.(*commands.CommandBase); ok {
 			err := r.TestCommand(cmdBase)
@@ -53,14 +59,11 @@ func (r *runner) RunTests() error {
 			}
 		}
 	}
+	r.logger.Log("Test execution finished succcessfully")
 	return nil
 }
 
 func (r *runner) addLoginHandler() error {
-	strErr := clc.Run([]string{"login", "--user", "user", "--password", "password"})
-	if strErr != "" {
-		return fmt.Errorf(strErr)
-	}
 	resModel := &authentication.LoginRes{AccountAlias: "ALIAS", BearerToken: "token"}
 	response, err := json.Marshal(resModel)
 	if err != nil {
@@ -77,11 +80,23 @@ func (r *runner) addLoginHandler() error {
 		}
 		return nil
 	}
-	r.addHandler("/authentication/login", string(response), checker)
+	r.addHandlerBase("/authentication/login", string(response), checker)
 	return nil
 }
 
-func (r *runner) addHandler(url string, response string, checker func(string) error) {
+func (r *runner) addHandler(url string, response string, checker func(string) error) error {
+	r.logger.Log("Adding httpHandler for url: %s", url)
+	r.addServeMux()
+	err := r.addLoginHandler()
+	if err != nil {
+		return err
+	}
+	r.addHandlerBase(url, response, checker)
+	return nil
+}
+
+func (r *runner) addHandlerBase(url string, response string, checker func(string) error) {
+	url = strings.ToLower(url)
 	r.serveMux.HandleFunc(url, func(w http.ResponseWriter, req *http.Request) {
 		reqContent, err := ioutil.ReadAll(req.Body)
 		if err != nil {
@@ -99,43 +114,46 @@ func (r *runner) addHandler(url string, response string, checker func(string) er
 }
 
 func (r *runner) findApiDef(url, method string) (*ApiDef, error) {
+	if method == "PATCH" {
+		return nil, nil
+	}
 	for _, apiDef := range r.api {
-		if apiDef.Url == url && apiDef.Method == method {
+		apiUrl := strings.Replace(apiDef.Url, "locationId", "DataCenter", -1)
+		if strings.EqualFold(apiUrl, url) && apiDef.Method == method {
 			return apiDef, nil
 		}
 	}
-	return nil, fmt.Errorf("Api definition for url %s not found", url)
+	return nil, fmt.Errorf("Api definition for url %s and method %s not found", url, method)
 }
 
 func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	r.logger.Log("------- Testing command %s %s", cmd.ExcInfo.Resource, cmd.ExcInfo.Command)
-	defer func() {
-		if panicErr := recover(); panicErr != nil {
-			err = panicErr.(error)
-		}
-	}()
 	apiDef, err := r.findApiDef(cmd.ExcInfo.Url, cmd.ExcInfo.Verb)
 	if err != nil {
 		return err
+	}
+	//skip patch operations for now
+	if apiDef == nil {
+		return nil
 	}
 	args := []string{cmd.ExcInfo.Resource, cmd.ExcInfo.Command}
 	defaultId := "some-id"
 	url := apiDef.Url
 	url = strings.Replace(url, "https://api.ctl.io/v2", "", -1)
 	url = strings.Replace(url, "{accountAlias}", "ALIAS", -1)
-	for _, param := range apiDef.UrlParameters {
-		if param.Name != "AccountAlias" {
-			args = append(args, arg_parser.DenormalizePropertyName(param.Name), defaultId)
-			url = strings.Replace(url, "{"+param.Name+"}", defaultId, -1)
+	var contentExampleString []byte
+	if apiDef.ContentExample != nil {
+		contentExampleString, err = json.Marshal(apiDef.ContentExample)
+		if err != nil {
+			return err
 		}
 	}
-	contentExampleString, err := json.Marshal(apiDef.ContentExample)
-	if err != nil {
-		return err
-	}
-	resExampleString, err := json.Marshal(apiDef.ResExample)
-	if err != nil {
-		return err
+	var resExampleString []byte
+	if apiDef.ResExample != nil {
+		resExampleString, err = json.Marshal(apiDef.ResExample)
+		if err != nil {
+			return err
+		}
 	}
 	modifiedContentExampleString, err := r.modifyContentParams(apiDef)
 	if err != nil {
@@ -144,52 +162,84 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	if apiDef.ContentExample != nil {
 		args = append(args, string(modifiedContentExampleString))
 	}
-	r.addHandler(url, string(resExampleString), func(req string) error {
-		return r.compareJson(req, string(contentExampleString))
-	})
-	strErr := clc.Run(args)
-	if strErr != "" {
-		return fmt.Errorf(strErr)
+	url = strings.ToLower(url)
+	for _, param := range apiDef.UrlParameters {
+		paramName := strings.Replace(param.Name, "IP", "Ip", -1)
+		if paramName != "AccountAlias" && paramName != "LocationId" {
+			args = append(args, arg_parser.DenormalizePropertyName(paramName), defaultId)
+			url = strings.Replace(url, "{"+strings.ToLower(paramName)+"}", defaultId, -1)
+		} else if paramName == "LocationId" {
+			args = append(args, "--data-center", defaultId)
+			url = strings.Replace(url, "{locationid}", defaultId, -1)
+		}
 	}
-	return nil
+	args = append(args, "--user", "user", "--password", "password")
+	err = r.addHandler(url, string(resExampleString), func(req string) error {
+		return r.compareJson(string(contentExampleString), req)
+	})
+	if err != nil {
+		return err
+	}
+
+	r.logger.Log("Args: %v", args)
+	res := clc.Run(args)
+	r.logger.Log("Result received: %s", res)
+	obj := new(interface{})
+	err = json.Unmarshal([]byte(res), obj)
+	if err != nil {
+		//if we can't unmarshal result - this is most likely a error message
+		return fmt.Errorf(res)
+	}
+	return r.deepCompareObjects("", apiDef.ResExample, *obj)
 }
 
 func (r *runner) modifyContentParams(apiDef *ApiDef) (string, error) {
+	contentExample := apiDef.ContentExample
+	if array, ok := contentExample.([]interface{}); ok {
+		contentExample = map[string]interface{}{"serverIds": array}
+	}
 	type convertProperty struct {
 		Method, Url, OldName, NewName string
 	}
 	properties := []convertProperty{
 		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "password", "rootPassword"},
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "memoryGB", "memoryGb"},
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "isManagedOS", "isManagedOs"},
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/publicIPAddresses", "cidr", "CIDR"},
+		{"PUT", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIP}", "cidr", "CIDR"},
+		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "password", "rootPassword"},
+		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "memoryGB", "memoryGb"},
 	}
+	data, err := json.Marshal(contentExample)
+	if err != nil {
+		return "", err
+	}
+	strData := string(data)
 	for _, prop := range properties {
 		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
-			for _, param := range apiDef.ContentParameters {
-				if param.Name == prop.OldName {
-					mapExample := apiDef.ContentExample.(map[string]interface{})
-					mapExample[prop.NewName] = mapExample[prop.OldName]
-					delete(mapExample, prop.OldName)
-				}
-			}
+			strData = strings.Replace(strData, prop.OldName, prop.NewName, -1)
 		}
 	}
-	data, err := json.Marshal(apiDef.ContentExample)
-	return string(data), err
+	return strData, err
 }
 
 func (r *runner) compareJson(json1, json2 string) error {
-	r.logger.Log("Request: %s", json1)
-	r.logger.Log("Content Example: %s", json1)
-	obj1 := map[string]interface{}{}
-	obj2 := map[string]interface{}{}
-	err := json.Unmarshal([]byte(json1), &obj1)
+	r.logger.Log("Json1: %s", json1)
+	r.logger.Log("Json2: %s", json2)
+	if strings.TrimSpace(json1) == "" && strings.TrimSpace(json2) == "" {
+		return nil
+	}
+	obj1 := new(interface{})
+	obj2 := new(interface{})
+	err := json.Unmarshal([]byte(json1), obj1)
 	if err != nil {
 		return err
 	}
-	err = json.Unmarshal([]byte(json2), &obj2)
+	err = json.Unmarshal([]byte(json2), obj2)
 	if err != nil {
 		return err
 	}
-	return r.deepCompareObjects("", obj1, obj2)
+	return r.deepCompareObjects("", *obj1, *obj2)
 }
 
 func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interface{}) error {
@@ -197,11 +247,11 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 		return nil
 	}
 	if obj1 == nil || obj2 == nil {
-		return fmt.Errorf("Mistmatch in property %s. Values: %v %v", prefix, obj1, obj2)
+		return fmt.Errorf("Mistmatch in property %s. Values: \n%v \n%v", prefix, obj1, obj2)
 	}
 	switch obj1.(type) {
 	case string, float64, bool:
-		if obj1 != obj2 {
+		if fmt.Sprintf("%v", obj1) != fmt.Sprintf("%v", obj2) {
 			return fmt.Errorf("Mistmatch in property %s. Values: %v %v", prefix, obj1, obj2)
 		}
 		return nil
@@ -212,7 +262,7 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 			return nil
 		}
 		if len(array1) != len(array2) {
-			return fmt.Errorf("Different array length for property %s - %b %b. Values %v %v", prefix, len(array1), len(array2), obj1, obj2)
+			return fmt.Errorf("Different array length for property %s - %d %d. Values %v %v", prefix, len(array1), len(array2), obj1, obj2)
 		}
 		for i := 0; i < len(array1); i++ {
 			res := r.deepCompareObjects(prefix+"["+strconv.Itoa(i)+"]", array1[i], array2[i])
@@ -223,19 +273,25 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 	case map[string]interface{}:
 		map1 := obj1.(map[string]interface{})
 		map2 := obj2.(map[string]interface{})
-		for key, value := range map1 {
-			//all property names in modesl starts with uppercase, but in returned json they can be lowercase
-			//so we make a conversion here
-			upperKey := []rune(key)
-			upperKey[0] = unicode.ToUpper(upperKey[0])
-			key2 := string(upperKey)
-			val2 := map2[key2]
-			//this is for case when response object by itself contains a map
-			//then, keys in this map are not uppercased
-			if val2 == nil {
-				val2 = map2[key]
+		if len(map1) != len(map2) {
+			var keys1, keys2 []string
+			for key1, _ := range map1 {
+				keys1 = append(keys1, key1)
 			}
-			res := r.deepCompareObjects(prefix+"."+key, value, val2)
+			for key2, _ := range map2 {
+				keys2 = append(keys2, key2)
+			}
+			return fmt.Errorf("Different map length for property %s - %d %d. Keys:\n%v \n%v", prefix, len(map1), len(map2), keys1, keys2)
+		}
+		for key, value := range map1 {
+			var correspondingValue interface{}
+			for key2, val2 := range map2 {
+				if strings.ToLower(key) == strings.ToLower(key2) {
+					correspondingValue = val2
+					break
+				}
+			}
+			res := r.deepCompareObjects(prefix+"."+key, value, correspondingValue)
 			if res != nil {
 				return res
 			}

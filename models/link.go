@@ -3,7 +3,7 @@ package models
 type LinkEntity struct {
 	Rel   string
 	Href  string
-	Id    string
-	Name  string
-	Verbs []string
+	Id    string   `json:",omitempty"`
+	Name  string   `json:",omitempty"`
+	Verbs []string `json:",omitempty"`
 }

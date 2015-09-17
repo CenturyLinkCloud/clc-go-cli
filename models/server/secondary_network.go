@@ -1,9 +1,9 @@
 package server
 
 type AddNetwork struct {
-	ServerId  string `valid:"required" URIParam:"yes"`
+	ServerId  string `json:"-" valid:"required" URIParam:"yes"`
 	NetworkId string `valid:"required"`
-	IPAddress string
+	IpAddress string
 }
 
 type RemoveNetwork struct {

@@ -23,7 +23,7 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 	}
 	if val, ok := parsedArgs["Password"]; ok {
 		if _, ok := val.(string); !ok {
-			return nil, fmt.Errorf("Password must be string")
+			return nil, fmt.Errorf("Password must be string.")
 		}
 		delete(parsedArgs, "Password")
 		res.Password = val.(string)

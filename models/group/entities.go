@@ -16,5 +16,5 @@ type Entity struct {
 	Groups        []Entity
 	Links         []models.LinkEntity
 	ChangeInfo    server.ChangeInfo
-	CustromFields []server.CustomFieldDef
+	CustromFields []server.FullCustomFieldDef
 }

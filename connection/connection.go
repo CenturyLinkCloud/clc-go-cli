@@ -117,7 +117,9 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 			if err != nil {
 				return nil, err
 			}
-			inputData = bytes.NewReader(b)
+			if string(b) != "{}" {
+				inputData = bytes.NewReader(b)
+			}
 		}
 		url = ExtractURIParams(url, reqModel)
 	}

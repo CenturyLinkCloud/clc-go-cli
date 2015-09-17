@@ -16,7 +16,6 @@ type GetRes struct {
 	IsTemplate  bool
 	LocationId  string
 	OsType      string
-	Os          string
 	Status      string
 	Details     Details
 	Type        string
