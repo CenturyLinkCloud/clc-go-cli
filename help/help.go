@@ -11,9 +11,10 @@ type Resource struct {
 }
 
 type Command struct {
-	Brief     []string
-	Arguments []Argument
-	NoEnvVars bool
+	Brief           []string
+	Arguments       []Argument
+	NoEnvVars       bool
+	AccountAgnostic bool
 }
 
 type Argument struct {
@@ -44,7 +45,9 @@ var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 			Specifies the password for the given user.
 	--profile
 			Specifies a profile to use (one from the config file).
-	--output
+{{if .AccountAgnostic}}{{else}}	--account-alias
+			Specifies a sub-account to work in.
+{{end}}	--output
 			Specifies the output format - either 'json', 'text' or 'table'.
 			Defaults to 'json'.
 	--generate-cli-skeleton
