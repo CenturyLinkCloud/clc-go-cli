@@ -35,6 +35,13 @@ func ExtractFrom(parsedArgs map[string]interface{}) (*Options, error) {
 		delete(parsedArgs, "Profile")
 		res.Profile = val.(string)
 	}
+	if val, ok := parsedArgs["AccountAlias"]; ok {
+		if _, ok := val.(string); !ok {
+			return nil, fmt.Errorf("Account alias must be string.")
+		}
+		delete(parsedArgs, "AccountAlias")
+		res.AccountAlias = val.(string)
+	}
 	if val, ok := parsedArgs["Trace"]; ok {
 		if reflect.ValueOf(val).Kind() != reflect.Invalid {
 			return nil, fmt.Errorf("trace option must not have a value")

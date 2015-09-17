@@ -17,24 +17,26 @@ var extractFromCases = []Case{
 	// Parses valid data.
 	{
 		input: map[string]interface{}{
-			"Help":     nil,
-			"User":     "John",
-			"Password": "Snow",
-			"Profile":  "default",
-			"Trace":    nil,
-			"Output":   "text",
-			"Query":    "location",
-			"Filter":   "name=Ygritte",
+			"Help":         nil,
+			"User":         "John",
+			"Password":     "Snow",
+			"Profile":      "default",
+			"AccountAlias": "THEWALL",
+			"Trace":        nil,
+			"Output":       "text",
+			"Query":        "location",
+			"Filter":       "name=Ygritte",
 		},
 		res: &options.Options{
-			Help:     true,
-			User:     "John",
-			Password: "Snow",
-			Profile:  "default",
-			Trace:    true,
-			Output:   "text",
-			Query:    "location",
-			Filter:   "name=Ygritte",
+			Help:         true,
+			User:         "John",
+			Password:     "Snow",
+			Profile:      "default",
+			AccountAlias: "THEWALL",
+			Trace:        true,
+			Output:       "text",
+			Query:        "location",
+			Filter:       "name=Ygritte",
 		},
 	},
 	// Complains about the invalid data.
@@ -61,6 +63,12 @@ var extractFromCases = []Case{
 			"Profile": 1,
 		},
 		err: "Profile must be string.",
+	},
+	{
+		input: map[string]interface{}{
+			"AccountAlias": []string{"THE", "WALL"},
+		},
+		err: "Account alias must be string.",
 	},
 	{
 		input: map[string]interface{}{
