@@ -3,6 +3,7 @@ package commands_test
 import (
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/config"
+	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
 	"reflect"
@@ -137,6 +138,84 @@ func TestLogin(t *testing.T) {
 	conf.Profiles["friend"] = config.Profile{User: "Sam@Tarly", Password: "g1lly"}
 	got = c.Login(opts, conf)
 	expected = "Logged in as Sam@Tarly."
+}
+
+func TestSetDefaultDataCenter(t *testing.T) {
+	proxy.Config()
+	defer proxy.CloseConfig()
+
+	c := commands.NewSetDefaultDC(commands.CommandExcInfo{})
+	c.Input = &datacenter.SetDefault{DataCenter: "CA1"}
+	if c.IsOffline() != true {
+		t.Errorf("Invalid result. The command must be offline.")
+	}
+
+	got, err := c.ExecuteOffline()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, got, "CA1 is now the default data center.")
+	var conf *config.Config
+	conf, err = config.LoadConfig()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, conf.DefaultDataCenter, "CA1")
+}
+
+func TestShowDefaultDataCenter(t *testing.T) {
+	proxy.Config()
+	defer proxy.CloseConfig()
+
+	c := commands.NewShowDefaultDC(commands.CommandExcInfo{})
+	if c.IsOffline() != true {
+		t.Errorf("Invalid result. The command must be offline.")
+	}
+
+	got, err := c.ExecuteOffline()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, got, "No data center is currently set as default.")
+
+	conf := &config.Config{DefaultDataCenter: "CA1"}
+	err = config.Save(conf)
+	if err != nil {
+		t.Error(err)
+	}
+	got, err = c.ExecuteOffline()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, got, "CA1")
+}
+
+func TestUnsetDefaultDataCenter(t *testing.T) {
+	proxy.Config()
+	defer proxy.CloseConfig()
+
+	conf := &config.Config{DefaultDataCenter: "CA1"}
+	err := config.Save(conf)
+	if err != nil {
+		t.Error(err)
+	}
+
+	c := commands.NewUnsetDefaultDC(commands.CommandExcInfo{})
+	if c.IsOffline() != true {
+		t.Errorf("Invalid result. The command must be offline.")
+	}
+
+	var got string
+	got, err = c.ExecuteOffline()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, got, "The default data center is unset.")
+	conf, err = config.LoadConfig()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, conf.DefaultDataCenter, "")
 }
 
 func assert(t *testing.T, got, expected string) {
