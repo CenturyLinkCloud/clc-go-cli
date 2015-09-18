@@ -1,36 +1,46 @@
 package commands_test
 
 import (
+	"github.com/centurylinkcloud/clc-go-cli/auth"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/config"
+	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
+	"github.com/centurylinkcloud/clc-go-cli/state"
 	"reflect"
 	"sort"
 	"testing"
+	"time"
 )
 
 type (
+	// Types for TestCommandBaseArguments.
 	testEntity struct {
 		PropertyId   string
 		PropertyName string
 	}
-
 	testCommandInput struct {
 		Property1 string
 		Property2 testEntity
 	}
-
 	testComposedInput struct {
 		Property   string
 		testEntity `argument:"composed"`
 	}
-
 	testComplexInput struct {
 		Property          string
 		AuxiliaryProperty string `argument:"ignore"`
 	}
+
+	// Types for TestWait.
+	footprintType1 struct {
+		Links []models.LinkEntity
+	}
+	footprintType2 models.LinkEntity
+	footprintType3 models.Status
 )
 
 func TestCommandBaseArguments(t *testing.T) {
@@ -216,6 +226,89 @@ func TestUnsetDefaultDataCenter(t *testing.T) {
 		t.Error(err)
 	}
 	assert(t, conf.DefaultDataCenter, "")
+}
+
+func TestWait(t *testing.T) {
+	proxy.Config()
+	defer proxy.CloseConfig()
+
+	status := commands.StatusResponse{}
+	proxy.Server([]proxy.Endpoint{
+		{"/authentication/login", proxy.LoginResponse},
+		{"/get/status", &status},
+	})
+	defer proxy.CloseServer()
+
+	cn, err := auth.AuthenticateCommand(&options.Options{User: "_", Password: "_"}, &config.Config{})
+	if err != nil {
+		t.Error(err)
+	}
+	commands.PING_INTERVAL = time.Duration(200)
+	w := commands.NewWait(commands.CommandExcInfo{})
+
+	// At first check an idle run.
+	err = w.Execute(cn)
+	if err != nil {
+		t.Error(err)
+	}
+	expected := "Nothing to wait for."
+	if !reflect.DeepEqual(w.Output, &expected) {
+		t.Errorf("Invalid result. Expected: %v\nGot: %v", expected, w.Output)
+	}
+
+	// Then add a footprint of the "previous" command.
+	// There can be different types of footprints and we test all of them here.
+	f1 := footprintType1{Links: []models.LinkEntity{
+		{
+			Rel:  "status",
+			Href: "get/status",
+		},
+	}}
+	f2 := footprintType2{
+		Rel:  "status",
+		Href: "get/status",
+	}
+	f3 := footprintType3{
+		URI: "get/status",
+	}
+	for _, f := range []interface{}{f1, f2, f3} {
+		err := state.SaveLastResult(f)
+		if err != nil {
+			t.Error(err)
+		}
+
+		done := make(chan error)
+		status.Status = "notStarted"
+		go func(w *commands.Wait, cn base.Connection, done chan<- error) {
+			err := w.Execute(cn)
+			if err != nil {
+				t.Error(err)
+			}
+			done <- nil
+		}(w, cn, done)
+
+		step := 0
+	Wait:
+		for {
+			select {
+			case <-done:
+				if step < 3 {
+					t.Error("Invalid result. The command finished prematurily.")
+				}
+				break Wait
+			case <-time.After(time.Millisecond * 500):
+				step += 1
+				switch step {
+				case 1:
+					status.Status = "executing"
+				case 2:
+					status.Status = "resumed"
+				default:
+					status.Status = "succeeded"
+				}
+			}
+		}
+	}
 }
 
 func assert(t *testing.T, got, expected string) {
