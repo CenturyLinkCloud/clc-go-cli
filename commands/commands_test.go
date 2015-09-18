@@ -2,6 +2,9 @@ package commands_test
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/commands"
+	"github.com/centurylinkcloud/clc-go-cli/config"
+	"github.com/centurylinkcloud/clc-go-cli/options"
+	"github.com/centurylinkcloud/clc-go-cli/proxy"
 	"reflect"
 	"sort"
 	"testing"
@@ -89,5 +92,55 @@ func TestCommandBaseArguments(t *testing.T) {
 	sort.Strings(expected)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result.\nExpected: %v\nGot: %v", expected, got)
+	}
+}
+
+func TestLogin(t *testing.T) {
+	proxy.Config()
+	defer proxy.CloseConfig()
+
+	c := commands.NewLogin(commands.CommandExcInfo{})
+	conf := &config.Config{}
+	opts := &options.Options{}
+
+	// Test with no options.
+	got := c.Login(opts, conf)
+	expected := "Either a profile or a user and a password must be specified."
+	assert(t, got, expected)
+
+	// Try specifying a user.
+	opts.User = "John@Snow"
+	got = c.Login(opts, conf)
+	expected = "Both --user and --password options must be specified."
+	assert(t, got, expected)
+
+	// Then provide a password.
+	opts.Password = "1gr1tte"
+	got = c.Login(opts, conf)
+	expected = "Logged in as John@Snow."
+	assert(t, got, expected)
+	var err error
+	conf, err = config.LoadConfig()
+	if err != nil {
+		t.Error(err)
+	}
+	assert(t, conf.User, "John@Snow")
+	assert(t, conf.Password, "1gr1tte")
+
+	// Try to switch a profile.
+	opts.User, opts.Password = "", ""
+	opts.Profile = "friend"
+	got = c.Login(opts, conf)
+	expected = "Profile friend does not exist."
+	assert(t, got, expected)
+	// Oops, lets create one.
+	conf.Profiles["friend"] = config.Profile{User: "Sam@Tarly", Password: "g1lly"}
+	got = c.Login(opts, conf)
+	expected = "Logged in as Sam@Tarly."
+}
+
+func assert(t *testing.T, got, expected string) {
+	if got != expected {
+		t.Errorf("Invalid result. Expected: %s\nGot: %s", expected, got)
 	}
 }
