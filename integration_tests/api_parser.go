@@ -83,7 +83,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 		for _, param := range parameters {
 			if param.Type == "complex" {
 				var err error
-				param.Children, err = p.parseTable(reqSec, resSec, strings.Title(param.Name+" Definition"))
+				param.Children, err = p.parseTable(reqSec, resSec, false, strings.Title(param.Name+" Definition"))
 				if err != nil {
 					return err
 				}
@@ -102,11 +102,11 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 	if err != nil {
 		return nil, err
 	}
-	res.UrlParameters, err = p.parseTable(reqSec, resSec, "URI Parameters")
+	res.UrlParameters, err = p.parseTable(reqSec, resSec, true, "URI Parameters", "URI Properties")
 	if err != nil {
 		return nil, err
 	}
-	res.ContentParameters, err = p.parseTable(reqSec, resSec, "Content Properties")
+	res.ContentParameters, err = p.parseTable(reqSec, resSec, false, "Content Properties")
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 	if err != nil {
 		return nil, err
 	}
-	res.ResParameters, err = p.parseTable(resSec, nil, "Entity Definition")
+	res.ResParameters, err = p.parseTable(resSec, nil, false, "Entity Definition")
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 
 func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (string, string, error) {
 	p.logger.Log("parseUrl called")
-	res, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Pre, atom.Code, 1)
+	res, err := p.findNodeByHeader(startNode, endNode, atom.Pre, atom.Code, 1, headerText)
 	if err != nil {
 		return "", "", err
 	}
@@ -148,7 +148,7 @@ func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (str
 
 func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) (interface{}, error) {
 	p.logger.Log("parseExample called")
-	res, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Pre, atom.Code, 2)
+	res, err := p.findNodeByHeader(startNode, endNode, atom.Pre, atom.Code, 2, headerText)
 	if err != nil {
 		return nil, err
 	}
@@ -174,9 +174,9 @@ func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) 
 	return *data, err
 }
 
-func (p *parser) parseTable(startNode, endNode *html.Node, headerText string) ([]*ParameterDef, error) {
+func (p *parser) parseTable(startNode, endNode *html.Node, capitalize bool, headerText ...string) ([]*ParameterDef, error) {
 	p.logger.Log("parseTable called")
-	table, err := p.findNodeByHeader(startNode, endNode, headerText, atom.Table, atom.Table, 1)
+	table, err := p.findNodeByHeader(startNode, endNode, atom.Table, atom.Table, 1, headerText...)
 	if err != nil {
 		return nil, err
 	}
@@ -205,7 +205,11 @@ func (p *parser) parseTable(startNode, endNode *html.Node, headerText string) ([
 		p.logger.LogNode("parseTable row found", row)
 		item := &ParameterDef{}
 		cell := next(row.FirstChild)
-		item.Name = cell.FirstChild.Data
+		itemName := cell.FirstChild.Data
+		if capitalize {
+			itemName = strings.Title(itemName)
+		}
+		item.Name = itemName
 		cell = next(cell)
 
 		item.Type = cell.FirstChild.Data
@@ -225,8 +229,8 @@ func (p *parser) parseTable(startNode, endNode *html.Node, headerText string) ([
 	return res, nil
 }
 
-func (p *parser) findNodeByHeader(startNode, endNode *html.Node, headerText string, containerType, elemType atom.Atom, containerMaxRemoteness int) (*html.Node, error) {
-	header := p.findNextNode(startNode, endNode, headerText)
+func (p *parser) findNodeByHeader(startNode, endNode *html.Node, containerType, elemType atom.Atom, containerMaxRemoteness int, headerText ...string) (*html.Node, error) {
+	header := p.findNextNode(startNode, endNode, headerText...)
 	if header != nil {
 		p.logger.LogNode("findNodeByHeader header found:", header)
 
@@ -258,7 +262,7 @@ func (p *parser) findNodeByHeader(startNode, endNode *html.Node, headerText stri
 		}
 		return res, nil
 	}
-	p.logger.Log("findNodeByHeader header not found %s", headerText)
+	p.logger.Log("findNodeByHeader header not found %v", headerText)
 	return nil, nil
 }
 
@@ -279,10 +283,12 @@ func (p *parser) hasAttr(attrs []html.Attribute, key, val string) bool {
 	return false
 }
 
-func (p *parser) findNextNode(startNode, endNode *html.Node, text string) *html.Node {
+func (p *parser) findNextNode(startNode, endNode *html.Node, text ...string) *html.Node {
 	for c := startNode.NextSibling; c != endNode; c = c.NextSibling {
-		if c.FirstChild != nil && c.FirstChild.Data == text {
-			return c
+		for _, item := range text {
+			if c.FirstChild != nil && c.FirstChild.Data == item {
+				return c
+			}
 		}
 	}
 	return nil

@@ -141,6 +141,7 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	url := apiDef.Url
 	url = strings.Replace(url, "https://api.ctl.io/v2", "", -1)
 	url = strings.Replace(url, "{accountAlias}", "ALIAS", -1)
+	r.modifyContentExample(apiDef)
 	var contentExampleString []byte
 	if apiDef.ContentExample != nil {
 		contentExampleString, err = json.Marshal(apiDef.ContentExample)
@@ -165,6 +166,7 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	url = strings.ToLower(url)
 	for _, param := range apiDef.UrlParameters {
 		paramName := strings.Replace(param.Name, "IP", "Ip", -1)
+		paramName = strings.Replace(paramName, "ID", "Id", -1)
 		if paramName != "AccountAlias" && paramName != "LocationId" {
 			args = append(args, arg_parser.DenormalizePropertyName(paramName), defaultId)
 			url = strings.Replace(url, "{"+strings.ToLower(paramName)+"}", defaultId, -1)
@@ -190,16 +192,37 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 		//if we can't unmarshal result - this is most likely a error message
 		return fmt.Errorf(res)
 	}
+	r.modifyResExample(apiDef)
 	return r.deepCompareObjects("", apiDef.ResExample, *obj)
+}
+
+func (r *runner) modifyResExample(apiDef *ApiDef) {
+}
+
+func (r *runner) modifyContentExample(apiDef *ApiDef) {
+	additionalProperties := []AdditionalProperty{
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "isManagedBackup", true},
+	}
+	for _, prop := range additionalProperties {
+		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
+			apiDef.ContentExample.(map[string]interface{})[prop.Name] = prop.Value
+		}
+	}
+
+	missedExamples := []MissedExample{
+		{"POST", "https://api.ctl.io/v2/operations/{accountAlias}/servers/startMaintenance", []interface{}{"WA1ALIASWB01", "WA1ALIASWB02"}},
+	}
+	for _, prop := range missedExamples {
+		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
+			apiDef.ContentExample = prop.Example
+		}
+	}
 }
 
 func (r *runner) modifyContentParams(apiDef *ApiDef) (string, error) {
 	contentExample := apiDef.ContentExample
 	if array, ok := contentExample.([]interface{}); ok {
 		contentExample = map[string]interface{}{"serverIds": array}
-	}
-	type convertProperty struct {
-		Method, Url, OldName, NewName string
 	}
 	properties := []convertProperty{
 		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "password", "rootPassword"},
@@ -210,6 +233,13 @@ func (r *runner) modifyContentParams(apiDef *ApiDef) (string, error) {
 		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "password", "rootPassword"},
 		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "memoryGB", "memoryGb"},
 	}
+	for _, param := range apiDef.ContentParameters {
+		if param.Type == "dateTime" {
+			contentExample.(map[string]interface{})[param.Name] = strings.Replace(contentExample.(map[string]interface{})[param.Name].(string), "T", " ", -1)
+			contentExample.(map[string]interface{})[param.Name] = strings.Replace(contentExample.(map[string]interface{})[param.Name].(string), "Z", "", -1)
+		}
+	}
+
 	data, err := json.Marshal(contentExample)
 	if err != nil {
 		return "", err
@@ -298,4 +328,18 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 		}
 	}
 	return nil
+}
+
+type convertProperty struct {
+	Method, Url, OldName, NewName string
+}
+
+type AdditionalProperty struct {
+	Method, Url, Name string
+	Value             interface{}
+}
+
+type MissedExample struct {
+	Method, Url string
+	Example     interface{}
 }

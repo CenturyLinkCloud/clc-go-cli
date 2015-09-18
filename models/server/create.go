@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	timeFormat = "2006-01-02 15:04:05"
+	apiTimeFormat = "2006-01-02T15:04:05Z"
 )
 
 type CreateReq struct {
@@ -86,7 +86,7 @@ func (c *CreateReq) Validate() error {
 func (c *CreateReq) ApplyDefaultBehaviour() error {
 	zeroTime := time.Time{}
 	if c.Ttl != zeroTime {
-		c.TtlString = c.Ttl.Format(timeFormat)
+		c.TtlString = c.Ttl.Format(apiTimeFormat)
 	}
 	return nil
 }

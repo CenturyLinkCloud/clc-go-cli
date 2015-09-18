@@ -12,7 +12,7 @@ type Import struct {
 	Name         string `valid:"required"`
 	Description  string `json:",omitempty"`
 	GroupId      string
-	GroupName    string
+	GroupName    string             `json:"-"`
 	PrimaryDns   string             `json:",omitempty"`
 	SecondaryDns string             `json:",omitempty"`
 	NetworkId    string             `json:",omitempty"`

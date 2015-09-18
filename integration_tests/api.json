@@ -938,7 +938,7 @@
         "UrlExample": "https://api.ctl.io/v2/autoscalePolicies/ALIAS",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
@@ -1027,14 +1027,14 @@
         "UrlExample": "https://api.ctl.io/v2/autoscalePolicies/ALIAS/80a7bf90b199464b859399bff54f4173",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "policyId",
+                "Name": "PolicyId",
                 "Type": "string",
                 "Description": "ID of the autoscale policy being queried",
                 "IsRequired": true,
@@ -1123,14 +1123,14 @@
         "UrlExample": "https://api.ctl.io/v2/servers/ALIAS/WA1ALIASSERV0101/cpuAutoscalePolicy",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "serverId",
+                "Name": "ServerId",
                 "Type": "string",
                 "Description": "ID of the server. Retrieved from query to containing a group, or by looking at the URL when viewing a server in the Control Portal.",
                 "IsRequired": true,
@@ -1148,14 +1148,14 @@
         "UrlExample": "https://api.ctl.io/v2/servers/ALIAS/WA1ALIASSERV0101/cpuAutoscalePolicy",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "serverId",
+                "Name": "ServerId",
                 "Type": "string",
                 "Description": "ID of the server. Retrieved from query to containing group, or by looking at the URL when viewing a server in the Control Portal.",
                 "IsRequired": true,
@@ -1206,14 +1206,14 @@
         "UrlExample": "https://api.ctl.io/v2/servers/ALIAS/WA1ALIASSERV0101/cpuAutoscalePolicy",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "serverId",
+                "Name": "ServerId",
                 "Type": "string",
                 "Description": "ID of the server. Retrieved from query to containing group, or by looking at the URL when viewing a server in the Control Portal.",
                 "IsRequired": true,
@@ -1254,28 +1254,28 @@
         "UrlExample": "https://api.ctl.io/v2/invoice/ALIAS/2015/7/?pricingAccount=PALIAS",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "year",
+                "Name": "Year",
                 "Type": "integer",
                 "Description": "Year of usage, in YYYY format.",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "month",
+                "Name": "Month",
                 "Type": "integer",
                 "Description": "Monthly period of usage, in M format.",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "pricingAccountAlias",
+                "Name": "PricingAccountAlias",
                 "Type": "string",
                 "Description": "Short code of the account that sends the invoice for the accountAlias",
                 "IsRequired": false,
@@ -1908,14 +1908,14 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/firewallPolicies/SRC_ALIAS/WA1",
         "UrlParameters": [
             {
-                "Name": "sourceAccountAlias",
+                "Name": "SourceAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the target data center for the new policy. Valid codes can be retrieved from the ",
                 "IsRequired": true,
@@ -1996,21 +1996,21 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/firewallPolicies/SRC_ALIAS/WA1/1ac853b00e1011e5b9390800200c9a66",
         "UrlParameters": [
             {
-                "Name": "sourceAccountAlias",
+                "Name": "SourceAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the target data center for the new policy. Valid codes can be retrieved from the ",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "firewallPolicy",
+                "Name": "FirewallPolicy",
                 "Type": "string",
                 "Description": "ID of the firewall policy",
                 "IsRequired": true,
@@ -2028,21 +2028,21 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/firewallPolicies/SRC_ALIAS/WA1/1ac853b00e1011e5b9390800200c9a66",
         "UrlParameters": [
             {
-                "Name": "sourceAccountAlias",
+                "Name": "SourceAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center you are querying. Valid codes can be retrieved from the ",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "firewallPolicy",
+                "Name": "FirewallPolicy",
                 "Type": "string",
                 "Description": "ID of the firewall policy",
                 "IsRequired": true,
@@ -2145,21 +2145,21 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/firewallPolicies/SRC_ALIAS/WA1?destinationAccount=DEST_ALIAS",
         "UrlParameters": [
             {
-                "Name": "sourceAccountAlias",
+                "Name": "SourceAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center you are querying. Valid codes can be retrieved from the ",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "destinationAccountAlias",
+                "Name": "DestinationAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": false,
@@ -2234,21 +2234,21 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/firewallPolicies/SRC_ALIAS/WA1/e46ef2500e1011e5b9390800200c9a66",
         "UrlParameters": [
             {
-                "Name": "sourceAccountAlias",
+                "Name": "SourceAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center associated with the policy of interest. Valid codes can be retrieved from the ",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "destinationAccountAlias",
+                "Name": "DestinationAccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": false,
@@ -2826,14 +2826,14 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/networks/ALIAS/WA1/claim",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center you are querying. Valid codes can be retrieved from the ",
                 "IsRequired": true,
@@ -2948,14 +2948,14 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/networks/ALIAS/WA1/ec6ff75a0ffd4504840dab343fe41077/ipAddresses?type=claimed",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center you are querying. Valid codes can be retrieved from the ",
                 "IsRequired": true,
@@ -2969,7 +2969,7 @@
                 "Children": null
             },
             {
-                "Name": "type",
+                "Name": "Type",
                 "Type": "string",
                 "Description": "Optional component of the query to request details of IP Addresses in a certain state. Should be one of the following: \"claimed\" (returns details of the network as well as information about claimed IP addresses), \"free\" (returns details of the network as well as information about free IP addresses) or \"all\" (returns details of the network as well as information about all IP addresses)",
                 "IsRequired": false,
@@ -3167,14 +3167,14 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/networks/ALIAS/WA1",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center you are querying. Valid codes can be retrieved from the ",
                 "IsRequired": true,
@@ -3325,14 +3325,14 @@
         "UrlExample": "https://api.ctl.io/v2-experimental/networks/ALIAS/WA1/ec6ff75a0ffd4504840dab343fe41077/release",
         "UrlParameters": [
             {
-                "Name": "accountAlias",
+                "Name": "AccountAlias",
                 "Type": "string",
                 "Description": "Short code for a particular account",
                 "IsRequired": true,
                 "Children": null
             },
             {
-                "Name": "dataCenter",
+                "Name": "DataCenter",
                 "Type": "string",
                 "Description": "Short string representing the data center you are querying. Valid codes can be retrieved from the ",
                 "IsRequired": true,
@@ -3934,10 +3934,7 @@
                 "Children": null
             }
         ],
-        "ContentExample": [
-            "WA1ALIASWB01",
-            "WA1ALIASWB02"
-        ],
+        "ContentExample": null,
         "ResExample": [
             {
                 "isQueued": true,
@@ -4670,7 +4667,7 @@
     },
     {
         "Method": "POST",
-        "Url": "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/networks",
+        "Url": "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/networks",
         "UrlExample": "https://api.ctl.io/v2/servers/ALIAS/WA1ALIASSERV0101/networks",
         "UrlParameters": [
             {
@@ -4983,7 +4980,6 @@
             "groupId": "2a5c0b9662cf4fc8bf6180f139facdc0",
             "ipAddress": "10.123.456.12",
             "isManagedOS": false,
-            "isManagedBackup": false,
             "memoryGB": 4,
             "name": "web",
             "networkId": "d51ef9f58f244205922eab9d240b126f",
@@ -4992,7 +4988,7 @@
             "secondaryDns": "172.17.1.27",
             "sourceServerId": "RHEL-6-64-TEMPLATE",
             "storageType": "standard",
-            "ttl": "2014-12-17 01:17:17",
+            "ttl": "2014-12-17T01:17:17Z",
             "type": "standard"
         },
         "ResExample": {
@@ -5431,7 +5427,29 @@
         "Method": "DELETE",
         "Url": "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/networks/{networkId}",
         "UrlExample": "https://api.ctl.io/v2/servers/ALIAS/WA1ALIASSERV0101/networks/f49875b17cee4b8c99bf1ab75aa286d6",
-        "UrlParameters": null,
+        "UrlParameters": [
+            {
+                "Name": "AccountAlias",
+                "Type": "string",
+                "Description": "Short code for a particular account",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "ServerId",
+                "Type": "string",
+                "Description": "ID of the server",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "NetworkId",
+                "Type": "string",
+                "Description": "ID of the network. These can be retrieved from the ",
+                "IsRequired": true,
+                "Children": null
+            }
+        ],
         "ContentParameters": null,
         "ContentExample": null,
         "ResExample": {

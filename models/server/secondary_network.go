@@ -8,10 +8,10 @@ import (
 
 type AddNetwork struct {
 	ServerId    string `json:"-" URIParam:"yes"`
-	ServerName  string
+	ServerName  string `json:"-"`
 	NetworkId   string
-	NetworkName string
-	IPAddress   string
+	NetworkName string `json:"-"`
+	IpAddress   string
 }
 
 type RemoveNetwork struct {
