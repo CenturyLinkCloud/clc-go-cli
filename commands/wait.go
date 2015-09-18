@@ -9,6 +9,10 @@ import (
 	"time"
 )
 
+var (
+	PING_INTERVAL time.Duration = 200 // milliseconds
+)
+
 type Wait struct {
 	CommandBase
 }
@@ -69,7 +73,7 @@ func ping(cn base.Connection, URL string) (status StatusResponse) {
 	status = StatusResponse{Status: "notStarted"}
 	for status.Status == "executing" || status.Status == "resumed" || status.Status == "notStarted" {
 		cn.ExecuteRequest("GET", URL, nil, &status)
-		time.Sleep(200)
+		time.Sleep(PING_INTERVAL * time.Millisecond)
 	}
 	return
 }
