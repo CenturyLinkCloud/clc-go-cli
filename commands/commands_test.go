@@ -133,7 +133,7 @@ func TestLogin(t *testing.T) {
 	var err error
 	conf, err = config.LoadConfig()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, conf.User, "John@Snow")
 	assert(t, conf.Password, "1gr1tte")
@@ -162,13 +162,13 @@ func TestSetDefaultDataCenter(t *testing.T) {
 
 	got, err := c.ExecuteOffline()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, got, "CA1 is now the default data center.")
 	var conf *config.Config
 	conf, err = config.LoadConfig()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, conf.DefaultDataCenter, "CA1")
 }
@@ -184,18 +184,18 @@ func TestShowDefaultDataCenter(t *testing.T) {
 
 	got, err := c.ExecuteOffline()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, got, "No data center is currently set as default.")
 
 	conf := &config.Config{DefaultDataCenter: "CA1"}
 	err = config.Save(conf)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	got, err = c.ExecuteOffline()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, got, "CA1")
 }
@@ -207,7 +207,7 @@ func TestUnsetDefaultDataCenter(t *testing.T) {
 	conf := &config.Config{DefaultDataCenter: "CA1"}
 	err := config.Save(conf)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	c := commands.NewUnsetDefaultDC(commands.CommandExcInfo{})
@@ -218,12 +218,12 @@ func TestUnsetDefaultDataCenter(t *testing.T) {
 	var got string
 	got, err = c.ExecuteOffline()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, got, "The default data center is unset.")
 	conf, err = config.LoadConfig()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	assert(t, conf.DefaultDataCenter, "")
 }
@@ -241,7 +241,7 @@ func TestWait(t *testing.T) {
 
 	cn, err := auth.AuthenticateCommand(&options.Options{User: "_", Password: "_"}, &config.Config{})
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	commands.PING_INTERVAL = time.Duration(200)
 	w := commands.NewWait(commands.CommandExcInfo{})
@@ -249,7 +249,7 @@ func TestWait(t *testing.T) {
 	// At first check an idle run.
 	err = w.Execute(cn)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	expected := "Nothing to wait for."
 	if !reflect.DeepEqual(w.Output, &expected) {
@@ -274,7 +274,7 @@ func TestWait(t *testing.T) {
 	for _, f := range []interface{}{f1, f2, f3} {
 		err := state.SaveLastResult(f)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 
 		done := make(chan error)
@@ -282,7 +282,7 @@ func TestWait(t *testing.T) {
 		go func(w *commands.Wait, cn base.Connection, done chan<- error) {
 			err := w.Execute(cn)
 			if err != nil {
-				t.Error(err)
+				t.Fatal(err)
 			}
 			done <- nil
 		}(w, cn, done)
