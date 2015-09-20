@@ -261,15 +261,15 @@ func TestWait(t *testing.T) {
 	f1 := footprintType1{Links: []models.LinkEntity{
 		{
 			Rel:  "status",
-			Href: "get/status",
+			Href: "/get/status",
 		},
 	}}
 	f2 := footprintType2{
 		Rel:  "status",
-		Href: "get/status",
+		Href: "/get/status",
 	}
 	f3 := footprintType3{
-		URI: "get/status",
+		URI: "/get/status",
 	}
 	for _, f := range []interface{}{f1, f2, f3} {
 		err := state.SaveLastResult(f)

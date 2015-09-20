@@ -17,7 +17,7 @@ func acquire() *http.ServeMux {
 	mux := http.NewServeMux()
 	server = httptest.NewServer(mux)
 	connection.BaseUrl = server.URL + "/"
-	base.URL = server.URL + "/"
+	base.URL = server.URL
 	return mux
 }
 
