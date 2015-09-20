@@ -1,12 +1,14 @@
 package commands_test
 
 import (
+	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
+	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
 	"github.com/centurylinkcloud/clc-go-cli/state"
@@ -308,6 +310,76 @@ func TestWait(t *testing.T) {
 				}
 			}
 		}
+	}
+}
+
+func TestLoadGroups(t *testing.T) {
+	ca1 := datacenter.GetRes{
+		Links: []models.LinkEntity{
+			{
+				Rel:  "self",
+				Href: "/v2/datacenters/ALIAS/CA1",
+			},
+			{
+				Rel:  "group",
+				Href: "/get/group/ca1",
+			},
+		},
+	}
+	ca2 := datacenter.GetRes{
+		Links: []models.LinkEntity{
+			{
+				Rel:  "self",
+				Href: "/v2/datacenters/ALIAS/CA2",
+			},
+			{
+				Rel:  "group",
+				Href: "/get/group/ca2",
+			},
+		},
+	}
+	allDatacenters := []datacenter.GetRes{ca1, ca2}
+	group1 := group.Entity{Name: "Group 1"}
+	group2 := group.Entity{Name: "Group 2"}
+	proxy.Server([]proxy.Endpoint{
+		{"/v2/datacenters/ALIAS/CA1", &ca1},
+		{"/v2/datacenters/ALIAS/CA2", &ca2},
+		{"/v2/datacenters/ALIAS", &allDatacenters},
+		{"/get/group/ca1", &group1},
+		{"/get/group/ca2", &group2},
+		{"/authentication/login", proxy.LoginResponse},
+	})
+	defer proxy.CloseServer()
+
+	cn, err := auth.AuthenticateCommand(&options.Options{User: "_", Password: "_"}, &config.Config{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	c := commands.NewGroupList(commands.CommandExcInfo{})
+
+	// Load groups for all data centers.
+	c.Input.(*group.List).All.Set = true
+	err = c.Execute(cn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected := fmt.Sprintf("%v", []group.Entity{group1, group2})
+	got := fmt.Sprintf("%v", c.Output.([]group.Entity))
+	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("Invalid result.\nExpected: %s\nGot: %s", expected, got)
+	}
+
+	// Load groups for one data center.
+	c.Input.(*group.List).All.Set = false
+	c.Input.(*group.List).DataCenter = "CA1"
+	err = c.Execute(cn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expected = fmt.Sprintf("%v", []group.Entity{group1})
+	got = fmt.Sprintf("%v", c.Output.([]group.Entity))
+	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("Invalid result.\nExpected: %s\nGot: %s", expected, got)
 	}
 }
 
