@@ -23,6 +23,7 @@ type Endpoint struct {
 func Server(endpoints []Endpoint) {
 	mux := acquire()
 	for _, e := range endpoints {
+		e := e // escape the closure
 		mux.HandleFunc(e.URL, func(w http.ResponseWriter, r *http.Request) {
 			js, err := json.Marshal(e.Response)
 			if err != nil {
