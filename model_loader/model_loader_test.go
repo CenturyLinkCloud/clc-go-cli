@@ -199,7 +199,7 @@ var testCases = []modelLoaderTestCase{
 		args: map[string]interface{}{
 			"UnknownField": "some value",
 		},
-		err: "Field `UnknownField` does not exist.",
+		err: "Unknown option or argument: `UnknownField`.",
 	},
 	// Fails with different type mismatches.
 	{

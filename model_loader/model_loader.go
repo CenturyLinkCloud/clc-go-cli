@@ -170,7 +170,7 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 func getFieldByName(model reflect.Value, name string) (reflect.Value, error) {
 	field := model.Elem().FieldByName(name)
 	if !field.IsValid() {
-		return reflect.ValueOf(nil), fmt.Errorf("Field `%s` does not exist.", name)
+		return reflect.ValueOf(nil), fmt.Errorf("Unknown option or argument: `%s`.", name)
 	}
 	return field, nil
 }
