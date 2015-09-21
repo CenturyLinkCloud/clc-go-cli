@@ -9,6 +9,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
+	"github.com/centurylinkcloud/clc-go-cli/models/server"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
 	"github.com/centurylinkcloud/clc-go-cli/state"
@@ -313,7 +314,7 @@ func TestWait(t *testing.T) {
 	}
 }
 
-func TestLoadGroups(t *testing.T) {
+func TestLoadGroupsAndServers(t *testing.T) {
 	ca1 := datacenter.GetRes{
 		Links: []models.LinkEntity{
 			{
@@ -339,14 +340,34 @@ func TestLoadGroups(t *testing.T) {
 		},
 	}
 	allDatacenters := []datacenter.GetRes{ca1, ca2}
-	group1 := group.Entity{Name: "Group 1"}
-	group2 := group.Entity{Name: "Group 2"}
+	group1 := group.Entity{
+		Name:         "Group 1",
+		ServersCount: 0,
+	}
+	group2 := group.Entity{
+		Name:         "Group 2",
+		ServersCount: 2,
+		Links: []models.LinkEntity{
+			{
+				Rel:  "server",
+				Href: "/get/server/1",
+			},
+			{
+				Rel:  "server",
+				Href: "/get/server/2",
+			},
+		},
+	}
+	server1 := server.GetRes{Name: "Server 1"}
+	server2 := server.GetRes{Name: "Server 2"}
 	proxy.Server([]proxy.Endpoint{
 		{"/v2/datacenters/ALIAS/CA1", &ca1},
 		{"/v2/datacenters/ALIAS/CA2", &ca2},
 		{"/v2/datacenters/ALIAS", &allDatacenters},
 		{"/get/group/ca1", &group1},
 		{"/get/group/ca2", &group2},
+		{"/get/server/1", &server1},
+		{"/get/server/2", &server2},
 		{"/authentication/login", proxy.LoginResponse},
 	})
 	defer proxy.CloseServer()
@@ -379,6 +400,42 @@ func TestLoadGroups(t *testing.T) {
 	expected = fmt.Sprintf("%v", []group.Entity{group1})
 	got = fmt.Sprintf("%v", c.Output.([]group.Entity))
 	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("Invalid result.\nExpected: %s\nGot: %s", expected, got)
+	}
+
+	// Try to load servers of a data center with no servers.
+	sc := commands.NewServerList(commands.CommandExcInfo{})
+	sc.Input.(*server.List).DataCenter = "CA1"
+	err = sc.Execute(cn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	serversGot := sc.Output.([]server.GetRes)
+	if len(serversGot) != 0 {
+		t.Errorf("Invalid result.\nExpected empty list\nGot: %v", serversGot)
+	}
+
+	// Load servers of a data center with some servers inside.
+	sc.Input.(*server.List).DataCenter = "CA2"
+	err = sc.Execute(cn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got = fmt.Sprintf("%v", sc.Output.([]server.GetRes))
+	expected = fmt.Sprintf("%v", []server.GetRes{server1, server2})
+	if got != expected {
+		t.Errorf("Invalid result.\nExpected: %s\nGot: %s", expected, got)
+	}
+
+	// Load servers for all data centers.
+	sc.Input.(*server.List).All.Set = true
+	err = sc.Execute(cn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got = fmt.Sprintf("%v", sc.Output.([]server.GetRes))
+	expected = fmt.Sprintf("%v", []server.GetRes{server1, server2})
+	if got != expected {
 		t.Errorf("Invalid result.\nExpected: %s\nGot: %s", expected, got)
 	}
 }
