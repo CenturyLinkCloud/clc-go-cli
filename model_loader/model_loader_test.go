@@ -5,6 +5,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -200,6 +201,19 @@ var testCases = []modelLoaderTestCase{
 			"UnknownField": "some value",
 		},
 		err: "Unknown option or argument: `UnknownField`.",
+	},
+	// Fails with numbers out of range.
+	{
+		args: map[string]interface{}{
+			"FieldInt": "99223372036854775808",
+		},
+		err: "Value `99223372036854775808` is too big.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldFloat": strings.Repeat("9", 310),
+		},
+		err: fmt.Sprintf("Value `%s` is too big.", strings.Repeat("9", 310)),
 	},
 	// Fails with different type mismatches.
 	{
