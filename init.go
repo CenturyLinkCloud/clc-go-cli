@@ -171,7 +171,10 @@ func init() {
 				},
 				{
 					"--custom-fields",
-					[]string{"Collection of custom field ID-value pairs to set for the server."},
+					[]string{
+						"Collection of custom field ID-value pairs to set for the server.",
+						"Each object of a collection has keys 'id' and 'value'.",
+					},
 				},
 				{
 					"--additional-disks",
@@ -772,7 +775,10 @@ func init() {
 				},
 				{
 					"--custom-fields",
-					[]string{"Collection of custom field ID-value pairs to set for the server."},
+					[]string{
+						"Collection of custom field ID-value pairs to set for the server.",
+						"Each object of a collection has keys 'id' and 'value'.",
+					},
 				},
 				{
 					"--ovf-id",
@@ -892,7 +898,10 @@ func init() {
 				},
 				{
 					"--custom-fields",
-					[]string{"Collection of custom field ID-value pairs to set for the server."},
+					[]string{
+						"Collection of custom field ID-value pairs to set for the server.",
+						"Each object of a collection has keys 'id' and 'value'.",
+					},
 				},
 			},
 		},
