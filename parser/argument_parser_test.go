@@ -37,7 +37,7 @@ var testCases = []parserTestParam{
 	{input: []string{"--some-key", "value1", "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
 	{input: []string{`{"some-key": "value"}`, "--some-key", "value2"}, err: "Option 'SomeKey' is specified twice."},
 	// Does not parse root values not in JSON or a=b,c=d,.. format.
-	{input: []string{"value", "value2"}, err: "value is neither a JSON object nor an object in a=b,c=d.. format."},
+	{input: []string{"value", "value2"}, err: "value is neither a valid JSON object nor a valid object in a=b,c=d.. format."},
 	// Parses top-level objects in JSON and a=b,c=d,.. format.
 	{input: []string{"key-one=value1,key-two=value2", `{"key-three":"value3"}`}, res: map[string]interface{}{
 		"KeyOne":   "value1",
