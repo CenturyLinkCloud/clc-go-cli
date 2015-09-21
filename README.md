@@ -6,7 +6,11 @@ Command Line Interface for manipulating the CenturyLink IaaS.
 
 ### Download the tool
 
-Download a release tarball compiled for your platform from the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases). Extract an executable (`clc.exe` on Windows and `clc` on other platforms) and optionally put it on your PATH.
+The latest release:
+
+[MacOS](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-darwin.tar.gz) | [Linux](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-linux-amd64.tar.gz) | [Windows](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-windows-x64.zip)
+
+See previous releases and release notes on the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases).
 
 ### Log in to your IaaS account
 
@@ -14,23 +18,23 @@ You need to be authenticated with a username and password in order to execute CL
 
 1. A config (see [the Config section](#set-up-the-configuration-file) for more details).
 2. A `login` command:
-  
+
   `clc login --user bob --password passw0rd`.
-  
+
   This puts the passed credentials into the config.
 3. `CLC_USER` and `CLC_PASSWORD` environment variables:
 
   `CLC_USER=bob CLC_PASSWORD=passw0rd clc server list`
-  
+
   or on Windows in PowerShell:
-  
+
   `$env:CLC_USER="bob"; $env:CLC_PASSWORD="passw0rd"; clc.exe server list`.
-  
+
   If specified, they take precedence over the values from the configuration file, if any.
 4. `--user` and `--password` command options:
 
   `clc server list --user bob --password passw0rd`.
-  
+
   If specified, they take precedence over the values from the configuration file and environment variables, if any.
 
 ### Set up the configuration file
