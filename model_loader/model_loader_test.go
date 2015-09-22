@@ -18,14 +18,15 @@ type modelLoaderTestCase struct {
 }
 
 type testModel struct {
-	FieldString   string
-	FieldInt      int64
-	FieldFloat    float64
-	FieldBool     bool
-	FieldDateTime time.Time
-	FieldObject   testFieldObject
-	FieldArray    []testFieldObject
-	FieldNil      base.NilField
+	FieldString     string
+	FieldInt        int64
+	FieldFloat      float64
+	FieldBool       bool
+	FieldDateTime   time.Time
+	FieldObject     testFieldObject
+	FieldArray      []testFieldObject
+	FieldNil        base.NilField
+	testInnerObject `argument:"composed"`
 }
 
 type testFieldObject struct {
@@ -37,6 +38,8 @@ type testFieldObject struct {
 type testFieldInnerObject struct {
 	FieldString string
 }
+
+type testInnerObject struct{}
 
 var testCases = []modelLoaderTestCase{
 	// Loads simple fields.
@@ -201,6 +204,12 @@ var testCases = []modelLoaderTestCase{
 			"UnknownField": "some value",
 		},
 		err: "Unknown option or argument: `UnknownField`.",
+	},
+	{
+		args: map[string]interface{}{
+			"testInnerObject": "some value",
+		},
+		err: "Unknown option or argument: `testInnerObject`.",
 	},
 	// Fails with numbers out of range.
 	{
