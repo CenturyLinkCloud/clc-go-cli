@@ -48,6 +48,10 @@ type GuestDiskUsage struct {
 }
 
 func (g *GetStatsReq) Validate() error {
+	if err := g.Group.Validate(); err != nil {
+		return err
+	}
+
 	if g.Type == "latest" {
 		return nil
 	}

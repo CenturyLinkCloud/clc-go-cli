@@ -33,6 +33,10 @@ func (u *UpdateReq) Validate() error {
 		return fmt.Errorf("Invalid property: patch-operation")
 	}
 
+	if err := u.Group.Validate(); err != nil {
+		return err
+	}
+
 	if u.ParentGroupName != "" && u.ParentGroupId != "" {
 		return fmt.Errorf("Only one of parent-group-id and parent-group-name may be specified")
 	}

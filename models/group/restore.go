@@ -19,6 +19,10 @@ type RestoreRes struct {
 }
 
 func (r *RestoreReq) Validate() error {
+	if err := r.Group.Validate(); err != nil {
+		return err
+	}
+
 	if (r.TargetGroupId == "") == (r.TargetGroupName == "") {
 		return fmt.Errorf("Exactly one of the target-group-id and taret-group-name parameters must be specified")
 	}
