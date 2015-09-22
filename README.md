@@ -246,4 +246,4 @@ instructions below may not work properly on Windows.
 * Install go vet: `go get code.google.com/p/go.tools/cmd/vet`.
 * Before commit check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it) and check that all tests pass via `./run_tests`.
 
-If you want to make an executable, simply run `./build`. The binary will appear in the `./out` folder.
+If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
