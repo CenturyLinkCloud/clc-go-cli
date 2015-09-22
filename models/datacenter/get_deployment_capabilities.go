@@ -10,7 +10,7 @@ type GetDCRes struct {
 	SupportsBareMetalServers   bool
 	DeployableNetworks         []DeployableNetwork
 	Templates                  []Template
-	ImportableOsTypes          []ImportableOSType
+	ImportableOsTypes          []ImportableOSType `json:",omitempty"`
 }
 
 type DeployableNetwork struct {
@@ -26,7 +26,7 @@ type Template struct {
 	StorageSizeGB      int64
 	Capabilities       []string
 	ReservedDrivePaths []string
-	DrivePathLength    int64
+	DrivePathLength    int64 `json:",omitempty"`
 }
 
 type ImportableOSType struct {

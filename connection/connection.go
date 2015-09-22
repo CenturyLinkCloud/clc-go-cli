@@ -18,7 +18,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
 
-const OriginalBaseUrl = "https://api.ctl.io/v2/"
+const OriginalBaseUrl = "https://api.ctl.io/"
 
 //this made a variable instead of a constant for testing purpoises
 var BaseUrl = OriginalBaseUrl
@@ -36,7 +36,7 @@ var NewConnection = func(username string, password string, logger *log.Logger) (
 	cn.logger.Printf("Creating new connection. Username: %s", username)
 	loginReq := &authentication.LoginReq{Username: username, Password: password}
 	loginRes := &authentication.LoginRes{}
-	err := cn.ExecuteRequest("POST", BaseUrl+"authentication/login", loginReq, loginRes)
+	err := cn.ExecuteRequest("POST", BaseUrl+"v2/authentication/login", loginReq, loginRes)
 	if err != nil {
 		return nil, err
 	}

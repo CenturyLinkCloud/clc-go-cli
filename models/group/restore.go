@@ -9,13 +9,13 @@ import (
 type RestoreReq struct {
 	Group           `argument:"composed" URIParam:"GroupId"`
 	TargetGroupId   string
-	TargetGroupName string
+	TargetGroupName string `json:"-"`
 }
 
 type RestoreRes struct {
 	IsQueued     bool
-	Links        []models.LinkEntity
-	ErrorMessage string
+	Links        []models.LinkEntity `json:",omitempty"`
+	ErrorMessage string              `json:",omitempty"`
 }
 
 func (r *RestoreReq) Validate() error {

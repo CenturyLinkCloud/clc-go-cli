@@ -6,8 +6,8 @@ import (
 )
 
 type Group struct {
-	GroupId   string
-	GroupName string
+	GroupId   string `json:"-"`
+	GroupName string `json:"-"`
 }
 
 func (g *Group) Validate() error {

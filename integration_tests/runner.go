@@ -80,7 +80,7 @@ func (r *runner) addLoginHandler() error {
 		}
 		return nil
 	}
-	r.addHandlerBase("/authentication/login", string(response), checker)
+	r.addHandlerBase("/v2/authentication/login", string(response), checker)
 	return nil
 }
 
@@ -117,8 +117,12 @@ func (r *runner) findApiDef(url, method string) (*ApiDef, error) {
 	if method == "PATCH" {
 		return nil, nil
 	}
+	if strings.Contains(url, "?") {
+		return nil, nil
+	}
 	for _, apiDef := range r.api {
 		apiUrl := strings.Replace(apiDef.Url, "locationId", "DataCenter", -1)
+		apiUrl = strings.Replace(apiUrl, "Network", "NetworkId", -1)
 		if strings.EqualFold(apiUrl, url) && apiDef.Method == method {
 			return apiDef, nil
 		}
@@ -139,7 +143,7 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	args := []string{cmd.ExcInfo.Resource, cmd.ExcInfo.Command}
 	defaultId := "some-id"
 	url := apiDef.Url
-	url = strings.Replace(url, "https://api.ctl.io/v2", "", -1)
+	url = strings.Replace(url, "https://api.ctl.io", "", -1)
 	url = strings.Replace(url, "{accountAlias}", "ALIAS", -1)
 	r.modifyContentExample(apiDef)
 	var contentExampleString []byte
@@ -197,6 +201,14 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 }
 
 func (r *runner) modifyResExample(apiDef *ApiDef) {
+	additionalProperties := []AdditionalProperty{
+		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}", "serversCount", 0},
+	}
+	for _, prop := range additionalProperties {
+		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
+			apiDef.ResExample.(map[string]interface{})[prop.Name] = prop.Value
+		}
+	}
 }
 
 func (r *runner) modifyContentExample(apiDef *ApiDef) {
@@ -211,6 +223,7 @@ func (r *runner) modifyContentExample(apiDef *ApiDef) {
 
 	missedExamples := []MissedExample{
 		{"POST", "https://api.ctl.io/v2/operations/{accountAlias}/servers/startMaintenance", []interface{}{"WA1ALIASWB01", "WA1ALIASWB02"}},
+		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/restore", map[string]interface{}{"targetGroupId": "WA1ALIASWB02"}},
 	}
 	for _, prop := range missedExamples {
 		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
@@ -277,6 +290,12 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 		return nil
 	}
 	if obj1 == nil || obj2 == nil {
+		if array, ok := obj1.([]interface{}); ok && len(array) == 0 {
+			return nil
+		}
+		if array, ok := obj2.([]interface{}); ok && len(array) == 0 {
+			return nil
+		}
 		return fmt.Errorf("Mistmatch in property %s. Values: \n%v \n%v", prefix, obj1, obj2)
 	}
 	switch obj1.(type) {

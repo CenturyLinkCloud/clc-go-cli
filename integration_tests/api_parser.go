@@ -102,7 +102,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 	if err != nil {
 		return nil, err
 	}
-	res.UrlParameters, err = p.parseTable(reqSec, resSec, true, "URI Parameters", "URI Properties")
+	res.UrlParameters, err = p.parseTable(reqSec, resSec, true, "URI Parameters", "URI Properties", "URI and Querystring Parameters")
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 		return nil, err
 	}
 	res.ResExample, err = p.parseExample(resSec, nil, "Examples")
-	return res, nil
+	return res, err
 }
 
 func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (string, string, error) {
@@ -165,10 +165,23 @@ func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) 
 		return nil, nil
 	}
 	data := new(interface{})
+	p.logger.Log("Converting object: %s", content)
 	err = json.Unmarshal([]byte(content), data)
-	if err != nil && err.Error() == "invalid character '}' looking for beginning of object key string" {
+	if err != nil && (err.Error() == "invalid character '}' looking for beginning of object key string" || err.Error() == "invalid character ']' looking for beginning of value") {
 		i := strings.LastIndex(content, ",")
 		content = content[:i] + content[i+1:]
+		err = json.Unmarshal([]byte(content), data)
+	}
+	if err != nil && err.Error() == "invalid character ',' after top-level value" {
+		content = "[" + content + "]"
+		err = json.Unmarshal([]byte(content), data)
+	}
+	if err != nil && err.Error() == "invalid character '\"' after object key:value pair" {
+		content = strings.Replace(content, "/v2/groups/acct/31d13f501459411ba59304f3d47486eb/scheduledActivities\"", "/v2/groups/acct/31d13f501459411ba59304f3d47486eb/scheduledActivities\",", -1)
+		err = json.Unmarshal([]byte(content), data)
+	}
+	if err != nil && err.Error() == "invalid character '(' looking for beginning of value" {
+		content = strings.Replace(content, "(/v2/groups/ALIAS/GROUP/statistics?start=2014-04-09T20:00:00&sampleInterval=01:00:00)", "", -1)
 		err = json.Unmarshal([]byte(content), data)
 	}
 	return *data, err
@@ -236,7 +249,7 @@ func (p *parser) findNodeByHeader(startNode, endNode *html.Node, containerType, 
 
 		//if next node is paragraf we don't need to return error, because this is a valid case
 		//just return nil
-		_, err := p.findNextNodeByType(header, atom.P, 1)
+		_, err := p.findNextNodeByType(header, atom.P, 2)
 		if err == nil {
 			return nil, nil
 		}
@@ -286,7 +299,7 @@ func (p *parser) hasAttr(attrs []html.Attribute, key, val string) bool {
 func (p *parser) findNextNode(startNode, endNode *html.Node, text ...string) *html.Node {
 	for c := startNode.NextSibling; c != endNode; c = c.NextSibling {
 		for _, item := range text {
-			if c.FirstChild != nil && c.FirstChild.Data == item {
+			if c.FirstChild != nil && strings.HasSuffix(c.FirstChild.Data, item) {
 				return c
 			}
 		}
