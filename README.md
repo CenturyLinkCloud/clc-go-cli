@@ -1,16 +1,16 @@
 # CenturyLink CLI
 
-Command Line Interface for manipulating the CenturyLink IaaS.
+This is the Command Line Interface (CLI) for manipulating the CenturyLink Infrastructure as a Service (IaaS).
 
 ## Getting Started
 
 ### Download the tool
 
-The latest release:
+Click a link below to download the latest OS system release.
 
 [MacOS](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-darwin.tar.gz) | [Linux](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-linux-amd64.tar.gz) | [Windows](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-windows-x64.zip)
 
-See previous releases and release notes on the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases).
+**Note:** You can see previous releases and release notes on the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases).
 
 ### Log in to your IaaS account
 
@@ -30,16 +30,16 @@ You need to be authenticated with a username and password in order to execute CL
 
   `$env:CLC_USER="bob"; $env:CLC_PASSWORD="passw0rd"; clc.exe server list`.
 
-  If specified, they take precedence over the values from the configuration file, if any.
+  **Note:** If specified, these values take precedence over the values from the configuration file and environment variables (if any).
 4. `--user` and `--password` command options:
 
   `clc server list --user bob --password passw0rd`.
 
-  If specified, they take precedence over the values from the configuration file and environment variables, if any.
+  **Note:** If specified, these values take precedence over the values from the configuration file and environment variables (if any).
 
 ### Set up the configuration file
 
-The program uses a configuration file located at `$HOME/.clc/config.yml` on Linux/Unix/Mac and `C:\Users\%username%\clc\config.yml` on Windows. One is created automatically on the first execution of any command. The file is in YAML format. The following fields count:
+The program uses a configuration file located at `$HOME/.clc/config.yml` on Linux/Unix/Mac and `C:\Users\%username%\clc\config.yml` on Windows. A config file is created automatically on the first execution of any command. The file is in YAML format. The following fields count:
 
 * `user` and `password`: the credentials used for authentication.
 * `defaultformat`: a default output format, either `json`, `table` or `text`.
@@ -59,11 +59,11 @@ profiles:
     passwod: pa33w0rd
 ```
 
-Choose a profile either via a `--profile` option or `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+Choose a profile either via a `--profile` option or a `CLC_PROFILE` environment variable: `clc server list --profile alice`.
 
 ### Specify a default data center
 
-A number of commands require a data center to be specified (via the `--data-center` option) what limits entities (groups, servers, policies, etc) operated upon to only those belonging to this data center.
+A number of commands require a data center to specify (via the `--data-center` option) what limits the entities (groups, servers, policies, etc) operated upon to only those belonging to this data center.
 
 There is a possibility to set a default one so that you do not need to specify it explicitly with every command.
 
