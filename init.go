@@ -171,7 +171,10 @@ func init() {
 				},
 				{
 					"--custom-fields",
-					[]string{"Collection of custom field ID-value pairs to set for the server."},
+					[]string{
+						"Collection of custom field ID-value pairs to set for the server.",
+						"Each object of a collection has keys 'id' and 'value'.",
+					},
 				},
 				{
 					"--additional-disks",
@@ -772,7 +775,10 @@ func init() {
 				},
 				{
 					"--custom-fields",
-					[]string{"Collection of custom field ID-value pairs to set for the server."},
+					[]string{
+						"Collection of custom field ID-value pairs to set for the server.",
+						"Each object of a collection has keys 'id' and 'value'.",
+					},
 				},
 				{
 					"--ovf-id",
@@ -892,7 +898,10 @@ func init() {
 				},
 				{
 					"--custom-fields",
-					[]string{"Collection of custom field ID-value pairs to set for the server."},
+					[]string{
+						"Collection of custom field ID-value pairs to set for the server.",
+						"Each object of a collection has keys 'id' and 'value'.",
+					},
 				},
 			},
 		},
@@ -1553,6 +1562,7 @@ func init() {
 					},
 				},
 			},
+			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.ListReq{}, &[]firewall.Entity{}, commands.CommandExcInfo{
@@ -1579,6 +1589,7 @@ func init() {
 					[]string{"Short code for a particular account."},
 				},
 			},
+			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.GetReq{}, &firewall.Entity{}, commands.CommandExcInfo{
@@ -1602,6 +1613,7 @@ func init() {
 					[]string{"Required. ID of the firewall policy."},
 				},
 			},
+			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.UpdateReq{}, new(string), commands.CommandExcInfo{
@@ -1646,6 +1658,7 @@ func init() {
 					},
 				},
 			},
+			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.DeleteReq{}, new(string), commands.CommandExcInfo{
@@ -1669,6 +1682,7 @@ func init() {
 					[]string{"Required. ID of the firewall policy."},
 				},
 			},
+			AccountAgnostic: true,
 		},
 	})
 
@@ -2055,7 +2069,8 @@ func init() {
 	registerCustomCommand(commands.NewWait(commands.CommandExcInfo{
 		Resource: "wait",
 		Help: help.Command{
-			Brief: []string{"Waits for the previous command to complete."},
+			Brief:           []string{"Waits for the previous command to complete."},
+			AccountAgnostic: true,
 		},
 	}))
 	registerCustomCommand(commands.NewLogin(commands.CommandExcInfo{
@@ -2065,7 +2080,8 @@ func init() {
 				"Logs the user in by saving his credentials to the config.",
 				"Specify the credentials using the --user and --password options.",
 			},
-			NoEnvVars: true,
+			NoEnvVars:       true,
+			AccountAgnostic: true,
 		},
 	}))
 
@@ -2082,6 +2098,7 @@ func init() {
 					[]string{"Short code for the data center being set."},
 				},
 			},
+			AccountAgnostic: true,
 		},
 	}))
 	registerCustomCommand(commands.NewUnsetDefaultDC(commands.CommandExcInfo{
@@ -2091,6 +2108,7 @@ func init() {
 			Brief: []string{
 				"Unsets the default data center.",
 			},
+			AccountAgnostic: true,
 		},
 	}))
 	registerCustomCommand(commands.NewShowDefaultDC(commands.CommandExcInfo{
@@ -2100,6 +2118,7 @@ func init() {
 			Brief: []string{
 				"Show the default data center set, if any.",
 			},
+			AccountAgnostic: true,
 		},
 	}))
 }

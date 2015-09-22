@@ -6,7 +6,11 @@ Command Line Interface for manipulating the CenturyLink IaaS.
 
 ### Download the tool
 
-Download a release tarball compiled for your platform from the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases). Extract an executable (`clc.exe` on Windows and `clc` on other platforms) and optionally put it on your PATH.
+The latest release:
+
+[MacOS](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-darwin.tar.gz) | [Linux](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-linux-amd64.tar.gz) | [Windows](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-windows-x64.zip)
+
+See previous releases and release notes on the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases).
 
 ### Log in to your IaaS account
 
@@ -14,23 +18,23 @@ You need to be authenticated with a username and password in order to execute CL
 
 1. A config (see [the Config section](#set-up-the-configuration-file) for more details).
 2. A `login` command:
-  
+
   `clc login --user bob --password passw0rd`.
-  
+
   This puts the passed credentials into the config.
 3. `CLC_USER` and `CLC_PASSWORD` environment variables:
 
   `CLC_USER=bob CLC_PASSWORD=passw0rd clc server list`
-  
+
   or on Windows in PowerShell:
-  
+
   `$env:CLC_USER="bob"; $env:CLC_PASSWORD="passw0rd"; clc.exe server list`.
-  
+
   If specified, they take precedence over the values from the configuration file, if any.
 4. `--user` and `--password` command options:
 
   `clc server list --user bob --password passw0rd`.
-  
+
   If specified, they take precedence over the values from the configuration file and environment variables, if any.
 
 ### Set up the configuration file
@@ -94,19 +98,19 @@ Alternatively, a name of an entity can be specified (the common pattern is `--<e
 
 ### Enjoy the tool
 
-Below are some examples of CLI commands so that you can faster get to use it efficiently.
+Below are some examples of CLI commands to help you faster get to use the tool.
 
 Explore the list of data centers:
 
 `clc data-center list`
 
-Find server template ids that contain the word "UBUNTU" in some data center `<data-center>`:
+Find server template IDs that contain the word "UBUNTU" in some data center `<data-center>`:
 
 ```
 clc data-center get-deployment-capabilities --data-center <data-center> --query templates.name --output text | grep UBUNTU
 ```
 
-Search for the root group id of the data center under consideration:
+Search for the root group ID of the data center under consideration:
 
 ```
 clc group list --all --filter location-id=<data-center> --query id --output text
@@ -118,17 +122,49 @@ Or, the same thing can be accomplished by issuing:
 clc group list --data-center <data-center> --query id --output text
 ```
 
-Get the list of subgroups. Use a "SubGroup" alias for subgroups ids in the output:
+Get the list of subgroups. Use a "SubGroup" alias for subgroups IDs in the output:
 
 ```
 clc group get --group-id <root-group-id> --query 'groups.{SubGroup:id}'
 ```
 
+Create your own group inside the one queried:
+
+```
+clc group create --name "my group" --description "A group of mine" --parent-group-id <group-id> --custom-fields "id=<some-field>,value=<some-value>" "id=<another-field>,value=<another-value>"
+```
+
+Note how we set custom fields here. According to the command help, the `--custom-fields` argument accepts an array of objects with 2 keys each: `id` and `value`. The tool interprets multiple space-separated values as an array and each object can be specified using the `key1=value1,key2=value2,..`-notation, which is described in more detail further in the document.
+
 Create a server:
 
 ```
-clc server create --name myserv --source-server-id <template-id> --group-id <group-id> --cpu 1 --memoryGB 1
+clc server create --name myserv --source-server-id <template-id> --group-id <group-id> --cpu 1 --memory-gb 1
 ```
+
+The same can be accomplished with a piece of JSON:
+
+```
+clc server create '{"name":"myserv","source-server-id":"<template-id>","group-id":"<group-id>","cpu":1,"memory-gb":1}'
+```
+
+Be careful with JSON though. Keys and string values have to be enclosed in **double** quotes. Also, an expression may fail to be parsed unless it is enclosed in quotes, mainly because commas and spaces usually have special meanings in shells.
+
+Moreover, there is yet another notation for describing objects:
+
+```
+clc server create "name=myserv,source-server-id='<template-id>',group-id='<group-id>',cpu=1,memory-gb=1"
+```
+
+In this case you can use both `'` and `"` for both values and the whole expression but be sure to escape special characters as it has been partly described for JSON. Note that this notation does not support nested objects and arrays.
+
+Finally, you can mix the ways described:
+
+```
+clc server create '{"name":"myserv"}' source-server-id='<template-id>' --group-id <group-id> --cpu 1 --memory-gb 1
+```
+
+Be sure to put all the data **not bound to any command key** first, otherwise it will be interpreted as a value or an item of an array for the preceding command key.
 
 Wait until the server has been created:
 

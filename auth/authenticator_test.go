@@ -65,7 +65,7 @@ func TestAuthenticator(t *testing.T) {
 		os.Setenv("CLC_PASSWORD", testCase.env.password)
 		os.Setenv("CLC_PROFILE", testCase.env.profile)
 		var res expectedResult
-		connection.NewConnection = func(username string, password string, logger *log.Logger) (cn base.Connection, err error) {
+		connection.NewConnection = func(username, password, accountAlias string, logger *log.Logger) (cn base.Connection, err error) {
 			res = expectedResult{username, password}
 			return nil, nil
 		}

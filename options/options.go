@@ -1,14 +1,15 @@
 package options
 
 type Options struct {
-	Output   string
-	Filter   string
-	Query    string
-	User     string
-	Password string
-	Profile  string
-	Trace    bool
-	Help     bool
+	Output       string
+	Filter       string
+	Query        string
+	User         string
+	Password     string
+	Profile      string
+	AccountAlias string
+	Trace        bool
+	Help         bool
 }
 
 func Get() []string {
@@ -18,6 +19,7 @@ func Get() []string {
 		"--user",
 		"--password",
 		"--profile",
+		"--account-alias",
 		"--trace",
 		"--query",
 		"--filter",

@@ -27,7 +27,7 @@ func Load(cn base.Connection, dataCenter string) ([]GetRes, error) {
 	}
 
 	servers := make([]GetRes, len(links))
-	if links == nil {
+	if len(links) == 0 {
 		return servers, nil
 	}
 	done := make(chan error)

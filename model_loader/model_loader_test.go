@@ -5,6 +5,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -199,7 +200,20 @@ var testCases = []modelLoaderTestCase{
 		args: map[string]interface{}{
 			"UnknownField": "some value",
 		},
-		err: "Field `UnknownField` does not exist.",
+		err: "Unknown option or argument: `UnknownField`.",
+	},
+	// Fails with numbers out of range.
+	{
+		args: map[string]interface{}{
+			"FieldInt": "99223372036854775808",
+		},
+		err: "Value `99223372036854775808` is too big.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldFloat": strings.Repeat("9", 310),
+		},
+		err: fmt.Sprintf("Value `%s` is too big.", strings.Repeat("9", 310)),
 	},
 	// Fails with different type mismatches.
 	{
@@ -250,8 +264,12 @@ func TestModelLoader(t *testing.T) {
 		t.Logf("Executing %d test case.", i+1)
 		res := testModel{}
 		err := model_loader.LoadModel(testCase.args, &res)
-		if (err != nil || testCase.err != "") && err.Error() != testCase.err {
-			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
+		errMsg := ""
+		if err != nil {
+			errMsg = err.Error()
+		}
+		if (err != nil || testCase.err != "") && errMsg != testCase.err {
+			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, errMsg)
 		}
 		if testCase.res != nil && !reflect.DeepEqual(testCase.res, res) {
 			t.Errorf("Invalid result.\n expected %#v,\n obtained %#v", testCase.res, res)

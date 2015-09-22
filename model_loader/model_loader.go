@@ -7,6 +7,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
+	"strconv"
 	"time"
 )
 
@@ -50,7 +51,16 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 			}
 		} else if reflect.ValueOf(arg).Kind() == reflect.String {
 			if valid.IsInt(arg.(string)) {
-				argInt, _ = valid.ToInt(arg.(string))
+				var err error
+				argInt, err = valid.ToInt(arg.(string))
+				if err != nil {
+					if num, ok := err.(*strconv.NumError); ok {
+						if num.Err == strconv.ErrRange {
+							return fmt.Errorf("Value `%s` is too big.", arg.(string))
+						}
+					}
+					return err
+				}
 				mismatch = false
 			}
 		}
@@ -68,7 +78,13 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 			mismatch = false
 		} else if reflect.ValueOf(arg).Kind() == reflect.String {
 			if valid.IsFloat(arg.(string)) {
-				argFloat64, _ = valid.ToFloat(arg.(string))
+				var err error
+				argFloat64, err = valid.ToFloat(arg.(string))
+				if num, ok := err.(*strconv.NumError); ok {
+					if num.Err == strconv.ErrRange {
+						return fmt.Errorf("Value `%s` is too big.", arg.(string))
+					}
+				}
 				mismatch = false
 			}
 		}
@@ -170,7 +186,7 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 func getFieldByName(model reflect.Value, name string) (reflect.Value, error) {
 	field := model.Elem().FieldByName(name)
 	if !field.IsValid() {
-		return reflect.ValueOf(nil), fmt.Errorf("Field `%s` does not exist.", name)
+		return reflect.ValueOf(nil), fmt.Errorf("Unknown option or argument: `%s`.", name)
 	}
 	return field, nil
 }

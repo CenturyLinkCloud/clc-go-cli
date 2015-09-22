@@ -1,5 +1,5 @@
 package base
 
-const (
+var (
 	URL = "https://api.ctl.io"
 )
