@@ -65,7 +65,7 @@ Choose a profile either via a `--profile` option or a `CLC_PROFILE` environment 
 
 A number of commands require a default data center variable (via the `--data-center` option) in order to ensure that the command only operates on the entities (groups, servers, policies, etc) belonging to the specific data center.
 
-There is an option to set a default data center so that you do not need to specify it explicitly with every command.
+There is an option to set a default data center so that you do not need to specify it with every command.
 
 You can either set a data center in the config using the `defaultdatacenter` field or execute a command:
 
@@ -96,7 +96,7 @@ Alternatively, the name of an entity can be specified instead of the ID (the com
 * If there is more than one entity with the specified name, an error occurs.
 * Autocomplete, if turned on, works for names and does **not** work for IDs. See [the Autocomplete section](#autocomplete-for-entity-names) for details.
 
-### Enjoy the tool
+### List of CLI commands
 
 Below is a list of CLI commands to help bring you up-to-speed on using the tool.
 
