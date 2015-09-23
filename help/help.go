@@ -46,7 +46,7 @@ var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 	--profile
 			Specifies a profile to use (one from the config file).
 {{if .AccountAgnostic}}{{else}}	--account-alias
-			Specifies a sub-account to work in.
+			Specifies an account to work in.
 {{end}}	--output
 			Specifies the output format - either 'json', 'text' or 'table'.
 			Defaults to 'json'.
