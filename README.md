@@ -134,6 +134,10 @@ Or unset it using:
 clc data-center unset-default
 ```
 
+### Switch accounts
+
+Your account is determined automatically for you upon authentication. But you might also have sub accounts that have to be dealt with. Thus, the tool allows you to specify a custom account via an `--account-alias` option: `clc server list --account-alias MYSUBACC`.
+
 ### Identify entities by ID or by name
 
 There is a great deal of commands that depend on the instances of certain entities, such as `server`, `group`, `network`.
