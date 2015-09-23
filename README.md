@@ -100,17 +100,17 @@ Alternatively, the name of an entity can be specified instead of the ID (the com
 
 Below is a list of CLI commands to help bring you up-to-speed on using the tool.
 
-**Explore the list of data centers:**
+####Explore the list of data centers:
 
 `clc data-center list`
 
-**Find server template IDs that contain the word "UBUNTU" in some data center `<data-center>`:**
+####Find server template IDs that contain the word "UBUNTU" in some data center `<data-center>`:
 
 ```
 clc data-center get-deployment-capabilities --data-center <data-center> --query templates.name --output text | grep UBUNTU
 ```
 
-**Search for the root group ID of the data center under consideration:**
+####Search for the root group ID of the data center under consideration:
 
 ```
 clc group list --all --filter location-id=<data-center> --query id --output text
@@ -122,13 +122,13 @@ Or, the same thing can be accomplished by issuing:
 clc group list --data-center <data-center> --query id --output text
 ```
 
-**Get the list of subgroups. Use a "SubGroup" alias for subgroups IDs in the output:**
+####Get the list of subgroups. Use a "SubGroup" alias for subgroups IDs in the output:
 
 ```
 clc group get --group-id <root-group-id> --query 'groups.{SubGroup:id}'
 ```
 
-**Create your own group inside the one queried:**
+####Create your own group inside the one queried:
 
 ```
 clc group create --name "my group" --description "A group of mine" --parent-group-id <group-id> --custom-fields "id=<some-field>,value=<some-value>" "id=<another-field>,value=<another-value>"
@@ -136,7 +136,7 @@ clc group create --name "my group" --description "A group of mine" --parent-grou
 
 **Note:** Pay attention to how we set custom fields. According to the command help, the `--custom-fields` argument accepts an array of objects with 2 keys each: `id` and `value`. The tool interprets multiple space-separated values as an array and each object can be specified using the `key1=value1,key2=value2,..`-notation, which is described in more detail further in the document.
 
-**Create a server:**
+####Create a server:
 
 ```
 clc server create --name myserv --source-server-id <template-id> --group-id <group-id> --cpu 1 --memory-gb 1
@@ -168,37 +168,37 @@ clc server create '{"name":"myserv"}' source-server-id='<template-id>' --group-i
 
 **Note:** Be sure to put all the data **not bound to any command key** first, otherwise it will be interpreted as a value or an item of an array for the preceding command key.
 
-**Wait until the server has been created:**
+####Wait until the server has been created:
 
 ```
 clc wait
 ```
 
-**Query only servers with status "active" and see the output as a table:**
+####Query only servers with status "active" and see the output as a table:
 
 ```
 clc server list --all --filter status=active --output table
 ```
 
-**Increase the server's CPUs count and log the HTTP request/response data:**
+####Increase the server's CPUs count and log the HTTP request/response data:
 
 ```
 clc server update --server-id <server_id> --cpu 2 --trace
 ```
 
-**Show billing details of the servers of the group as a table:**
+####Show billing details of the servers of the group as a table:
 
 ```
 clc group get-billing-details --group-id <group-id> --query groups.<group-id>.servers --output table
 ```
 
-**Make a skeleton of a command for getting groups with servers inside:**
+####Make a skeleton of a command for getting groups with servers inside:
 
 ```
 clc group list --filter 'servers-count>0' --generate-cli-skeleton > groups_with_servers.json
 ```
 
-**Apply the skeleton:**
+####Apply the skeleton:
 
 ```
 clc group list --from-file groups_with_servers.json
