@@ -121,6 +121,7 @@ func (r *runner) findApiDef(url, method string) (*ApiDef, error) {
 		return nil, nil
 	}
 	for _, apiDef := range r.api {
+		apiDef.Url = strings.Replace(apiDef.Url, "{sourceAccountAlias}", "{accountAlias}", -1)
 		apiUrl := strings.Replace(apiDef.Url, "locationId", "DataCenter", -1)
 		apiUrl = strings.Replace(apiUrl, "Network", "NetworkId", -1)
 		if strings.EqualFold(apiUrl, url) && apiDef.Method == method {
@@ -171,17 +172,13 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	for _, param := range apiDef.UrlParameters {
 		paramName := strings.Replace(param.Name, "IP", "Ip", -1)
 		paramName = strings.Replace(paramName, "ID", "Id", -1)
-		if paramName != "AccountAlias" && paramName != "LocationId" && paramName != "sourceAccountAlias" {
+		if paramName != "AccountAlias" && paramName != "LocationId" && !strings.EqualFold(paramName, "sourceAccountAlias") {
 			args = append(args, arg_parser.DenormalizePropertyName(paramName), defaultId)
 			url = strings.Replace(url, "{"+strings.ToLower(paramName)+"}", defaultId, -1)
 		} else if paramName == "LocationId" {
 			args = append(args, "--data-center", defaultId)
 			url = strings.Replace(url, "{locationid}", defaultId, -1)
-		} else if paramName == "sourceAccountAlias" {
-			args = append(args, "--source-account-alias", defaultId)
-			url = strings.Replace(url, "{SourceAccountAlias}", defaultId, -1)
 		}
-
 	}
 	args = append(args, "--user", "user", "--password", "password")
 	err = r.addHandler(url, string(resExampleString), func(req string) error {
@@ -240,7 +237,7 @@ func (r *runner) initialModifyContent(apiDef *ApiDef) {
 	urlProperties := []convertProperty{
 		{"PUT", "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{dataCenter}/{Network}", "Network", "NetworkId"},
 		{"POST", "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{dataCenter}/{Network}/release", "Network", "NetworkId"},
-		{"PUT", "https://api.ctl.io/v2-experimental/firewallPolicies/{sourceAccountAlias}/{dataCenter}/{firewallPolicy}", "DestinationAccountAlias", "FirewallPolicy"},
+		{"PUT", "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{dataCenter}/{firewallPolicy}", "DestinationAccountAlias", "FirewallPolicy"},
 	}
 	for _, prop := range urlProperties {
 		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
