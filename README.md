@@ -86,7 +86,7 @@ The program uses a configuration file located at `$HOME/.clc/config.yml` on Linu
 
 * `user` and `password`: the credentials used for authentication.
 * `defaultformat`: a default output format, either `json`, `table` or `text`.
-* `profiles`: a hash of alternative credentials.
+* `profiles`: a hash of alternative credentials. See [Profiles](#profiles).
 * `defaultdatacenter`: a short code for a default data center. See [the corresponding section](#specify-a-default-data-center).
 
 An example of a configuration file:
@@ -102,7 +102,13 @@ profiles:
     passwod: pa33w0rd
 ```
 
-Choose a profile either via a `--profile` option or `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+### Profiles
+
+Each profile is a pair of alternative credentials to use. Profiles are specified in the configuration file.
+
+To choose a profile for a single command invokation use either a `--profile` option or `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+
+Also, you can set up your default credentials from a profile via the `login` command: `clc login --profile alice`. Be careful, though, because your previous defaults will be overriden this way. Therefore it is a grood idea to have a profile for every of your users.
 
 ### Specify a default data center
 
