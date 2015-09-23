@@ -2,11 +2,11 @@ package firewall
 
 import (
 	"fmt"
+
 	"github.com/centurylinkcloud/clc-go-cli/models"
 )
 
 type CreateReq struct {
-	SourceAccountAlias string `valid:"required" URIParam:"yes"`
 	DataCenter         string `valid:"required" URIParam:"yes"`
 	DestinationAccount string `valid:"required"`
 	Source             []string
