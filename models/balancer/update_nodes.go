@@ -12,7 +12,7 @@ type UpdateNodes struct {
 }
 
 type UpdateNode struct {
-	Status      string
+	Status      string `json:",omitempty"`
 	IpAddress   string `valid:"required"`
 	PrivatePort int64  `valid:"required"`
 }

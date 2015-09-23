@@ -7130,8 +7130,8 @@
         "ResParameters": null
     },
     {
-        "Method": "",
-        "Url": "",
+        "Method": "GET",
+        "Url": "https://api.ctl.io/v2/sharedLoadBalancers/{accountAlias}/{dataCenter}/{loadBalancerId}/pools/{poolId}/nodes",
         "UrlExample": "",
         "UrlParameters": [
             {

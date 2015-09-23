@@ -9,6 +9,6 @@ type GetRes struct {
 }
 
 type NameValue struct {
-	Name   string
-	String string
+	Name  string
+	Value string
 }

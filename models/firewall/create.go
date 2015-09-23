@@ -6,8 +6,8 @@ import (
 )
 
 type CreateReq struct {
-	SourceAccountAlias string `valid:"required" URIParam:"yes"`
-	DataCenter         string `valid:"required" URIParam:"yes"`
+	SourceAccountAlias string `json:"-" valid:"required" URIParam:"yes"`
+	DataCenter         string `json:"-" valid:"required" URIParam:"yes"`
 	DestinationAccount string `valid:"required"`
 	Source             []string
 	Destination        []string

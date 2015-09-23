@@ -6,9 +6,9 @@ import (
 )
 
 type Network struct {
-	NetworkId   string
-	NetworkName string
-	DataCenter  string
+	NetworkId   string `json:"-"`
+	NetworkName string `json:"-"`
+	DataCenter  string `json:"-"`
 }
 
 func (n *Network) Validate() error {

@@ -142,10 +142,10 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	}
 	args := []string{cmd.ExcInfo.Resource, cmd.ExcInfo.Command}
 	defaultId := "some-id"
+	r.initialModifyContent(apiDef)
 	url := apiDef.Url
 	url = strings.Replace(url, "https://api.ctl.io", "", -1)
 	url = strings.Replace(url, "{accountAlias}", "ALIAS", -1)
-	r.modifyContentExample(apiDef)
 	var contentExampleString []byte
 	if apiDef.ContentExample != nil {
 		contentExampleString, err = json.Marshal(apiDef.ContentExample)
@@ -160,7 +160,7 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 			return err
 		}
 	}
-	modifiedContentExampleString, err := r.modifyContentParams(apiDef)
+	modifiedContentExampleString, err := r.postModifyContent(apiDef)
 	if err != nil {
 		return err
 	}
@@ -171,13 +171,17 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	for _, param := range apiDef.UrlParameters {
 		paramName := strings.Replace(param.Name, "IP", "Ip", -1)
 		paramName = strings.Replace(paramName, "ID", "Id", -1)
-		if paramName != "AccountAlias" && paramName != "LocationId" {
+		if paramName != "AccountAlias" && paramName != "LocationId" && paramName != "sourceAccountAlias" {
 			args = append(args, arg_parser.DenormalizePropertyName(paramName), defaultId)
 			url = strings.Replace(url, "{"+strings.ToLower(paramName)+"}", defaultId, -1)
 		} else if paramName == "LocationId" {
 			args = append(args, "--data-center", defaultId)
 			url = strings.Replace(url, "{locationid}", defaultId, -1)
+		} else if paramName == "sourceAccountAlias" {
+			args = append(args, "--source-account-alias", defaultId)
+			url = strings.Replace(url, "{SourceAccountAlias}", defaultId, -1)
 		}
+
 	}
 	args = append(args, "--user", "user", "--password", "password")
 	err = r.addHandler(url, string(resExampleString), func(req string) error {
@@ -190,6 +194,9 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	r.logger.Log("Args: %v", args)
 	res := clc.Run(args)
 	r.logger.Log("Result received: %s", res)
+	if res == "API request completed successfully. Status code: 200." {
+		return nil
+	}
 	obj := new(interface{})
 	err = json.Unmarshal([]byte(res), obj)
 	if err != nil {
@@ -211,7 +218,7 @@ func (r *runner) modifyResExample(apiDef *ApiDef) {
 	}
 }
 
-func (r *runner) modifyContentExample(apiDef *ApiDef) {
+func (r *runner) initialModifyContent(apiDef *ApiDef) {
 	additionalProperties := []AdditionalProperty{
 		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "isManagedBackup", true},
 	}
@@ -230,21 +237,31 @@ func (r *runner) modifyContentExample(apiDef *ApiDef) {
 			apiDef.ContentExample = prop.Example
 		}
 	}
+	urlProperties := []convertProperty{
+		{"PUT", "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{dataCenter}/{Network}", "Network", "NetworkId"},
+		{"POST", "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{dataCenter}/{Network}/release", "Network", "NetworkId"},
+		{"PUT", "https://api.ctl.io/v2-experimental/firewallPolicies/{sourceAccountAlias}/{dataCenter}/{firewallPolicy}", "DestinationAccountAlias", "FirewallPolicy"},
+	}
+	for _, prop := range urlProperties {
+		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
+			for _, param := range apiDef.UrlParameters {
+				if param.Name == prop.OldName {
+					param.Name = prop.NewName
+				}
+			}
+			apiDef.Url = strings.Replace(apiDef.Url, prop.OldName, prop.NewName, -1)
+		}
+	}
 }
 
-func (r *runner) modifyContentParams(apiDef *ApiDef) (string, error) {
+func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 	contentExample := apiDef.ContentExample
 	if array, ok := contentExample.([]interface{}); ok {
-		contentExample = map[string]interface{}{"serverIds": array}
-	}
-	properties := []convertProperty{
-		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "password", "rootPassword"},
-		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "memoryGB", "memoryGb"},
-		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "isManagedOS", "isManagedOs"},
-		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/publicIPAddresses", "cidr", "CIDR"},
-		{"PUT", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIP}", "cidr", "CIDR"},
-		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "password", "rootPassword"},
-		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "memoryGB", "memoryGb"},
+		if _, ok := array[0].(string); ok {
+			contentExample = map[string]interface{}{"serverIds": array}
+		} else {
+			contentExample = map[string]interface{}{"nodes": array}
+		}
 	}
 	for _, param := range apiDef.ContentParameters {
 		if param.Type == "dateTime" {
@@ -253,12 +270,22 @@ func (r *runner) modifyContentParams(apiDef *ApiDef) (string, error) {
 		}
 	}
 
+	exampleProperties := []convertProperty{
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "password", "rootPassword"},
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "memoryGB", "memoryGb"},
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "isManagedOS", "isManagedOs"},
+		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/publicIPAddresses", "cidr", "CIDR"},
+		{"PUT", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/publicIPAddresses/{publicIP}", "cidr", "CIDR"},
+		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "password", "rootPassword"},
+		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "memoryGB", "memoryGb"},
+		{"POST", "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}", "location", "dataCenter"},
+	}
 	data, err := json.Marshal(contentExample)
 	if err != nil {
 		return "", err
 	}
 	strData := string(data)
-	for _, prop := range properties {
+	for _, prop := range exampleProperties {
 		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
 			strData = strings.Replace(strData, prop.OldName, prop.NewName, -1)
 		}

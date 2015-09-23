@@ -6,8 +6,8 @@ import (
 )
 
 type Policy struct {
-	PolicyId   string
-	PolicyName string
+	PolicyId   string `json:"-"`
+	PolicyName string `json:"-"`
 }
 
 var (

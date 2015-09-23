@@ -6,9 +6,9 @@ import (
 )
 
 type LoadBalancer struct {
-	LoadBalancerId   string
-	LoadBalancerName string
-	DataCenter       string
+	LoadBalancerId   string `json:"-"`
+	LoadBalancerName string `json:"-"`
+	DataCenter       string `json:"-"`
 }
 
 func (b *LoadBalancer) Validate() error {
