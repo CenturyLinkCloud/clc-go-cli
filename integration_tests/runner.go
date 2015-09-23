@@ -59,7 +59,7 @@ func (r *runner) RunTests() error {
 			}
 		}
 	}
-	r.logger.Log("Test execution finished succcessfully")
+	r.logger.Logf("Test execution finished succcessfully")
 	return nil
 }
 
@@ -85,7 +85,7 @@ func (r *runner) addLoginHandler() error {
 }
 
 func (r *runner) addHandler(url string, response string, checker func(string) error) error {
-	r.logger.Log("Adding httpHandler for url: %s", url)
+	r.logger.Logf("Adding httpHandler for url: %s", url)
 	r.addServeMux()
 	err := r.addLoginHandler()
 	if err != nil {
@@ -132,7 +132,7 @@ func (r *runner) findApiDef(url, method string) (*ApiDef, error) {
 }
 
 func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
-	r.logger.Log("------- Testing command %s %s", cmd.ExcInfo.Resource, cmd.ExcInfo.Command)
+	r.logger.Logf("------- Testing command %s %s", cmd.ExcInfo.Resource, cmd.ExcInfo.Command)
 	apiDef, err := r.findApiDef(cmd.ExcInfo.Url, cmd.ExcInfo.Verb)
 	if err != nil {
 		return err
@@ -188,9 +188,9 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 		return err
 	}
 
-	r.logger.Log("Args: %v", args)
+	r.logger.Logf("Args: %v", args)
 	res := clc.Run(args)
-	r.logger.Log("Result received: %s", res)
+	r.logger.Logf("Result received: %s", res)
 	if res == "API request completed successfully. Status code: 200." {
 		return nil
 	}
@@ -291,8 +291,8 @@ func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 }
 
 func (r *runner) compareJson(json1, json2 string) error {
-	r.logger.Log("Json1: %s", json1)
-	r.logger.Log("Json2: %s", json2)
+	r.logger.Logf("Json1: %s", json1)
+	r.logger.Logf("Json2: %s", json2)
 	if strings.TrimSpace(json1) == "" && strings.TrimSpace(json2) == "" {
 		return nil
 	}

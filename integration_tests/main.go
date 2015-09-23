@@ -32,7 +32,7 @@ func main() {
 			showError("Error while loadin API", err)
 			return
 		}
-		logger.Log("Api def loaded, count: %d", len(api))
+		logger.Logf("Api def loaded, count: %d", len(api))
 		runner := NewRunner(api, logger)
 		err = runner.RunTests()
 		if err != nil {

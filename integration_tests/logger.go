@@ -6,7 +6,7 @@ import (
 )
 
 type Logger interface {
-	Log(format string, a ...interface{})
+	Logf(format string, a ...interface{})
 	LogNode(message string, n *html.Node)
 }
 
@@ -16,7 +16,7 @@ func NewLogger() Logger {
 	return &logger{}
 }
 
-func (l *logger) Log(format string, a ...interface{}) {
+func (l *logger) Logf(format string, a ...interface{}) {
 	fmt.Printf(format+"\n", a...)
 }
 

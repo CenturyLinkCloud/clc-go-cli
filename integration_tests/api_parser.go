@@ -131,7 +131,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 }
 
 func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (string, string, error) {
-	p.logger.Log("parseUrl called")
+	p.logger.Logf("parseUrl called")
 	res, err := p.findNodeByHeader(startNode, endNode, []atom.Atom{atom.Pre, atom.P}, atom.Code, 1, headerText)
 	if err != nil {
 		return "", "", err
@@ -147,7 +147,7 @@ func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (str
 }
 
 func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) (interface{}, error) {
-	p.logger.Log("parseExample called")
+	p.logger.Logf("parseExample called")
 	res, err := p.findNodeByHeader(startNode, endNode, []atom.Atom{atom.Pre, atom.P}, atom.Code, 2, headerText)
 	if err != nil {
 		return nil, err
@@ -165,7 +165,7 @@ func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) 
 		return nil, nil
 	}
 	data := new(interface{})
-	p.logger.Log("Converting object: %s", content)
+	p.logger.Logf("Converting object: %s", content)
 	err = json.Unmarshal([]byte(content), data)
 	if err != nil && (err.Error() == "invalid character '}' looking for beginning of object key string" || err.Error() == "invalid character ']' looking for beginning of value") {
 		i := strings.LastIndex(content, ",")
@@ -188,7 +188,7 @@ func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) 
 }
 
 func (p *parser) parseTable(startNode, endNode *html.Node, capitalize bool, headerText ...string) ([]*ParameterDef, error) {
-	p.logger.Log("parseTable called")
+	p.logger.Logf("parseTable called")
 	table, err := p.findNodeByHeader(startNode, endNode, []atom.Atom{atom.Table}, atom.Table, 1, headerText...)
 	if err != nil {
 		return nil, err
@@ -275,7 +275,7 @@ func (p *parser) findNodeByHeader(startNode, endNode *html.Node, containerType [
 		}
 		return res, nil
 	}
-	p.logger.Log("findNodeByHeader header not found %v", headerText)
+	p.logger.Logf("findNodeByHeader header not found %v", headerText)
 	return nil, nil
 }
 
