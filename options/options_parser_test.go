@@ -56,7 +56,7 @@ var extractFromCases = []Case{
 		input: map[string]interface{}{
 			"Password": 1,
 		},
-		err: "Password must be string",
+		err: "Password must be string.",
 	},
 	{
 		input: map[string]interface{}{
