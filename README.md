@@ -247,6 +247,16 @@ clc group list --from-file groups_with_servers.json
 
 ## Autocomplete
 
+Autocomplete currently works for:
+
+* Resources (server, data-center, group, etc)
+* Commands
+* Command options and arguments
+* The `--output` values
+* The `--profile` values
+* Values of the arguments that have a limited set of possible values (like `server create --type standard|hyperscale|bareMetal`)
+* Values of the arguments that are actually entity names
+
 ### Autocomplete for entity names
 
 Entity names is a special item in the autocomplete list because options are fetched from the server. Therefore such kind of autocomplete only works under certain circumstances and the process may take a relatively long time.
