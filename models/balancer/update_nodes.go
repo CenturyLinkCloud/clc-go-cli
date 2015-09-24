@@ -6,7 +6,7 @@ import (
 )
 
 type UpdateNodes struct {
-	LoadBalancer `argument:"composed" URIParam:"LoadBalancerId,DataCenter"`
+	LoadBalancer `argument:"composed" URIParam:"LoadBalancerId,DataCenter" json:"-"`
 	PoolId       string `valid:"required" URIParam:"yes"`
 	Nodes        []UpdateNode
 }

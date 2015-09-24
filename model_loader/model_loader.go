@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-const (
-	timeFormat = "2006-01-02 15:04:05"
-)
-
 func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error {
 	metaModel := reflect.ValueOf(inputModel)
 	if !metaModel.IsValid() {
@@ -99,12 +95,12 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 		var err error
 		var mismatch = true
 		if reflect.ValueOf(arg).Kind() == reflect.String {
-			if argTime, err = time.Parse(timeFormat, arg.(string)); err == nil {
+			if argTime, err = time.Parse(base.TIME_FORMAT, arg.(string)); err == nil {
 				mismatch = false
 			}
 		}
 		if mismatch {
-			return fmt.Errorf("Type mismatch: %s value must be datetime in `YYYY-MM-DD hh:mm:ss` format.", key)
+			return fmt.Errorf("Type mismatch: %s value must be datetime in `%s` format.", key, base.TIME_FORMAT_REPR)
 		} else {
 			field.Set(reflect.ValueOf(argTime))
 			return nil

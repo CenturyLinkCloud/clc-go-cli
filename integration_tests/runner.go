@@ -268,12 +268,6 @@ func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 			contentExample = map[string]interface{}{"nodes": array}
 		}
 	}
-	for _, param := range apiDef.ContentParameters {
-		if param.Type == "dateTime" {
-			contentExample.(map[string]interface{})[param.Name] = strings.Replace(contentExample.(map[string]interface{})[param.Name].(string), "T", " ", -1)
-			contentExample.(map[string]interface{})[param.Name] = strings.Replace(contentExample.(map[string]interface{})[param.Name].(string), "Z", "", -1)
-		}
-	}
 
 	exampleProperties := []convertProperty{
 		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "password", "rootPassword"},

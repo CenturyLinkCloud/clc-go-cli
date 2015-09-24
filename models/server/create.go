@@ -10,10 +10,6 @@ import (
 	"time"
 )
 
-const (
-	apiTimeFormat = "2006-01-02T15:04:05Z"
-)
-
 type CreateReq struct {
 	Name                   string `valid:"required"`
 	Description            string `json:",omitempty"`
@@ -86,7 +82,7 @@ func (c *CreateReq) Validate() error {
 func (c *CreateReq) ApplyDefaultBehaviour() error {
 	zeroTime := time.Time{}
 	if c.Ttl != zeroTime {
-		c.TtlString = c.Ttl.Format(apiTimeFormat)
+		c.TtlString = c.Ttl.Format(base.TIME_FORMAT)
 	}
 	return nil
 }

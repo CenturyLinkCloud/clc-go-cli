@@ -5,7 +5,7 @@ import (
 )
 
 type GetBillingReq struct {
-	Group `argument:"composed" URIParam:"GroupId"`
+	Group `argument:"composed" URIParam:"GroupId" json:"-"`
 }
 
 type GetBillingRes struct {
