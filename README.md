@@ -16,7 +16,7 @@ Click a link below to download the latest OS system release.
 
 #### On Linux:
 
-Extract the archive. Its contents look like
+Extract the archive. Its contents look like:
 
 ```
 clc-$VERSION-linux-amd64
@@ -40,50 +40,7 @@ The pkg file is an easy way to set up things. It installs everything for you. Th
 
 #### On Windows:
 
-Extract the archive. Its contents look like
-
-```
-clc-$VERSION-windows-x64
-|
- -- clc.exe
- -- autocomplete
-   |
-    -- powershell3_autocomplete.ps1
-```
-
-You can start using the binary right away, or put it somewhere on your PATH for convenience. To turn on PowerShell autocomplete execute the `powershell3_autocomplete.ps1` script.
-
-Note that autocomplete only works with PowerShell version >= 3. PowerShell v3 is distributed as a part of Windows Management Framework 3.0, which can be downloaded [from here](http://www.microsoft.com/en-us/download/details.aspx?id=34595). You can check the version by typing `$PSVersionTable.PSVersion`.
-
-### Install it
-
-#### On Linux:
-
-Extract the archive. Its contents look like
-
-```
-clc-$VERSION-linux-amd64
-|
- -- clc
- -- install_autocompletion
- -- autocomplete
-   |
-    -- bash_autocomplete
-```
-
-You can immediately start using the `clc` binary, or put it somewhere on your `PATH` for convenience. In order to turn on bash autocomplete you have to source the `bash_autocomplete` script. `install_autocompletion` copies this script to `~/.bash_completion/clc` and puts a line sourcing it to the `~/.bashrc` file so that autocomplete is turned on automatically in every terminal session.
-
-#### On MacOS:
-
-There are 2 options of installing the tool: a tar archive and a pkg file.
-
-The tar archive is pretty much the same as the one for Linux. The only difference is that `install_autocompletion` alters `~/.bash_profile`, not `~/.bashrc`.
-
-The pkg file is an easy way to set up things. It installs everything for you. The binary is placed at `/usr/local/bin`. The `~/.bash_completion/clc` script is created and a line sourcing this script is added to `~/.bash_profile` to enable bash autocomplete.
-
-#### On Windows:
-
-Extract the archive. Its contents look like
+Extract the archive. Its contents look like:
 
 ```
 clc-$VERSION-windows-x64
