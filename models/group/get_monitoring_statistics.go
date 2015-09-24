@@ -8,7 +8,7 @@ import (
 )
 
 type GetStatsReq struct {
-	Group          `argument:"composed" URIParam:"GroupId"`
+	Group          `argument:"composed" URIParam:"GroupId" json:"-"`
 	Start          string `URIParam:"yes"`
 	End            string `URIParam:"yes"`
 	SampleInterval string `URIParam:"yes"`

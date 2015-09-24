@@ -1,5 +1,5 @@
 package group
 
 type GetReq struct {
-	Group `URIParam:"GroupId" argument:"composed"`
+	Group `URIParam:"GroupId" argument:"composed" json:"-"`
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type RestoreReq struct {
-	Group           `argument:"composed" URIParam:"GroupId"`
+	Group           `argument:"composed" URIParam:"GroupId" json:"-"`
 	TargetGroupId   string
 	TargetGroupName string `json:"-"`
 }
