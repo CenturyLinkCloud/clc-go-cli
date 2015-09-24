@@ -156,6 +156,7 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	}
 	var resExampleString []byte
 	if apiDef.ResExample != nil {
+		r.modifyResExample(apiDef)
 		resExampleString, err = json.Marshal(apiDef.ResExample)
 		if err != nil {
 			return err
@@ -200,13 +201,13 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 		//if we can't unmarshal result - this is most likely a error message
 		return fmt.Errorf(res)
 	}
-	r.modifyResExample(apiDef)
 	return r.deepCompareObjects("", apiDef.ResExample, *obj)
 }
 
 func (r *runner) modifyResExample(apiDef *ApiDef) {
 	additionalProperties := []AdditionalProperty{
-		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}", "serversCount", 0},
+		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}", "serversCount", 1},
+		{"GET", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}", "os", "some-os"},
 	}
 	for _, prop := range additionalProperties {
 		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
