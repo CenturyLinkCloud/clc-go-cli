@@ -534,6 +534,21 @@ func init() {
 	})
 	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/reboot",
+		Resource: "server",
+		Command:  "reboot",
+		Help: help.Command{
+			Brief: []string{"Sends the reboot operation to a list of servers and adds operation to queue."},
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"Required. List of server IDs to perform reboot operation on."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/reset",
 		Resource: "server",
 		Command:  "reset",
