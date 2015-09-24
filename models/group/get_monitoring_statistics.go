@@ -2,12 +2,9 @@ package group
 
 import (
 	"fmt"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"regexp"
 	"time"
-)
-
-const (
-	timeFormat = "2006-01-02 15:04:05"
 )
 
 type GetStatsReq struct {
@@ -58,14 +55,14 @@ func (g *GetStatsReq) Validate() error {
 	if g.Start == "" || g.SampleInterval == "" {
 		return fmt.Errorf("For the types hourly and realtime both start and sample-interval must be set.")
 	}
-	_, err := time.Parse(timeFormat, g.Start)
+	_, err := time.Parse(base.TIME_FORMAT, g.Start)
 	if err != nil {
-		return fmt.Errorf("start must be in YYYY-MM-DD hh:mm:ss format.")
+		return fmt.Errorf("start must be in `%s` format.", base.TIME_FORMAT_REPR)
 	}
 	if g.End != "" {
-		_, err := time.Parse(timeFormat, g.End)
+		_, err := time.Parse(base.TIME_FORMAT, g.End)
 		if err != nil {
-			return fmt.Errorf("end must be in YYYY-MM-DD hh:mm:ss format.")
+			return fmt.Errorf("end must be in `%s` format.", base.TIME_FORMAT_REPR)
 		}
 	}
 	match, err := regexp.Match("^[[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}$", []byte(g.SampleInterval))
