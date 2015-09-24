@@ -19,19 +19,12 @@ type Pool struct {
 	Port        int64
 	Method      string
 	Persistence string
-	Nodes       []PoolNode
+	Nodes       []Node
 	Links       []models.LinkEntity
 }
 
-type PoolNode struct {
-	Name        string
-	Status      string
-	IpAddress   string
-	PrivatePort int64
-	Links       []models.LinkEntity `json:",omitempty"`
-}
-
 type Node struct {
+	Name        string `json:",omitempty"`
 	Status      string
 	IpAddress   string
 	PrivatePort int64
