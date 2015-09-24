@@ -1,10 +1,6 @@
 # CenturyLink CLI
 
-<<<<<<< HEAD
 This is the Command Line Interface (CLI) for the CenturyLink Cloud.
-=======
-Command Line Interface for CenturyLink Cloud.
->>>>>>> CenturyLinkCloud/master
 
 ## Getting Started
 
