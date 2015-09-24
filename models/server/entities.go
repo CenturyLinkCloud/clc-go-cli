@@ -50,7 +50,7 @@ type Details struct {
 }
 
 type IPAddresses struct {
-	Public   string `json:",omitempty"`
+	Public   string
 	Internal string
 }
 

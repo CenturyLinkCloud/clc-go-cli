@@ -211,7 +211,14 @@ func (r *runner) modifyResExample(apiDef *ApiDef) {
 	}
 	for _, prop := range additionalProperties {
 		if apiDef.Method == prop.Method && apiDef.Url == prop.Url {
-			apiDef.ResExample.(map[string]interface{})[prop.Name] = prop.Value
+			if obj, ok := apiDef.ResExample.(map[string]interface{}); ok {
+				obj[prop.Name] = prop.Value
+			}
+			if array, ok := apiDef.ResExample.([]interface{}); ok {
+				for _, obj := range array {
+					obj.(map[string]interface{})[prop.Name] = prop.Value
+				}
+			}
 		}
 	}
 }
@@ -347,7 +354,8 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 	case map[string]interface{}:
 		map1 := obj1.(map[string]interface{})
 		map2 := obj2.(map[string]interface{})
-		if len(map1) != len(map2) {
+		//defferent map length should be considered a valid case
+		/*if len(map1) != len(map2) {
 			var keys1, keys2 []string
 			for key1, _ := range map1 {
 				keys1 = append(keys1, key1)
@@ -356,7 +364,7 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 				keys2 = append(keys2, key2)
 			}
 			return fmt.Errorf("Different map length for property %s - %d %d. Keys:\n%v \n%v", prefix, len(map1), len(map2), keys1, keys2)
-		}
+		}*/
 		for key, value := range map1 {
 			var correspondingValue interface{}
 			for key2, val2 := range map2 {

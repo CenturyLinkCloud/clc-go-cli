@@ -13,8 +13,8 @@ type Entity struct {
 	Type         string
 	Status       string
 	ServersCount int64
-	Groups       []Entity `json:",omitempty"`
+	Groups       []Entity
 	Links        []models.LinkEntity
 	ChangeInfo   models.ChangeInfo
-	CustomFields []customfields.FullDef `json:",omitempty"`
+	CustomFields []customfields.FullDef
 }

@@ -14,8 +14,8 @@ type RestoreReq struct {
 
 type RestoreRes struct {
 	IsQueued     bool
-	Links        []models.LinkEntity `json:",omitempty"`
-	ErrorMessage string              `json:",omitempty"`
+	Links        []models.LinkEntity
+	ErrorMessage string
 }
 
 func (r *RestoreReq) Validate() error {

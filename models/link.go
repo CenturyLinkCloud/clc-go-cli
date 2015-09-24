@@ -7,9 +7,9 @@ import (
 type LinkEntity struct {
 	Rel   string
 	Href  string
-	Id    string   `json:",omitempty"`
-	Name  string   `json:",omitempty"`
-	Verbs []string `json:",omitempty"`
+	Id    string
+	Name  string
+	Verbs []string
 }
 
 func GetLink(links []LinkEntity, resource string) (string, error) {

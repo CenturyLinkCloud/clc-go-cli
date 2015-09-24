@@ -24,9 +24,9 @@ type Pool struct {
 }
 
 type Node struct {
-	Name        string `json:",omitempty"`
+	Name        string
 	Status      string
 	IpAddress   string
 	PrivatePort int64
-	Links       []models.LinkEntity `json:",omitempty"`
+	Links       []models.LinkEntity
 }
