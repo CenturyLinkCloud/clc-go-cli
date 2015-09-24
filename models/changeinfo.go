@@ -7,6 +7,6 @@ import (
 type ChangeInfo struct {
 	CreatedDate  time.Time
 	CreatedBy    string
-	ModifiedData time.Time
+	ModifiedDate time.Time
 	ModifiedBy   string
 }

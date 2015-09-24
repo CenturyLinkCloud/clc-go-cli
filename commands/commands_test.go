@@ -237,7 +237,7 @@ func TestWait(t *testing.T) {
 
 	status := commands.StatusResponse{}
 	proxy.Server([]proxy.Endpoint{
-		{"/authentication/login", proxy.LoginResponse},
+		{"/v2/authentication/login", proxy.LoginResponse},
 		{"/get/status", &status},
 	})
 	defer proxy.CloseServer()
@@ -368,7 +368,7 @@ func TestLoadGroupsAndServers(t *testing.T) {
 		{"/get/group/ca2", &group2},
 		{"/get/server/1", &server1},
 		{"/get/server/2", &server2},
-		{"/authentication/login", proxy.LoginResponse},
+		{"/v2/authentication/login", proxy.LoginResponse},
 	})
 	defer proxy.CloseServer()
 

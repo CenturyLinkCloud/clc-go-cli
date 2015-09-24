@@ -18,8 +18,10 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
 )
 
+const OriginalBaseUrl = "https://api.ctl.io/"
+
 //this made a variable instead of a constant for testing purpoises
-var BaseUrl = "https://api.tier3.com/v2/"
+var BaseUrl = OriginalBaseUrl
 
 type connection struct {
 	bearerToken  string
@@ -34,7 +36,7 @@ var NewConnection = func(username, password, accountAlias string, logger *log.Lo
 	cn.logger.Printf("Creating new connection. Username: %s", username)
 	loginReq := &authentication.LoginReq{Username: username, Password: password}
 	loginRes := &authentication.LoginRes{}
-	err := cn.ExecuteRequest("POST", BaseUrl+"authentication/login", loginReq, loginRes)
+	err := cn.ExecuteRequest("POST", BaseUrl+"v2/authentication/login", loginReq, loginRes)
 	if err != nil {
 		return nil, err
 	}
@@ -127,6 +129,9 @@ func FilterQuery(raw string) string {
 }
 
 func (cn *connection) prepareRequest(verb string, url string, reqModel interface{}) (req *http.Request, err error) {
+	if BaseUrl != OriginalBaseUrl {
+		url = strings.Replace(url, OriginalBaseUrl, BaseUrl, -1)
+	}
 	var inputData io.Reader
 	if reqModel != nil {
 		if verb == "POST" || verb == "PUT" || verb == "PATCH" {
@@ -134,7 +139,9 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 			if err != nil {
 				return nil, err
 			}
-			inputData = bytes.NewReader(b)
+			if string(b) != "{}" {
+				inputData = bytes.NewReader(b)
+			}
 		}
 		url = ExtractURIParams(url, reqModel)
 	}

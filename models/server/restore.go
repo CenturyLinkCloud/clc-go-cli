@@ -1,7 +1,7 @@
 package server
 
 type RestoreReq struct {
-	ServerId string `valid:"required" URIParam:"yes"`
+	ServerId string `json:"-" valid:"required" URIParam:"yes"`
 
 	TargetGroupId string `valid:"required"`
 }

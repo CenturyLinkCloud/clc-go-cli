@@ -16,7 +16,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/state"
 )
 
-func run(args []string) string {
+func Run(args []string) string {
 	if len(args) == 0 {
 		return usage()
 	}

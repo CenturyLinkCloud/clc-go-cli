@@ -72,7 +72,7 @@ var testCases = []modelLoaderTestCase{
 	// Loads time.Time field.
 	{
 		args: map[string]interface{}{
-			"FieldDateTime": "2012-02-13 15:40:00",
+			"FieldDateTime": "2012-02-13T15:40:00Z",
 		},
 		res: testModel{
 			FieldDateTime: time.Date(2012, time.February, 13, 15, 40, 0, 0, time.UTC),
@@ -178,7 +178,7 @@ var testCases = []modelLoaderTestCase{
 		args: map[string]interface{}{
 			"FieldDateTime": []float64{.1, .2},
 		},
-		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DD hh:mm:ss` format.",
+		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DDThh:mm:ssZ` format.",
 	},
 	// Loads JSON into string field as string.
 	{
@@ -253,7 +253,7 @@ var testCases = []modelLoaderTestCase{
 		args: map[string]interface{}{
 			"FieldDateTime": "2012 04 05",
 		},
-		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DD hh:mm:ss` format.",
+		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DDThh:mm:ssZ` format.",
 	},
 	// Does not accept any values for base.NilField's.
 	{

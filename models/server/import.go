@@ -12,12 +12,12 @@ type Import struct {
 	Name         string `valid:"required"`
 	Description  string `json:",omitempty"`
 	GroupId      string
-	GroupName    string
+	GroupName    string             `json:"-"`
 	PrimaryDns   string             `json:",omitempty"`
 	SecondaryDns string             `json:",omitempty"`
 	NetworkId    string             `json:",omitempty"`
 	NetworkName  string             `json:"-"`
-	RootPassword string             `valid:"required"`
+	RootPassword string             `json:"Password" valid:"required"`
 	Cpu          int64              `valid:"required"`
 	MemoryGb     int64              `valid:"required"`
 	Type         string             `valid:"required" oneOf:"standard,hyperscale"`

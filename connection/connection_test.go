@@ -74,7 +74,7 @@ func newConnection(t *testing.T, registerHandler bool, accountAlias string) (bas
 	if registerHandler {
 		resModel := &authentication.LoginRes{AccountAlias: "ALIAS", BearerToken: "token"}
 		reqModel := &authentication.LoginReq{Username: "user", Password: "password"}
-		addHandler(t, "/authentication/login", reqModel, resModel)
+		addHandler(t, "/v2/authentication/login", reqModel, resModel)
 	}
 	logger := log.New(os.Stdout, "", log.LstdFlags)
 	return connection.NewConnection("user", "password", accountAlias, logger)

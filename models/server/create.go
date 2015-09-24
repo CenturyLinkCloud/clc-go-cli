@@ -10,26 +10,22 @@ import (
 	"time"
 )
 
-const (
-	timeFormat = "2006-01-02 15:04:05"
-)
-
 type CreateReq struct {
 	Name                   string `valid:"required"`
 	Description            string `json:",omitempty"`
 	GroupId                string
 	GroupName              string `json:",omitempty"`
 	SourceServerId         string
-	SourceServerName       string             `json:"-"`
-	TemplateName           string             `json:",omitempty"`
-	IsManagedOs            bool               `json:",omitempty"`
-	IsManagedBackup        bool               `json:",omitempty"`
+	SourceServerName       string `json:"-"`
+	TemplateName           string `json:"-"`
+	IsManagedOs            bool   `json:"IsManagedOS"`
+	IsManagedBackup        bool
 	PrimaryDns             string             `json:",omitempty"`
 	SecondaryDns           string             `json:",omitempty"`
 	NetworkId              string             `json:",omitempty"`
 	NetworkName            string             `json:",omitempty"`
 	IpAddress              string             `json:",omitempty"`
-	RootPassword           string             `json:",omitempty"`
+	RootPassword           string             `json:"Password,omitempty"`
 	SourceServerPassword   string             `json:",omitempty"`
 	Cpu                    int64              `valid:"required"`
 	CpuAutoscalePolicyId   string             `json:",omitempty"`
@@ -86,7 +82,7 @@ func (c *CreateReq) Validate() error {
 func (c *CreateReq) ApplyDefaultBehaviour() error {
 	zeroTime := time.Time{}
 	if c.Ttl != zeroTime {
-		c.TtlString = c.Ttl.Format(timeFormat)
+		c.TtlString = c.Ttl.Format(base.TIME_FORMAT)
 	}
 	return nil
 }

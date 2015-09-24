@@ -6,13 +6,13 @@ import (
 )
 
 type UpdateNodes struct {
-	LoadBalancer `argument:"composed" URIParam:"LoadBalancerId,DataCenter"`
+	LoadBalancer `argument:"composed" URIParam:"LoadBalancerId,DataCenter" json:"-"`
 	PoolId       string `valid:"required" URIParam:"yes"`
 	Nodes        []UpdateNode
 }
 
 type UpdateNode struct {
-	Status      string
+	Status      string `json:",omitempty"`
 	IpAddress   string `valid:"required"`
 	PrivatePort int64  `valid:"required"`
 }

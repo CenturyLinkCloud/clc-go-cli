@@ -265,7 +265,7 @@ func TestAPIRelatedPropertiesAutocomplete(t *testing.T) {
 
 	proxy.Config()
 	defer proxy.CloseConfig()
-	proxy.Server([]proxy.Endpoint{{"/authentication/login", proxy.LoginResponse}})
+	proxy.Server([]proxy.Endpoint{{"/v2/authentication/login", proxy.LoginResponse}})
 	defer proxy.CloseServer()
 
 	cli.AllCommands = append(cli.AllCommands, testCommand)

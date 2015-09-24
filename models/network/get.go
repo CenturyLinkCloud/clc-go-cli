@@ -5,7 +5,7 @@ import (
 )
 
 type GetReq struct {
-	Network     `argument:"composed" URIParam:"NetworkId,DataCenter"`
+	Network     `argument:"composed" URIParam:"NetworkId,DataCenter" json:"-"`
 	IpAddresses string `URIParam:"yes" oneOf:"none,claimed,free,all"`
 }
 

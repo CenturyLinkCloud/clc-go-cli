@@ -1,8 +1,8 @@
 package firewall
 
 type UpdateReq struct {
-	DataCenter     string `valid:"required" URIParam:"yes"`
-	FirewallPolicy string `valid:"required" URIParam:"yes"`
+	DataCenter     string `json:"-" valid:"required" URIParam:"yes"`
+	FirewallPolicy string `json:"-" valid:"required" URIParam:"yes"`
 	Enabled        bool
 	Source         []string
 	Destination    []string
