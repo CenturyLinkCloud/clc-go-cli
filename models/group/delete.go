@@ -1,5 +1,5 @@
 package group
 
 type DeleteReq struct {
-	Group `argument:"composed" URIParam:"GroupId"`
+	Group `argument:"composed" URIParam:"GroupId" json:"-"`
 }

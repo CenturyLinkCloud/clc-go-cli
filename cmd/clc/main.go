@@ -18,7 +18,7 @@ func main() {
 		state.WriteToFile([]byte(output), "completion", 0666)
 		return
 	} else {
-		output = run(args)
+		output = Run(args)
 	}
 	fmt.Printf("%s\n", output)
 }

@@ -6,8 +6,8 @@ import (
 )
 
 type UpdateIPAddressReq struct {
-	Server   `argument:"composed" URIParam:"ServerId"`
-	PublicIp string `valid:"required" URIParam:"yes"`
+	Server   `json:"-" argument:"composed" URIParam:"ServerId"`
+	PublicIp string `json:"-" valid:"required" URIParam:"yes"`
 
 	Ports              []models.PortRestriction
 	SourceRestrictions []models.SourceRestriction

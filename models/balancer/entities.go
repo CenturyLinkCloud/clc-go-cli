@@ -24,6 +24,7 @@ type Pool struct {
 }
 
 type Node struct {
+	Name        string
 	Status      string
 	IpAddress   string
 	PrivatePort int64

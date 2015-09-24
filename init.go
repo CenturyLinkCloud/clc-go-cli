@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/help"
@@ -182,7 +183,7 @@ func init() {
 				},
 				{
 					"--ttl",
-					[]string{"Date/time that the server should be deleted. Ignored for bare metal servers."},
+					[]string{fmt.Sprintf("Date/time that the server should be deleted. The format is %s. Ignored for bare metal servers.", base.TIME_FORMAT)},
 				},
 				{
 					"--packages",
@@ -527,6 +528,21 @@ func init() {
 				{
 					"--server-ids",
 					[]string{"Required. List of server IDs to perform pause operation on."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&server.PowerReq{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/reboot",
+		Resource: "server",
+		Command:  "reboot",
+		Help: help.Command{
+			Brief: []string{"Sends the reboot operation to a list of servers and adds operation to queue."},
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"Required. List of server IDs to perform reboot operation on."},
 				},
 			},
 		},
@@ -982,7 +998,7 @@ func init() {
 				{
 					"--start",
 					[]string{
-						"DateTime (UTC) of the query window. Note that statistics are only held for 14 days.",
+						fmt.Sprintf("DateTime (UTC) of the query window. The format is `%s`. Note that statistics are only held for 14 days.", base.TIME_FORMAT_REPR),
 						"Start date (and optional end date) must be within the past 14 days.",
 						"Value is not required if choosing the latest query type.",
 					},
@@ -990,7 +1006,7 @@ func init() {
 				{
 					"--end",
 					[]string{
-						"DateTime (UTC) of the query window. Default is the current time in UTC.",
+						fmt.Sprintf("DateTime (UTC) of the query window. The format is `%s`. Default is the current time in UTC.", base.TIME_FORMAT_REPR),
 						"End date (and start date) must be within the past 14 days.",
 						"Not a required value if results should be up to the current time.",
 					},

@@ -10,7 +10,7 @@ type CreateReq struct {
 	Name            string `valid:"required"`
 	Description     string
 	ParentGroupId   string
-	ParentGroupName string
+	ParentGroupName string `json:"-"`
 	CustomFields    []customfields.Def
 }
 

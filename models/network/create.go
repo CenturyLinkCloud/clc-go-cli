@@ -1,5 +1,5 @@
 package network
 
 type CreateReq struct {
-	DataCenter string `valid:"required" URIParam:"yes"`
+	DataCenter string `json:"-" valid:"required" URIParam:"yes"`
 }

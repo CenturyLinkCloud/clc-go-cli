@@ -7,7 +7,11 @@ import (
 )
 
 type CreateReq struct {
+<<<<<<< HEAD
 	DataCenter         string `valid:"required" URIParam:"yes"`
+=======
+	DataCenter         string `json:"-" valid:"required" URIParam:"yes"`
+>>>>>>> CenturyLinkCloud/master
 	DestinationAccount string `valid:"required"`
 	Source             []string
 	Destination        []string

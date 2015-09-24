@@ -6,11 +6,11 @@ import (
 )
 
 type AddIPAddressReq struct {
-	Server `argument:"composed" URIParam:"ServerId"`
+	Server `json:"-" argument:"composed" URIParam:"ServerId"`
 
-	InternalIpAddress  string
-	Ports              []models.PortRestriction
-	SourceRestrictions []models.SourceRestriction
+	InternalIpAddress  string                     `json:",omitempty"`
+	Ports              []models.PortRestriction   `json:",omitempty"`
+	SourceRestrictions []models.SourceRestriction `json:",omitempty"`
 }
 
 func (ar *AddIPAddressReq) Validate() error {

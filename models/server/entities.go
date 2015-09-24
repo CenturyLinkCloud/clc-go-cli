@@ -34,7 +34,7 @@ type PackageDef struct {
 }
 
 type Details struct {
-	IPAddresses       []IPAddresses
+	IpAddresses       []IPAddresses
 	AlertPolicies     []alert.AlertPolicy
 	Cpu               int64
 	DiskCount         int64
@@ -46,7 +46,7 @@ type Details struct {
 	Disks             []Disk
 	Partitions        []Partition
 	Snapshots         []Snapshot
-	CustomFields      []customfields.Def
+	CustomFields      []customfields.FullDef
 }
 
 type IPAddresses struct {

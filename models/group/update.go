@@ -8,7 +8,7 @@ import (
 )
 
 type UpdateReq struct {
-	Group          `argument:"composed" URIParam:"GroupId"`
+	Group          `argument:"composed" URIParam:"GroupId" json:"-"`
 	PatchOperation []GroupPatchOperation `argument:"ignore"`
 
 	CustomFields    []customfields.Def

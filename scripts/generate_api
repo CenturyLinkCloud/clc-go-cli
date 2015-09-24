@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+echo -e "Generating Binary..."
+go build -o ./out/tests integration_tests/*.go
+
+echo -e "Generating API"
+./out/tests -generate -api-path $(readlink -f '.')/integration_tests/api.json
