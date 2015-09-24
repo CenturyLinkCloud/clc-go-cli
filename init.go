@@ -1526,16 +1526,12 @@ func init() {
 
 	registerCommandBase(&firewall.CreateReq{}, &firewall.CreateRes{}, commands.CommandExcInfo{
 		Verb:     "POST",
-		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{DataCenter}",
 		Resource: "firewall-policy",
 		Command:  "create",
 		Help: help.Command{
 			Brief: []string{"Creates a firewall policy for a given account in a given data center ('intra data center firewall policy')."},
 			Arguments: []help.Argument{
-				{
-					"--source-account-alias",
-					[]string{"Required. Short code for a particular account."},
-				},
 				{
 					"--data-center",
 					[]string{"Required. Short string representing the target data center for the new policy."},
@@ -1562,12 +1558,11 @@ func init() {
 					},
 				},
 			},
-			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.ListReq{}, &[]firewall.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}?destinationAccount={DestinationAccountAlias}",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{DataCenter}?destinationAccount={DestinationAccountAlias}",
 		Resource: "firewall-policy",
 		Command:  "list",
 		Help: help.Command{
@@ -1577,10 +1572,6 @@ func init() {
 			},
 			Arguments: []help.Argument{
 				{
-					"--source-account-alias",
-					[]string{"Required. Short code for a particular account."},
-				},
-				{
 					"--data-center",
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
@@ -1589,21 +1580,16 @@ func init() {
 					[]string{"Short code for a particular account."},
 				},
 			},
-			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.GetReq{}, &firewall.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "get",
 		Help: help.Command{
 			Brief: []string{"Gets the details of a specific firewall policy associated with a given account in a given data center (an 'intra data center firewall policy')."},
 			Arguments: []help.Argument{
-				{
-					"--source-account-alias",
-					[]string{"Required. Short code for a particular account."},
-				},
 				{
 					"--data-center",
 					[]string{"Required. Short string representing the data center you are querying."},
@@ -1613,21 +1599,16 @@ func init() {
 					[]string{"Required. ID of the firewall policy."},
 				},
 			},
-			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.UpdateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "PUT",
-		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "update",
 		Help: help.Command{
 			Brief: []string{"Updates a given firewall policy associated with a given account in a given data center (an 'intra data center firewall policy')."},
 			Arguments: []help.Argument{
-				{
-					"--source-account-alias",
-					[]string{"Required. Short code for a particular account."},
-				},
 				{
 					"--data-center",
 					[]string{"Required. Short string representing the data center associated with the policy of interest."},
@@ -1658,21 +1639,16 @@ func init() {
 					},
 				},
 			},
-			AccountAgnostic: true,
 		},
 	})
 	registerCommandBase(&firewall.DeleteReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "DELETE",
-		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{SourceAccountAlias}/{DataCenter}/{FirewallPolicy}",
+		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{DataCenter}/{FirewallPolicy}",
 		Resource: "firewall-policy",
 		Command:  "delete",
 		Help: help.Command{
 			Brief: []string{"Deletes a firewall policy for a given account in a given data center ('intra data center firewall policy')."},
 			Arguments: []help.Argument{
-				{
-					"--source-account-alias",
-					[]string{"Required. Short code for a particular account."},
-				},
 				{
 					"--data-center",
 					[]string{"Required. Short string representing the data center you are querying."},
@@ -1682,7 +1658,6 @@ func init() {
 					[]string{"Required. ID of the firewall policy."},
 				},
 			},
-			AccountAgnostic: true,
 		},
 	})
 

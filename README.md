@@ -1,6 +1,6 @@
 # CenturyLink CLI
 
-This is the Command Line Interface (CLI) for manipulating the CenturyLink Infrastructure as a Service (IaaS).
+This is the Command Line Interface (CLI) for the CenturyLink Cloud.
 
 ## Getting Started
 
@@ -8,9 +8,52 @@ This is the Command Line Interface (CLI) for manipulating the CenturyLink Infras
 
 Click a link below to download the latest OS system release.
 
-[MacOS](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-darwin.tar.gz) | [Linux](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-linux-amd64.tar.gz) | [Windows](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-windows-x64.zip)
+[MacOS tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-darwin.tar.gz) | [MacOS pkg](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21.pkg) | [Linux tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-linux-amd64.tar.gz) | [Windows zip](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-09-21/clc-2015-09-21-windows-x64.zip)
 
 **Note:** You can see previous releases and release notes on the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases).
+
+### Install it
+
+#### On Linux:
+
+Extract the archive. Its contents look like
+
+```
+clc-$VERSION-linux-amd64
+|
+ -- clc
+ -- install_autocompletion
+ -- autocomplete
+   |
+    -- bash_autocomplete
+```
+
+You can immediately start using the `clc` binary, or put it somewhere on your `PATH` for convenience. In order to turn on bash autocomplete you have to source the `bash_autocomplete` script. `install_autocompletion` copies this script to `~/.bash_completion/clc` and puts a line sourcing it to the `~/.bashrc` file so that autocomplete is turned on automatically in every terminal session.
+
+#### On MacOS:
+
+There are 2 options of installing the tool: a tar archive and a pkg file.
+
+The tar archive is pretty much the same as the one for Linux. The only difference is that `install_autocompletion` alters `~/.bash_profile`, not `~/.bashrc`.
+
+The pkg file is an easy way to set up things. It installs everything for you. The binary is placed at `/usr/local/bin`. The `~/.bash_completion/clc` script is created and a line sourcing this script is added to `~/.bash_profile` to enable bash autocomplete.
+
+#### On Windows:
+
+Extract the archive. Its contents look like
+
+```
+clc-$VERSION-windows-x64
+|
+ -- clc.exe
+ -- autocomplete
+   |
+    -- powershell3_autocomplete.ps1
+```
+
+You can start using the binary right away, or put it somewhere on your PATH for convenience. To turn on PowerShell autocomplete execute the `powershell3_autocomplete.ps1` script.
+
+Note that autocomplete only works with PowerShell version >= 3. PowerShell v3 is distributed as a part of Windows Management Framework 3.0, which can be downloaded [from here](http://www.microsoft.com/en-us/download/details.aspx?id=34595). You can check the version by typing `$PSVersionTable.PSVersion`.
 
 ### Log in to your IaaS account
 
@@ -43,7 +86,7 @@ The program uses a configuration file located at `$HOME/.clc/config.yml` on Linu
 
 * `user` and `password`: the credentials used for authentication.
 * `defaultformat`: a default output format, either `json`, `table` or `text`.
-* `profiles`: a hash of alternative credentials.
+* `profiles`: a hash of alternative credentials. See [Profiles](#profiles).
 * `defaultdatacenter`: a short code for a default data center. See [the corresponding section](#specify-a-default-data-center).
 
 An example of a configuration file:
@@ -59,7 +102,13 @@ profiles:
     passwod: pa33w0rd
 ```
 
-Choose a profile either via a `--profile` option or a `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+### Profiles
+
+Each profile is a pair of alternative credentials to use. Profiles are specified in the configuration file.
+
+To choose a profile for a single command invokation use either a `--profile` option or `CLC_PROFILE` environment variable: `clc server list --profile alice`.
+
+Also, you can set up your default credentials from a profile via the `login` command: `clc login --profile alice`. Be careful, though, because your previous defaults will be overriden this way. Therefore it is a grood idea to have a profile for every of your users.
 
 ### Specify a default data center
 
@@ -85,10 +134,14 @@ Or unset it using:
 clc data-center unset-default
 ```
 
+### Switch accounts
+
+Your account is determined automatically for you upon authentication. But you might also have sub accounts that have to be dealt with. Thus, the tool allows you to specify a custom account via an `--account-alias` option: `clc server list --account-alias MYSUBACC`.
+
 ### Identify entities by ID or by name
 
 There are many commands that depend on the identification of specific entities such as `server`, `group` or `network`.
-A common pattern for specyfing the entity ID in the command line is `--<entity>-id`, like `--server-id` or `--load-balancer-id`.
+A common pattern for specifying the entity ID in the command line is `--<entity>-id`, like `--server-id` or `--load-balancer-id`.
 
 Alternatively, the name of an entity can be specified instead of the ID (the common pattern is `--<entity>-name`). This approach has some important subtleties to mention:
 
@@ -206,15 +259,15 @@ clc group list --from-file groups_with_servers.json
 
 ## Autocomplete
 
-### Bash
+Autocomplete currently works for:
 
-Release tarballs for Linux/Unix/Darwin (starting from the release `2015-08-18`) contain 2 files for enabling autocomplete: `bash_autocomplete` and `install_autocompletion`. Execute `source bash_autocomplete` to turn on autocomplete for the current terminal session. `install_autocompletion` is provided for you to install autocomplete user-wide. The script copies the `bash_autocomplete` contents into `~/.bash_completion/clc` and updates `~/.bashrc` accordingly.
-
-### PowerShell
-
-Only v3 support is provided because previous versions do not support custom autocomplete handlers. PowerShell v3 is distributed as a part of Windows Management Framework 3.0, which can be downloaded [from here](http://www.microsoft.com/en-us/download/details.aspx?id=34595). You can check the version by typing `$PSVersionTable.PSVersion`.
-
-To turn on autocomplete execute `.\powershell3_autocomplete.ps1`. You can find the file in the release tarball for Windows.
+* Resources (server, data-center, group, etc)
+* Commands
+* Command options and arguments
+* The `--output` values
+* The `--profile` values
+* Values of the arguments that have a limited set of possible values (like `server create --type standard|hyperscale|bareMetal`)
+* Values of the arguments that are actually entity names
 
 ### Autocomplete for entity names
 
