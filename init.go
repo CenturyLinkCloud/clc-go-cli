@@ -2165,11 +2165,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
-					[]string{"ID of the autoscale policy being queried."},
+					[]string{"Required unless --policy-name is specified. ID of the autoscale policy being queried."},
 				},
 				{
 					"--policy-name",
-					[]string{"Name of the autoscale policy being queried."},
+					[]string{"Required unless --policy-id is specified. Name of the autoscale policy being queried."},
 				},
 			},
 		},
@@ -2184,11 +2184,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
 				},
 				{
 					"--server-name",
-					[]string{"Name of the server."},
+					[]string{"Required unless --server-id is specified. Name of the server."},
 				},
 			},
 		},
@@ -2203,19 +2203,19 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
 				},
 				{
 					"--server-name",
-					[]string{"Name of the server."},
+					[]string{"Required unless --server-id is specified. Name of the server."},
 				},
 				{
 					"--policy-id",
-					[]string{"The unique identifier of the autoscale policy to apply to the server."},
+					[]string{"Required unless --policy-name is specified. ID of the autoscale policy being queried."},
 				},
 				{
 					"--policy-name",
-					[]string{"Name of the autoscale policy to apply to the server."},
+					[]string{"Required unless --policy-id is specified. Name of the autoscale policy being queried."},
 				},
 			},
 		},
@@ -2230,11 +2230,11 @@ func init() {
 			Arguments: []help.Argument{
 				{
 					"--server-id",
-					[]string{"ID of the server."},
+					[]string{"Required unless --server-name is specified. ID of the server."},
 				},
 				{
 					"--server-name",
-					[]string{"Name of the server."},
+					[]string{"Required unless --server-id is specified. Name of the server."},
 				},
 			},
 		},

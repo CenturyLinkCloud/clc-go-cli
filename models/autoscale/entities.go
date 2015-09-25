@@ -8,12 +8,12 @@ type Entity struct {
 	Id                     string
 	Name                   string
 	ResourceType           string
-	ThresholdPeriodMinutes int
-	ScaleUpIncrement       int
+	ThresholdPeriodMinutes int64
+	ScaleUpIncrement       int64
 	Range                  Range
-	ScaleUpThreshold       int
-	scaleDownThreshold     int
-	scaleDownWindow        ScaleDownWindow
+	ScaleUpThreshold       int64
+	ScaleDownThreshold     int64
+	ScaleDownWindow        ScaleDownWindow
 	Links                  []models.LinkEntity
 }
 
