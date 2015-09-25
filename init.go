@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/help"
@@ -10,6 +11,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
 	"github.com/centurylinkcloud/clc-go-cli/models/autoscale"
 	"github.com/centurylinkcloud/clc-go-cli/models/balancer"
+	"github.com/centurylinkcloud/clc-go-cli/models/billing"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/firewall"
@@ -2021,6 +2023,33 @@ func init() {
 		Command:  "get",
 		Help: help.Command{
 			Brief: []string{"Retrieves the custom fields defined for a given account."},
+		},
+	})
+
+	registerCommandBase(&billing.GetInvoiceData{}, &billing.InvoiceData{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/invoice/{accountAlias}/{Year}/{Month}?pricingAccount={PricingAccountAlias}",
+		Resource: "billing",
+		Command:  "get-invoice-data",
+		Help: help.Command{
+			Brief: []string{
+				"Gets a list of invoicing data for a given account alias for a given month.",
+				"API NOTE: The data returned in this request are usage estimates only, and does not represent an actual bill.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--year",
+					[]string{"Required. Year of usage, in YYYY format."},
+				},
+				{
+					"--month",
+					[]string{"Monthly period of usage, a number between 1 and 12."},
+				},
+				{
+					"--pricing-account-alias",
+					[]string{"Short code of the account that sends the invoice for the accountAlias"},
+				},
+			},
 		},
 	})
 
