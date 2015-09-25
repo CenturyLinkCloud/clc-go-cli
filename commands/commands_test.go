@@ -157,22 +157,46 @@ func TestSetDefaultDataCenter(t *testing.T) {
 	proxy.Config()
 	defer proxy.CloseConfig()
 
+	datacenters := []datacenter.ListRes{{Id: "ca1"}}
+	proxy.Server([]proxy.Endpoint{
+		{"/v2/authentication/login", proxy.LoginResponse},
+		{"/v2/datacenters/ALIAS", datacenters},
+	})
+	defer proxy.CloseServer()
+
 	c := commands.NewSetDefaultDC(commands.CommandExcInfo{})
 	c.Input = &datacenter.SetDefault{DataCenter: "CA1"}
-	if c.IsOffline() != true {
-		t.Errorf("Invalid result. The command must be offline.")
-	}
 
-	got, err := c.ExecuteOffline()
+	cn, err := auth.AuthenticateCommand(&options.Options{User: "_", Password: "_"}, &config.Config{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert(t, got, "CA1 is now the default data center.")
+
+	err = c.Execute(cn)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert(t, *c.Output.(*string), "CA1 is now the default data center.")
 	var conf *config.Config
 	conf, err = config.LoadConfig()
 	if err != nil {
 		t.Fatal(err)
 	}
+	assert(t, conf.DefaultDataCenter, "CA1")
+
+	// Try setting an invalid code.
+	c.Input = &datacenter.SetDefault{DataCenter: "US"}
+	err = c.Execute(cn)
+	errMsg := ""
+	if err != nil {
+		errMsg = err.Error()
+	}
+	assert(t, errMsg, "US: there is no data center with such code")
+	conf, err = config.LoadConfig()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Check that the default data center has remained unchanged.
 	assert(t, conf.DefaultDataCenter, "CA1")
 }
 

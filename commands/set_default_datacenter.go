@@ -2,6 +2,9 @@ package commands
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 )
@@ -17,14 +20,10 @@ func NewSetDefaultDC(info CommandExcInfo) *SetDefaultDC {
 	return &s
 }
 
-func (s *SetDefaultDC) IsOffline() bool {
-	return true
-}
-
-func (s *SetDefaultDC) ExecuteOffline() (string, error) {
+func (s *SetDefaultDC) Execute(cn base.Connection) error {
 	conf, err := config.LoadConfig()
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	m, ok := s.Input.(*datacenter.SetDefault)
@@ -32,7 +31,27 @@ func (s *SetDefaultDC) ExecuteOffline() (string, error) {
 		panic("Input model must be of type *datacenter.SetDefault.")
 	}
 
+	datacenters := []datacenter.ListRes{}
+	URL := fmt.Sprintf("%s/v2/datacenters/{accountAlias}", base.URL)
+	err = cn.ExecuteRequest("GET", URL, nil, &datacenters)
+	if err != nil {
+		return err
+	}
+
+	valid := false
+	for _, d := range datacenters {
+		if strings.ToLower(d.Id) == strings.ToLower(m.DataCenter) {
+			valid = true
+			break
+		}
+	}
+	if !valid {
+		return fmt.Errorf("%s: there is no data center with such code", m.DataCenter)
+	}
+
 	conf.DefaultDataCenter = m.DataCenter
 	config.Save(conf)
-	return fmt.Sprintf("%s is now the default data center.", m.DataCenter), nil
+	success := fmt.Sprintf("%s is now the default data center.", m.DataCenter)
+	s.Output = &success
+	return nil
 }
