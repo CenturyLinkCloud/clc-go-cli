@@ -9,6 +9,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
+	"github.com/centurylinkcloud/clc-go-cli/models/autoscale"
 	"github.com/centurylinkcloud/clc-go-cli/models/balancer"
 	"github.com/centurylinkcloud/clc-go-cli/models/billing"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
@@ -2141,6 +2142,103 @@ func init() {
 			AccountAgnostic: true,
 		},
 	}))
+
+	registerCommandBase(&autoscale.ListReq{}, &[]autoscale.Entity{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/autoscalePolicies/{accountAlias}",
+		Resource: "autoscale-policy",
+		Command:  "list",
+		Help: help.Command{
+			Brief: []string{
+				"Gets a list of vertical autoscale policies for a given account.",
+			},
+			Arguments: []help.Argument{},
+		},
+	})
+	registerCommandBase(&autoscale.GetReq{}, &autoscale.Entity{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/autoscalePolicies/{accountAlias}/{PolicyId}",
+		Resource: "autoscale-policy",
+		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets a given vertical autoscale policy."},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"ID of the autoscale policy being queried."},
+				},
+				{
+					"--policy-name",
+					[]string{"Name of the autoscale policy being queried."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&autoscale.RemoveOnServerReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/cpuAutoscalePolicy",
+		Resource: "autoscale-policy",
+		Command:  "remove-on-server",
+		Help: help.Command{
+			Brief: []string{"Removes the autoscale policy from a given server, if the policy has first been applied to the server. "},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server."},
+				},
+				{
+					"--server-name",
+					[]string{"Name of the server."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&autoscale.SetOnServerReq{}, &autoscale.SetOnServerRes{}, commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/cpuAutoscalePolicy",
+		Resource: "autoscale-policy",
+		Command:  "set-on-server",
+		Help: help.Command{
+			Brief: []string{"Sets the autoscale policy for a specified server."},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server."},
+				},
+				{
+					"--server-name",
+					[]string{"Name of the server."},
+				},
+				{
+					"--policy-id",
+					[]string{"The unique identifier of the autoscale policy to apply to the server."},
+				},
+				{
+					"--policy-name",
+					[]string{"Name of the autoscale policy to apply to the server."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&autoscale.ViewOnServerReq{}, &autoscale.ViewOnServerRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/servers/{accountAlias}/{ServerId}/cpuAutoscalePolicy",
+		Resource: "autoscale-policy",
+		Command:  "view-on-server",
+		Help: help.Command{
+			Brief: []string{"Gets the autoscale policy of a given server, if a policy has been applied on the server."},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"ID of the server."},
+				},
+				{
+					"--server-name",
+					[]string{"Name of the server."},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
