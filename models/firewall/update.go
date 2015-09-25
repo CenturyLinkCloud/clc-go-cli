@@ -1,13 +1,8 @@
 package firewall
 
 type UpdateReq struct {
-<<<<<<< HEAD
-	DataCenter     string `valid:"required" URIParam:"yes"`
-	FirewallPolicy string `valid:"required" URIParam:"yes"`
-=======
 	DataCenter     string `json:"-" valid:"required" URIParam:"yes"`
 	FirewallPolicy string `json:"-" valid:"required" URIParam:"yes"`
->>>>>>> CenturyLinkCloud/master
 	Enabled        bool
 	Source         []string
 	Destination    []string
