@@ -360,6 +360,9 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 			return fmt.Errorf("Different map length for property %s - %d %d. Keys:\n%v \n%v", prefix, len(map1), len(map2), keys1, keys2)
 		}*/
 		for key, value := range map1 {
+			if key == "links" {
+				continue
+			}
 			var correspondingValue interface{}
 			for key2, val2 := range map2 {
 				if strings.ToLower(key) == strings.ToLower(key2) {

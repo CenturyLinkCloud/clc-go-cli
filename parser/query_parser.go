@@ -25,18 +25,31 @@ func ParseQuery(input interface{}, query string) (interface{}, error) {
 
 func ConvertToMapOrSlice(input interface{}) (interface{}, error) {
 	var model interface{}
-	modelSlice := make([]interface{}, 0)
-	modelStruct := make(map[string]interface{}, 0)
 
 	bytes, err := json.Marshal(input)
-	if err = json.Unmarshal(bytes, &modelSlice); err == nil {
-		model = modelSlice
-	} else if err = json.Unmarshal(bytes, &modelStruct); err == nil {
-		model = modelStruct
-	} else {
+	if err != nil {
 		return nil, err
 	}
-	return model, nil
+
+	err = json.Unmarshal(bytes, &model)
+	removeLinks(model)
+	return model, err
+}
+
+func removeLinks(input interface{}) {
+	switch input.(type) {
+	case map[string]interface{}:
+		m := input.(map[string]interface{})
+		delete(m, "Links")
+		for _, value := range m {
+			removeLinks(value)
+		}
+	case []interface{}:
+		array := input.([]interface{})
+		for _, child := range array {
+			removeLinks(child)
+		}
+	}
 }
 
 func parseQueryFields(query string) ([]string, []string, map[string]string, error) {
