@@ -99,15 +99,13 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldString,FieldUnknown",
-		res: map[string]interface{}{
-			"FieldString": "some string",
-		},
+		err:   "FieldUnknown: there is no such field in the result",
 	},
-	// Applies a query with all of the params being non-existent.
+	// Applies a query with a nested non-existent param.
 	{
 		input: testStruct,
-		query: "FieldUnknown,FieldYetUnknown",
-		res:   nil,
+		query: "FieldString.FieldUnknown",
+		err:   "FieldString.FieldUnknown: there is no such field in the result",
 	},
 	// Queries inner fields in structs.
 	{
@@ -149,14 +147,7 @@ var testQueryCases = []testParam{
 	{
 		input: testSlice,
 		query: "FieldStruct.{FieldNonExistent,FieldString}",
-		res: []interface{}{
-			map[string]interface{}{
-				"FieldString": "inner string 1",
-			},
-			map[string]interface{}{
-				"FieldString": "inner string 2",
-			},
-		},
+		err:   "FieldStruct.FieldNonExistent: there is no such field in the result",
 	},
 	// Queries inner slices.
 	{
@@ -221,6 +212,26 @@ var testQueryCases = []testParam{
 		input: testStruct,
 		query: "FieldSlice.{MyInt:FieldInt:}",
 		err:   "Invalid query: more than one semicolon was encountered within the alias expression.",
+	},
+	{
+		input: testStruct,
+		query: "FieldSlice.FieldInt,FieldSlice.FieldString",
+		err:   "If nested fields are queried, multiple fields can only be specified in a .{...} clause",
+	},
+	{
+		input: testStruct,
+		query: "FieldStruct,FieldSlice.{FieldInt,FieldString}",
+		err:   "If nested fields are queried, multiple fields can only be specified in a .{...} clause",
+	},
+	{
+		input: testStruct,
+		query: "FieldStruct.{FieldInt,FieldString.SomeField}",
+		err:   "FieldString.SomeField: you can not query inner objects in the .{...} clause",
+	},
+	{
+		input: testStruct,
+		query: "FieldStruct.{FieldInt,Inner:FieldString.SomeField}",
+		err:   "FieldString.SomeField: you can not query inner objects in the .{...} clause",
 	},
 }
 

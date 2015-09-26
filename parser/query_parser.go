@@ -6,9 +6,8 @@ import (
 	"strings"
 )
 
-// ParseQuery creates either a map[string]interface{} or []interface{} out of some struct or a slice of structs.
-// If the function returns a slice, its elements are either map[string]interface{} or []interface{} recursively.
-// Only the keys parsed from the given query string are left in the resulting maps.
+// ParseQuery accepts a map[string]interface{} or an []interface and
+// returns an object with only keys parsed from the given query string left.
 func ParseQuery(input interface{}, query string) (interface{}, error) {
 	path, fields, aliases, err := parseQueryFields(query)
 	if err != nil {
@@ -20,7 +19,7 @@ func ParseQuery(input interface{}, query string) (interface{}, error) {
 	} else {
 		current = path[0]
 	}
-	return parseModelByQuery(path, fields, input, current, getNextStep(path, current), aliases), nil
+	return parseModelByQuery(path, fields, input, current, getNextStep(path, current), aliases)
 }
 
 func ConvertToMapOrSlice(input interface{}) (interface{}, error) {
@@ -66,6 +65,11 @@ func parseQueryFields(query string) ([]string, []string, map[string]string, erro
 			return nil, nil, nil, err
 		}
 		parts := splitAndTrim(withAliases[0], ".")
+		for _, p := range parts {
+			if strings.Contains(p, ",") {
+				return nil, nil, nil, fmt.Errorf("If nested fields are queried, multiple fields can only be specified in a .{...} clause")
+			}
+		}
 		path = append(path, parts...)
 		path = append(path, fields[0])
 	} else {
@@ -78,6 +82,11 @@ func parseQueryFields(query string) ([]string, []string, map[string]string, erro
 				fields = parts
 			}
 		} else {
+			for _, p := range parts {
+				if strings.Contains(p, ".") {
+					return nil, nil, nil, fmt.Errorf("If nested fields are queried, multiple fields can only be specified in a .{...} clause")
+				}
+			}
 			fields = parts
 		}
 	}
@@ -97,35 +106,40 @@ func parseQueryAliases(raw string) (fields []string, aliases map[string]string, 
 				return nil, nil, fmt.Errorf("Invalid query: more than one semicolon was encountered within the alias expression.")
 			}
 			alias, field := m[0], m[1]
+			if strings.Contains(field, ".") {
+				return nil, nil, fmt.Errorf("%s: you can not query inner objects in the .{...} clause", field)
+			}
 			aliases[NormalizePropertyName(field)] = alias
 			fields = append(fields, field)
 		} else {
+			if strings.Contains(part, ".") {
+				return nil, nil, fmt.Errorf("%s: you can not query inner objects in the .{...} clause", part)
+			}
 			fields = append(fields, strings.Trim(part, "\t "))
 		}
 	}
 	return
 }
 
-func parseModelByQuery(path, fields []string, model interface{}, current, next string, aliases map[string]string) interface{} {
+func parseModelByQuery(path, fields []string, model interface{}, current, next string, aliases map[string]string) (interface{}, error) {
 	if slice, ok := model.([]interface{}); ok {
 		var result []interface{}
 		for _, el := range slice {
-			nextEl := parseModelByQuery(path, fields, el, current, next, aliases)
-			if nextEl != nil {
-				result = append(result, nextEl)
+			nextEl, err := parseModelByQuery(path, fields, el, current, next, aliases)
+			if err != nil {
+				return nil, err
 			}
+			result = append(result, nextEl)
 		}
-		if len(result) == 0 {
-			return nil
-		}
-		return result
+		return result, nil
 	} else if hash, ok := model.(map[string]interface{}); ok {
 		if next == "" {
-			result := filterFields(hash, fields, aliases)
-			if len(result) == 0 {
-				return nil
+			for _, f := range fields {
+				if _, ok := hash[f]; !ok {
+					return nil, noSuchPath(path, f)
+				}
 			}
-			return result
+			return filterFields(hash, fields, aliases), nil
 		} else {
 			var sub interface{}
 			if val, ok := hash[current]; ok {
@@ -133,12 +147,12 @@ func parseModelByQuery(path, fields []string, model interface{}, current, next s
 			} else if val, ok := hash[NormalizePropertyName(current)]; ok {
 				sub = val
 			} else {
-				return nil
+				return nil, noSuchPath(path, current)
 			}
 			return parseModelByQuery(path, fields, sub, next, getNextStep(path, next), aliases)
 		}
 	}
-	return nil
+	return nil, noSuchPath(path, current)
 }
 
 func filterFields(m map[string]interface{}, fields []string, aliases map[string]string) map[string]interface{} {
@@ -151,6 +165,24 @@ func filterFields(m map[string]interface{}, fields []string, aliases map[string]
 		}
 	}
 	return r
+}
+
+func noSuchPath(path []string, current string) error {
+	p := ""
+	finished := false
+	for _, s := range path {
+		if s == current {
+			p += current
+			finished = true
+			break
+		}
+		p = p + s + "."
+	}
+	if !finished {
+		p += current
+	}
+
+	return fmt.Errorf("%s: there is no such field in the result", p)
 }
 
 func contains(where []string, what string) bool {
