@@ -120,7 +120,7 @@ func TestDefaultBehaviour(t *testing.T) {
 		}
 		t.Logf("Executing %d test case.", i+1)
 		err := model_adjuster.ApplyDefaultBehaviour(&testCase.model)
-		res := testCase.res
+		res := testCase.model
 		if (err != nil || testCase.err != "") && err.Error() != testCase.err {
 			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
 		}
@@ -138,7 +138,7 @@ func TestIDInference(t *testing.T) {
 		}
 		t.Logf("Executing %d test case.", i+1)
 		err := model_adjuster.InferID(testCase.model, connStub{})
-		res := testCase.res
+		res := testCase.model
 
 		errMsg := ""
 		if err != nil {
