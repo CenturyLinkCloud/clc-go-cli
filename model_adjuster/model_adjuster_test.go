@@ -67,22 +67,18 @@ var applyDefaultTestCases = []modelAdjusterTestCase{
 	},
 	{
 		model: &testModel{
-			EssentialField: "some string",
-			OneOfField:     "value1",
+			OneOfField: "value1",
 		},
 		res: &testModel{
-			EssentialField: "some string",
-			OneOfField:     "vaLue1",
+			OneOfField: "vaLue1",
 		},
 	},
 	{
 		model: &testModel{
-			EssentialField: "some string",
-			OneOfField:     "vAlue2",
+			OneOfField: "vAlue2",
 		},
 		res: &testModel{
-			EssentialField: "some string",
-			OneOfField:     "ValuE2",
+			OneOfField: "ValuE2",
 		},
 	},
 	{
