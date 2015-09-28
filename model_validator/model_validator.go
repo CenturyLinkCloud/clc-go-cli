@@ -85,12 +85,3 @@ OverFields:
 	}
 	return nil
 }
-
-func contains(strs []string, s string) bool {
-	for _, el := range strs {
-		if s == el {
-			return true
-		}
-	}
-	return false
-}
