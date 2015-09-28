@@ -66,6 +66,7 @@ func validateEnums(model interface{}) error {
 	v, typ = meta, meta.Type()
 
 	numFields := typ.NumField()
+OverFields:
 	for i := 0; i < numFields; i++ {
 		name := typ.FieldByIndex([]int{i}).Name
 		opts, exist := FieldOptions(model, name)
@@ -74,9 +75,12 @@ func validateEnums(model interface{}) error {
 			if field.String() == "" {
 				continue
 			}
-			if !contains(opts, field.String()) {
-				return fmt.Errorf("%s value must be one of %s.", name, strings.Join(opts, ", "))
+			for _, o := range opts {
+				if strings.ToLower(o) == strings.ToLower(field.String()) {
+					continue OverFields
+				}
 			}
+			return fmt.Errorf("%s value must be one of %s.", name, strings.Join(opts, ", "))
 		}
 	}
 	return nil

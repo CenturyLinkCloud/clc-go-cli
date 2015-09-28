@@ -68,6 +68,15 @@ var testCases = []modelValidatorTestCase{
 		},
 		err: "",
 	},
+	// Test that it is case-insensitive.
+	{
+		model: testModel{
+			Enumerable:          "V2",
+			FieldRequired:       "checked",
+			FieldRequiredCustom: "checked",
+		},
+		err: "",
+	},
 	{
 		model: testModel{
 			Enumerable:          "v100",
