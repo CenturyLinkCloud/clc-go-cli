@@ -38,7 +38,7 @@ func (p *SetOnServerReq) InferID(cn base.Connection) error {
 }
 
 func (p *SetOnServerReq) GetNames(cn base.Connection, property string) ([]string, error) {
-	if property != "ServerName" {
+	if property == "ServerName" {
 		return p.Server.GetNames(cn, property)
 	}
 	return getNames(cn, property)
