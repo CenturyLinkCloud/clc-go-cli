@@ -1090,7 +1090,29 @@
         ],
         "ContentParameters": null,
         "ContentExample": null,
-        "ResExample": null,
+        "ResExample": {
+                "id": "3b6f26003c224596bc7e748a0adc97d5",
+                "links": [
+                    {
+                        "href": "/v2/autoscalePolicies/ALIAS/3b6f26003c224596bc7e748a0adc97d5",
+                        "rel": "self"
+                    }
+                ],
+                "name": "Production Database Scale Policy",
+                "range": {
+                    "max": 6,
+                    "min": 2
+                },
+                "resourceType": "cpu",
+                "scaleDownThreshold": 15,
+                "scaleDownWindow": {
+                    "end": "04:00",
+                    "start": "02:00"
+                },
+                "scaleUpIncrement": 1,
+                "scaleUpThreshold": 85,
+                "thresholdPeriodMinutes": 5
+            },
         "ResParameters": [
             {
                 "Name": "id",
