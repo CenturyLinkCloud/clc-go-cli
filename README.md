@@ -291,13 +291,29 @@ The documentation of the underlying HTTP API can be found [here](https://www.ctl
 Development is set up for Unix/Linux/Mac systems. Some of the
 instructions below may not work properly on Windows.
 
+
+### Preparing an environment
+
 * [Install Go](https://golang.org/).
 * Install Godep: `go get github.com/tools/godep`.
 * Clone this repo (do **not** use `go get`).
-* [Ensure your $GOPATH is set correctly](http://golang.org/cmd/go/#hdr-GOPATH_environment_variable).
+* [Ensure your $GOPATH is set correctly](http://golang.org/cmd/go/#hdr-GOPATH_environment_variable). Working in a clean environment without any other packages on $GOPATH is highly encouraged to avoid conflicts with the dependencies of the tool. Using a [gvm tool](https://github.com/moovweb/gvm) is a good choice for setting up a clean environment.
 * Install dependencies with Godep: enter the repo's root and `godep restore`.
-* Use the dev script to run commands: `./dev <resource> <command>`.
 * Install go vet: `go get code.google.com/p/go.tools/cmd/vet`.
-* Before commit check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it) and check that all tests pass via `./run_tests`.
+
+### The development
+
+* Use a `dev` script to run commands as you change the code:
+
+    ```
+    ./dev <resource> <command>
+    ```
+
+  This way you do not need to rebuild the tool every time you alter something.
+
+### Before commiting
+
+* Check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it).
+* Do not commit until the unit (`./run_tests`) and integration (`./run_integration_tests`) tests have passed.
 
 If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
