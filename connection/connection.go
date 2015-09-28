@@ -185,7 +185,7 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 		}
 	}
 	if stringPtr, ok := resModel.(*string); ok {
-		*stringPtr = fmt.Sprintf("API request completed successfully. Status code: %d.", res.StatusCode)
+		*stringPtr = ""
 		return
 	}
 	err = cn.decodeResponse(res, resModel)

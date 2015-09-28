@@ -20,5 +20,7 @@ func main() {
 	} else {
 		output = Run(args)
 	}
-	fmt.Printf("%s\n", output)
+	if output != "" {
+		fmt.Printf("%s\n", output)
+	}
 }
