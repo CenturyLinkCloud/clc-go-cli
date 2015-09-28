@@ -11,6 +11,7 @@ import (
 type testModel struct {
 	AuxiliaryField string
 	EssentialField string
+	OneOfField     string `oneOf:"vaLue1,ValuE2"`
 }
 
 type testModelNotAdjustable struct {
@@ -62,6 +63,26 @@ var applyDefaultTestCases = []modelAdjusterTestCase{
 		res: testModel{
 			AuxiliaryField: "",
 			EssentialField: "some string",
+		},
+	},
+	{
+		model: testModel{
+			EssentialField: "some string",
+			OneOfField:     "value1",
+		},
+		res: testModel{
+			EssentialField: "some string",
+			OneOfField:     "vaLue1",
+		},
+	},
+	{
+		model: testModel{
+			EssentialField: "some string",
+			OneOfField:     "vAlue2",
+		},
+		res: testModel{
+			EssentialField: "some string",
+			OneOfField:     "ValuE2",
 		},
 	},
 	{
