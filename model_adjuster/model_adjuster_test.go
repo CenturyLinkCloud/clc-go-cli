@@ -98,7 +98,7 @@ func TestDefaultBehaviour(t *testing.T) {
 			continue
 		}
 		t.Logf("Executing %d test case.", i+1)
-		err := model_adjuster.ApplyDefaultBehaviour(testCase.model)
+		err := model_adjuster.ApplyDefaultBehaviour(&testCase.model)
 		res := testCase.res
 		if (err != nil || testCase.err != "") && err.Error() != testCase.err {
 			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
