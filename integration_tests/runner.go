@@ -192,7 +192,7 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 	r.logger.Logf("Args: %v", args)
 	res := clc.Run(args)
 	r.logger.Logf("Result received: %s", res)
-	if res == "API request completed successfully. Status code: 200." {
+	if res == "" {
 		return nil
 	}
 	obj := new(interface{})
