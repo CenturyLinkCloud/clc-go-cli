@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	cli "github.com/centurylinkcloud/clc-go-cli"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	clc "github.com/centurylinkcloud/clc-go-cli/cmd/clc"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
 	"github.com/centurylinkcloud/clc-go-cli/connection"
@@ -16,6 +17,7 @@ import (
 	//"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Runner interface {
@@ -201,7 +203,29 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 		//if we can't unmarshal result - this is most likely a error message
 		return fmt.Errorf(res)
 	}
-	return r.deepCompareObjects("", apiDef.ResExample, *obj)
+	return r.deepCompareObjects("", r.postModifyResExample(apiDef.ResExample), *obj)
+}
+
+func (r *runner) postModifyResExample(obj interface{}) interface{} {
+	switch obj.(type) {
+	case map[string]interface{}:
+		m := obj.(map[string]interface{})
+		for key, value := range m {
+			m[key] = r.postModifyResExample(value)
+		}
+	case []interface{}:
+		array := obj.([]interface{})
+		for i, child := range array {
+			array[i] = r.postModifyResExample(child)
+		}
+	case string:
+		str := obj.(string)
+		t, err := time.Parse(base.SERVER_TIME_FORMAT, str)
+		if err == nil {
+			return t.Format(base.TIME_FORMAT)
+		}
+	}
+	return obj
 }
 
 func (r *runner) modifyResExample(apiDef *ApiDef) {
