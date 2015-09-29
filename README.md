@@ -286,11 +286,10 @@ Explore the available resources, commands, options and other useful guidance usi
 
 The documentation of the underlying HTTP API can be found [here](https://www.ctl.io/api-docs/v2/).
 
-## The Development Process
+## Contributing
 
 Development is set up for Unix/Linux/Mac systems. Some of the
 instructions below may not work properly on Windows.
-
 
 ### Preparing an environment
 
@@ -301,7 +300,9 @@ instructions below may not work properly on Windows.
 * Install dependencies with Godep: enter the repo's root and `godep restore`.
 * Install go vet: `go get code.google.com/p/go.tools/cmd/vet`.
 
-### The development
+### Developing
+
+* The TDD approach is recommended - write a failing test first, then fix it.
 
 * Use a `dev` script to run commands as you change the code:
 
@@ -311,9 +312,8 @@ instructions below may not work properly on Windows.
 
   This way you do not need to rebuild the tool every time you alter something.
 
-### Before commiting
+* Before making a pull request check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it).
 
-* Check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it).
 * Do not commit until the unit (`./run_tests`) and integration (`./run_integration_tests`) tests have passed.
 
-If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
+* If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
