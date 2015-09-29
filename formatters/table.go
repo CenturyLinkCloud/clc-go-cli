@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	table "github.com/ldmberman/tablewriter"
-	"math"
 	"sort"
 	"strings"
 )
@@ -130,14 +129,15 @@ func getMinWidth(keys, values []string, depth int) uint {
 
 	// 2 spaces around each of the cell values
 	// + 2 spaces around outer tables' borders for each level of nesting
-	// + 8 to keep it away from the end of the terminal a bit.
-	paddings := len(keys)*2 + depth*2 + 8
+	paddings := len(keys)*2 + depth*2
 
-	keysLen, valuesLen := 0, 0
+	words := 0
 	for i, k := range keys {
-		keysLen += len(k)
-		valuesLen += len(values[i])
+		if len(k) > len(values[i]) {
+			words += len(k)
+		} else {
+			words += len(values[i])
+		}
 	}
-	words := int(math.Max(float64(keysLen), float64(valuesLen)))
 	return uint(words + paddings + delimiters)
 }
