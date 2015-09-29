@@ -317,3 +317,7 @@ instructions below may not work properly on Windows.
 * Do not commit until the unit (`./run_tests`) and integration (`./run_integration_tests`) tests have passed.
 
 * If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
+
+## License
+
+The project is licensed under the [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
