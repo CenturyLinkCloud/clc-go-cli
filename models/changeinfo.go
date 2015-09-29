@@ -1,12 +1,10 @@
 package models
 
-import (
-	"time"
-)
+import "github.com/centurylinkcloud/clc-go-cli/base"
 
 type ChangeInfo struct {
-	CreatedDate  time.Time
+	CreatedDate  base.Time
 	CreatedBy    string
-	ModifiedDate time.Time
+	ModifiedDate base.Time
 	ModifiedBy   string
 }

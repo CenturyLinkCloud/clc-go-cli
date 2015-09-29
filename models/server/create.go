@@ -82,7 +82,7 @@ func (c *CreateReq) Validate() error {
 func (c *CreateReq) ApplyDefaultBehaviour() error {
 	zeroTime := time.Time{}
 	if c.Ttl != zeroTime {
-		c.TtlString = c.Ttl.Format(base.TIME_FORMAT)
+		c.TtlString = c.Ttl.Format(base.SERVER_TIME_FORMAT)
 	}
 	return nil
 }

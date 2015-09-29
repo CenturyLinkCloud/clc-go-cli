@@ -21,7 +21,7 @@ type GetStatsRes struct {
 }
 
 type Stats struct {
-	Timestamp                time.Time
+	Timestamp                base.Time
 	Cpu                      float64
 	CpuPercent               float64
 	MemoryMB                 float64
@@ -68,6 +68,24 @@ func (g *GetStatsReq) Validate() error {
 	match, err := regexp.Match("^[[:digit:]]{2}:[[:digit:]]{2}:[[:digit:]]{2}$", []byte(g.SampleInterval))
 	if err != nil || !match {
 		return fmt.Errorf("sample-interval must be in 02:00:00 format.")
+	}
+	return nil
+}
+
+func (g *GetStatsReq) ApplyDefaultBehaviour() error {
+	if g.Start != "" {
+		start, err := time.Parse(base.TIME_FORMAT, g.Start)
+		if err != nil {
+			return err
+		}
+		g.Start = start.Format(base.SERVER_TIME_FORMAT)
+	}
+	if g.End != "" {
+		end, err := time.Parse(base.TIME_FORMAT, g.End)
+		if err != nil {
+			return err
+		}
+		g.End = end.Format(base.SERVER_TIME_FORMAT)
 	}
 	return nil
 }

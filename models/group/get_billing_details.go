@@ -1,15 +1,13 @@
 package group
 
-import (
-	"time"
-)
+import "github.com/centurylinkcloud/clc-go-cli/base"
 
 type GetBillingReq struct {
 	Group `argument:"composed" URIParam:"GroupId" json:"-"`
 }
 
 type GetBillingRes struct {
-	Date   time.Time
+	Date   base.Time
 	Groups map[string]GroupBilling
 }
 
