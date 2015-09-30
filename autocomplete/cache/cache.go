@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const (
+var (
 	LONG_AUTOCOMPLETE_REFRESH_TIMEOUT = 30 // seconds
 )
 
@@ -23,7 +23,7 @@ func Get(key string) ([]string, bool) {
 		return nil, false
 	}
 
-	if time.Now().Sub(info.ModTime()) > time.Second*LONG_AUTOCOMPLETE_REFRESH_TIMEOUT {
+	if time.Now().Sub(info.ModTime()) > time.Second*time.Duration(LONG_AUTOCOMPLETE_REFRESH_TIMEOUT) {
 		return nil, false
 	}
 
