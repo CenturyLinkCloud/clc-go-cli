@@ -11,7 +11,7 @@ import (
 
 func TestCache(t *testing.T) {
 	proxy.Config()
-	defer proxy.Config()
+	defer proxy.CloseConfig()
 
 	// Touch empty cache.
 	got, exist := cache.Get("key")
