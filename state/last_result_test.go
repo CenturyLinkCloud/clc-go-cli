@@ -14,7 +14,7 @@ type Result struct {
 
 func TestLastResult(t *testing.T) {
 	proxy.Config()
-	defer proxy.Config()
+	defer proxy.CloseConfig()
 
 	r := Result{Status: "http://.../status"}
 	err := state.SaveLastResult(r)
