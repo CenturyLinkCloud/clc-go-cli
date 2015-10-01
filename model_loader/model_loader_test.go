@@ -154,12 +154,16 @@ var testCases = []modelLoaderTestCase{
 		},
 		err: "`can not be parsed into object` must be object specified either in JSON or in key=value,.. format.",
 	},
-	// Fails to load a JSON object into an array field.
+	// Loads an array value as is if it can't be parsed as JSON.
 	{
 		args: map[string]interface{}{
 			"FieldArray": `{"FieldString":"some string"}`,
 		},
-		err: fmt.Sprintf("`{%s:%s}` must be array specified either in JSON or in key=value,.. format.", `"FieldString"`, `"some string"`),
+		res: testModel{
+			FieldArray: []testFieldObject{{
+				FieldString: "some string",
+			}},
+		},
 	},
 	// Fails to load slices into fields of simple type.
 	{
