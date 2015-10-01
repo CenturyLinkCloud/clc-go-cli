@@ -152,7 +152,7 @@ var testCases = []modelLoaderTestCase{
 		args: map[string]interface{}{
 			"FieldObject": `can not be parsed into object`,
 		},
-		err: "`can not be parsed into object` must be object specified either in JSON or in key=value,.. format.",
+		err: "`can not be parsed into object` must be an object specified either in JSON or in key=value,.. format",
 	},
 	// Loads an array value as is if it can't be parsed as JSON.
 	{

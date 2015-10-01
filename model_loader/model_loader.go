@@ -217,7 +217,7 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 	if parsed, err := parser.ParseObject(argString); err == nil {
 		return parsed, nil
 	}
-	return nil, fmt.Errorf("`%s` must be object specified either in JSON or in key=value,.. format.", argString)
+	return nil, fmt.Errorf("`%s` must be an object specified either in JSON or in key=value,.. format", argString)
 }
 
 // Parses an object of type []interface{} either from JSON.
