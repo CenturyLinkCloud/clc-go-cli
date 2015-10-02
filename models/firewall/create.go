@@ -36,14 +36,14 @@ func (c *CreateReq) Validate() error {
 
 func validateSource(source []string) error {
 	if len(source) == 0 {
-		return fmt.Errorf("source: non-zero value required.")
+		return fmt.Errorf("sources: non-zero value required.")
 	}
 	return nil
 }
 
 func validateDestination(dest []string) error {
 	if len(dest) == 0 {
-		return fmt.Errorf("destination: non-zero value required.")
+		return fmt.Errorf("destinations: non-zero value required.")
 	}
 	return nil
 }
