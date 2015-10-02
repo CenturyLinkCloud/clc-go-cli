@@ -4,17 +4,17 @@ type UpdateReq struct {
 	DataCenter     string `json:"-" valid:"required" URIParam:"yes"`
 	FirewallPolicy string `json:"-" valid:"required" URIParam:"yes"`
 	Enabled        bool
-	Source         []string
-	Destination    []string
+	Sources        []string `json:"Source"`
+	Destinations   []string `json:"Destination"`
 	Ports          []string
 }
 
 func (u *UpdateReq) Validate() error {
-	err := validateSource(u.Source)
+	err := validateSource(u.Sources)
 	if err != nil {
 		return err
 	}
-	err = validateDestination(u.Destination)
+	err = validateDestination(u.Destinations)
 	if err != nil {
 		return err
 	}

@@ -7,10 +7,10 @@ import (
 )
 
 type CreateReq struct {
-	DataCenter         string `json:"-" valid:"required" URIParam:"yes"`
-	DestinationAccount string `valid:"required"`
-	Source             []string
-	Destination        []string
+	DataCenter         string   `json:"-" valid:"required" URIParam:"yes"`
+	DestinationAccount string   `valid:"required"`
+	Sources            []string `json:"Source"`
+	Destinations       []string `json:"Destination"`
 	Ports              []string
 }
 
@@ -19,11 +19,11 @@ type CreateRes struct {
 }
 
 func (c *CreateReq) Validate() error {
-	err := validateSource(c.Source)
+	err := validateSource(c.Sources)
 	if err != nil {
 		return err
 	}
-	err = validateDestination(c.Destination)
+	err = validateDestination(c.Destinations)
 	if err != nil {
 		return err
 	}

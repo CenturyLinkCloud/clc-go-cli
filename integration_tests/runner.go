@@ -298,6 +298,16 @@ func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 			contentExample.(map[string]interface{})[param.Name] = strings.Replace(contentExample.(map[string]interface{})[param.Name].(string), "T", " ", -1)
 			contentExample.(map[string]interface{})[param.Name] = strings.Replace(contentExample.(map[string]interface{})[param.Name].(string), "Z", "", -1)
 		}
+		if param.Name == "source" {
+			v := contentExample.(map[string]interface{})["source"]
+			contentExample.(map[string]interface{})["sources"] = v
+			delete(contentExample.(map[string]interface{}), "source")
+		}
+		if param.Name == "destination" {
+			v := contentExample.(map[string]interface{})["destination"]
+			contentExample.(map[string]interface{})["destinations"] = v
+			delete(contentExample.(map[string]interface{}), "destination")
+		}
 	}
 	exampleProperties := []convertProperty{
 		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "password", "rootPassword"},

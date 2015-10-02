@@ -1560,11 +1560,11 @@ func init() {
 					[]string{"Required. Short code for a particular account."},
 				},
 				{
-					"--source",
+					"--sources",
 					[]string{"Required. Source addresses for traffic on the originating firewall, specified using CIDR notation, on the originating firewall."},
 				},
 				{
-					"--destination",
+					"--destinations",
 					[]string{"Required. Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
 				},
 				{
@@ -1641,11 +1641,11 @@ func init() {
 					[]string{"Indicates if the policy is enabled (true) or disabled (false)."},
 				},
 				{
-					"--source",
+					"--sources",
 					[]string{"Required. Source addresses for traffic on the originating firewall, specified using CIDR notation."},
 				},
 				{
-					"--destination",
+					"--destinations",
 					[]string{"Required. Destination addresses for traffic on the terminating firewall, specified using CIDR notation."},
 				},
 				{
