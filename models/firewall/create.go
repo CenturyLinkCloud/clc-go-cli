@@ -2,8 +2,6 @@ package firewall
 
 import (
 	"fmt"
-
-	"github.com/centurylinkcloud/clc-go-cli/models"
 )
 
 type CreateReq struct {
@@ -12,10 +10,6 @@ type CreateReq struct {
 	Sources            []string `json:"Source"`
 	Destinations       []string `json:"Destination"`
 	Ports              []string
-}
-
-type CreateRes struct {
-	Links []models.LinkEntity
 }
 
 func (c *CreateReq) Validate() error {

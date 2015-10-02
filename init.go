@@ -1543,7 +1543,7 @@ func init() {
 		},
 	})
 
-	registerCommandBase(&firewall.CreateReq{}, &firewall.CreateRes{}, commands.CommandExcInfo{
+	registerCommandBase(&firewall.CreateReq{}, new(string), commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2-experimental/firewallPolicies/{accountAlias}/{DataCenter}",
 		Resource: "firewall-policy",
