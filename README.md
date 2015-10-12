@@ -1,4 +1,4 @@
-# CenturyLink CLI
+# CenturyLink Cloud CLI
 
 This is the Command Line Interface (CLI) for the CenturyLink Cloud.
 
@@ -6,7 +6,7 @@ This is the Command Line Interface (CLI) for the CenturyLink Cloud.
 
 ### Download the tool
 
-Click a link below to download the latest OS system release.
+Click a link below to download the latest release for each OS.
 
 [MacOS tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-10-02/clc-2015-10-02-darwin.tar.gz) | [MacOS pkg](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-10-02/clc-2015-10-02.pkg) | [Linux tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-10-02/clc-2015-10-02-linux-amd64.tar.gz) | [Windows zip](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2015-10-02/clc-2015-10-02-windows-x64.zip)
 
@@ -55,7 +55,7 @@ You can start using the binary right away, or put it somewhere on your PATH for 
 
 Note that autocomplete only works with PowerShell version >= 3. PowerShell v3 is distributed as a part of Windows Management Framework 3.0, which can be downloaded [from here](http://www.microsoft.com/en-us/download/details.aspx?id=34595). You can check the version by typing `$PSVersionTable.PSVersion`.
 
-### Log in to your IaaS account
+### Log in to your CenturyLink Cloud account
 
 You need to be authenticated with a username and password in order to execute CLI commands. There are plenty of ways to set the credentials:
 
