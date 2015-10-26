@@ -1091,28 +1091,26 @@
         "ContentParameters": null,
         "ContentExample": null,
         "ResExample": {
-                "id": "3b6f26003c224596bc7e748a0adc97d5",
-                "links": [
-                    {
-                        "href": "/v2/autoscalePolicies/ALIAS/3b6f26003c224596bc7e748a0adc97d5",
-                        "rel": "self"
-                    }
-                ],
-                "name": "Production Database Scale Policy",
-                "range": {
-                    "max": 6,
-                    "min": 2
-                },
-                "resourceType": "cpu",
-                "scaleDownThreshold": 15,
-                "scaleDownWindow": {
-                    "end": "04:00",
-                    "start": "02:00"
-                },
-                "scaleUpIncrement": 1,
-                "scaleUpThreshold": 85,
-                "thresholdPeriodMinutes": 5
+            "id": "9d14822c1e8541cea11703cf2b078c9d",
+            "name": "Production Database Scale Policy",
+            "resourceType": "cpu",
+            "thresholdPeriodMinutes": 5,
+            "scaleUpIncrement": 1,
+            "range": {
+                "max": 6,
+                "min": 2
             },
+            "scaleUpThreshold": 85,
+            "scaleDownThreshold": 15,
+            "scaleDownWindow": {
+                "start": "02:00",
+                "end": "04:00"
+            },
+            "links": [{
+                "rel": "self",
+                "href": "/v2/autoscalePolicies/ALIAS/9d14822c1e8541cea11703cf2b078c9d"
+            }]
+        },
         "ResParameters": [
             {
                 "Name": "id",
@@ -1721,6 +1719,11 @@
                     "description": "Windows 2012 R2 Standard 64-bit",
                     "hourlyRatePerSocket": 0.04,
                     "type": "windows2012R2Standard_64bit"
+                },
+                {
+                    "description": "Windows 2012 R2 Datacenter 64-bit",
+                    "hourlyRatePerSocket": 0.279,
+                    "type": "windows2012R2Datacenter_64bit"
                 }
             ],
             "skus": [
@@ -2066,21 +2069,21 @@
                 "Name": "destinationAccount",
                 "Type": "string",
                 "Description": "Short code for a particular account",
-                "IsRequired": false,
+                "IsRequired": true,
                 "Children": null
             },
             {
                 "Name": "source",
                 "Type": "string",
                 "Description": "Source addresses for traffic on the originating firewall, specified using ",
-                "IsRequired": false,
+                "IsRequired": true,
                 "Children": null
             },
             {
                 "Name": "destination",
                 "Type": "string",
                 "Description": "Destination addresses for traffic on the terminating firewall, specified using ",
-                "IsRequired": false,
+                "IsRequired": true,
                 "Children": null
             },
             {
@@ -3198,6 +3201,67 @@
     },
     {
         "Method": "GET",
+        "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/horizontalAutoscalePolicy/",
+        "UrlExample": "https://api.ctl.io/v2/groups/ALIAS/2a5c0b9662cf4fc8bf6180f139facdc0/horizontalAutoscalePolicy",
+        "UrlParameters": [
+            {
+                "Name": "AccountAlias",
+                "Type": "string",
+                "Description": "Short code for a particular account",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "GroupID",
+                "Type": "string",
+                "Description": "ID of the group being queried. Retrieved from query to parent group, or by looking at the URL of the Group in the Control Portal UI.",
+                "IsRequired": true,
+                "Children": null
+            }
+        ],
+        "ContentParameters": null,
+        "ContentExample": null,
+        "ResExample": {
+            "availableServers": 2,
+            "groupId": "fc06fd421e2ee41190460050568600e8",
+            "links": [
+                {
+                    "href": "/v2/groups/WHIM/fc06fd421e2ee41190460050568600e8/horizontalAutoscalePolicy",
+                    "rel": "self"
+                },
+                {
+                    "href": "/v2/groups/ALIAS/fc06fd421e2ee41190460050568600e8",
+                    "rel": "group"
+                },
+                {
+                    "href": "/v2/horizontalAutoscalePolicies/ALIAS/6cf7f7d139ee4d4f98a09bd0400b1a56",
+                    "rel": "horizontalAutoscalePolicy"
+                }
+            ],
+            "loadBalancer": {
+                "id": "bf82320cc96d42048fc7d5e41b0cdada",
+                "links": [
+                    {
+                        "href": "/v2/sharedLoadBalancers/ALIAS/WA1/bf82320cc96d42048fc7d5e41b0cdada",
+                        "rel": "self"
+                    }
+                ],
+                "name": "hotfix111314",
+                "privatePort": 300,
+                "publicIP": "1.1.1.1",
+                "publicPort": 443
+            },
+            "locationId": "WA1",
+            "policyId": "6cf7f7d139ee4d4f98a09bd0400b1a56",
+            "scaleDirection": "Up",
+            "scaleResourceReason": "MinimumResourceCount",
+            "targetSize": 1,
+            "timestamp": "2015-10-20T21:20:02Z"
+        },
+        "ResParameters": null
+    },
+    {
+        "Method": "GET",
         "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/statistics?type=hourly\u0026start={datetime}\u0026end={datetime}\u0026sampleInterval={dd:hh:mm:ss}",
         "UrlExample": "https://api.ctl.io/v2/groups/ALIAS/2a5c0b9662cf4fc8bf6180f139facdc0/statistics?type=hourly\u0026start=2014-04-05T07:52:47.302Z\u0026end=2014-04-07T07:52:47.302Z\u0026sampleInterval=01:00:00",
         "UrlParameters": [
@@ -3354,6 +3418,254 @@
                 "Children": null
             }
         ]
+    },
+    {
+        "Method": "GET",
+        "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/ScheduledActivities/",
+        "UrlExample": "https://api.ctl.io/v2/groups/ALIAS/2a5c0b9662cf4fc8bf6180f139facdc0/ScheduledActivities",
+        "UrlParameters": [
+            {
+                "Name": "AccountAlias",
+                "Type": "string",
+                "Description": "Short code for a particular account",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "GroupID",
+                "Type": "string",
+                "Description": "ID of the group being queried. Retrieved from query to parent group, or by looking at the URL of the Group in the Control Portal UI.",
+                "IsRequired": true,
+                "Children": null
+            }
+        ],
+        "ContentParameters": null,
+        "ContentExample": null,
+        "ResExample": [
+            {
+                "beginDateUTC": "2015-03-16T18:11:00Z",
+                "changeInfo": {
+                    "createdBy": "john.doe",
+                    "createdDate": "2015-03-16T18:12:02Z",
+                    "modifiedBy": "john.doe",
+                    "modifiedDate": "2015-10-20T22:20:25Z"
+                },
+                "customWeeklyDays": [
+                    "tue",
+                    "thu"
+                ],
+                "expire": "never",
+                "id": "95715f96f8a145d68ace797fe542c9ae",
+                "isExpired": false,
+                "links": [
+                    {
+                        "href": "/v2/groups/ALIAS/fc06fd421e2ee41190460050568600e8",
+                        "id": "fc06fd421e2ee41190460050568600e8",
+                        "name": "Default Group",
+                        "rel": "group"
+                    },
+                    {
+                        "href": "/v2/groups/ALIAS/fc06fd421e2ee41190460050568600e8/scheduledActivities/95715f96f8a145d68ace797fe542c9ae",
+                        "rel": "self",
+                        "verbs": [
+                            "GET",
+                            "PUT",
+                            "DELETE"
+                        ]
+                    }
+                ],
+                "locationId": "WA1",
+                "nextOccurrenceDateUTC": "2015-10-22T18:11:00Z",
+                "occurrenceCount": 0,
+                "repeat": "customWeekly",
+                "status": "on",
+                "timeZoneOffset": "-07:00:00",
+                "type": "shutdown"
+            }
+        ],
+        "ResParameters": null
+    },
+    {
+        "Method": "POST",
+        "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}",
+        "UrlExample": "https://api.ctl.io/v2/groups/ALIAS/2a5c0b9662cf4fc8bf6180f139facdc0",
+        "UrlParameters": [
+            {
+                "Name": "AccountAlias",
+                "Type": "string",
+                "Description": "Short code for a particular account",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "GroupID",
+                "Type": "string",
+                "Description": "ID of the group being queried. Retrieved from query to parent group, or by looking at the URL of the Group in the Control Portal UI.",
+                "IsRequired": true,
+                "Children": null
+            }
+        ],
+        "ContentParameters": [
+            {
+                "Name": "cpu",
+                "Type": "integer",
+                "Description": "Number of processors to configure the server with (1-16) (ignored for bare metal servers)",
+                "IsRequired": false,
+                "Children": null
+            },
+            {
+                "Name": "memoryGB",
+                "Type": "integer",
+                "Description": "Number of GB of memory to configure the server with (1-128) (ignored for bare metal servers)",
+                "IsRequired": false,
+                "Children": null
+            },
+            {
+                "Name": "networkId",
+                "Type": "string",
+                "Description": "ID of the Network. This can be retrieved from the Get Network List API operation.",
+                "IsRequired": false,
+                "Children": null
+            },
+            {
+                "Name": "primaryDns",
+                "Type": "string",
+                "Description": "Primary DNS to set on the server. If not supplied the default value set on the account will be used.",
+                "IsRequired": false,
+                "Children": null
+            },
+            {
+                "Name": "secondaryDns",
+                "Type": "string",
+                "Description": "Secondary DNS to set on the server. If not supplied the default value set on the account will be used.",
+                "IsRequired": false,
+                "Children": null
+            },
+            {
+                "Name": "templateName",
+                "Type": "string",
+                "Description": "Name of the template to use as the source. The list of available templates for a given account in a data center can be retrieved from the ",
+                "IsRequired": false,
+                "Children": null
+            }
+        ],
+        "ContentExample": {
+            "cpu": "1",
+            "memoryGB": "2",
+            "networkId": "fb46f06f8278421d8e94d78cf6409ba5",
+            "primaryDns": "8.8.8.8",
+            "secondaryDns": "8.8.4.4",
+            "templateName": "UBUNTU-10-64-TEMPLATE"
+        },
+        "ResExample": {
+            "cpu": {
+                "inherited": false,
+                "value": 1
+            },
+            "memoryGB": {
+                "inherited": false,
+                "value": 2
+            },
+            "networkId": {
+                "inherited": true,
+                "value": "ee600a2b4b734aac8ab0de2642597433"
+            },
+            "primaryDns": {
+                "inherited": false,
+                "value": "8.8.8.8"
+            },
+            "secondaryDns": {
+                "inherited": false,
+                "value": "8.8.4.4"
+            },
+            "templateName": {
+                "inherited": false,
+                "value": "UBUNTU-10-64-TEMPLATE"
+            }
+        },
+        "ResParameters": null
+    },
+    {
+        "Method": "PUT",
+        "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/horizontalAutoscalePolicy/",
+        "UrlExample": "https://api.ctl.io/v2/groups/ALIAS/2a5c0b9662cf4fc8bf6180f139facdc0/horizontalAutoscalePolicy",
+        "UrlParameters": [
+            {
+                "Name": "AccountAlias",
+                "Type": "string",
+                "Description": "Short code for a particular account",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "GroupID",
+                "Type": "string",
+                "Description": "ID of the group being queried. Retrieved from query to parent group, or by looking at the URL of the Group in the Control Portal UI.",
+                "IsRequired": true,
+                "Children": null
+            }
+        ],
+        "ContentParameters": [
+            {
+                "Name": "policyId",
+                "Type": "string",
+                "Description": "The unique identifier of the autoscale policy",
+                "IsRequired": true,
+                "Children": null
+            },
+            {
+                "Name": "loadBalancerPool",
+                "Type": "complex",
+                "Description": "Information about the load balancer",
+                "IsRequired": true,
+                "Children": null
+            }
+        ],
+        "ContentExample": {
+            "loadBalancerPool": {
+                "id": "bf82320cc96d42048fc7d5e41b0cdada",
+                "privatePort": 80,
+                "publicPort": 80
+            },
+            "policyId": "6cf7f7d139ee4d4f98a09bd0400b1a56"
+        },
+        "ResExample": {
+            "availableServers": 2,
+            "groupId": "fc06fd421e2ee41190460050568600e8",
+            "links": [
+                {
+                    "href": "/v2/groups/ALIAS/fc06fd421e2ee41190460050568600e8/horizontalAutoscalePolicy",
+                    "rel": "self"
+                },
+                {
+                    "href": "/v2/groups/ALIAS/fc06fd421e2ee41190460050568600e8",
+                    "rel": "group"
+                },
+                {
+                    "href": "/v2/horizontalAutoscalePolicies/ALIAS/6cf7f7d139ee4d4f98a09bd0400b1a56",
+                    "rel": "horizontalAutoscalePolicy"
+                }
+            ],
+            "loadBalancer": {
+                "id": "bf82320cc96d42048fc7d5e41b0cdada",
+                "links": [
+                    {
+                        "href": "/v2/sharedLoadBalancers/ALIAS/WA1/bf82320cc96d42048fc7d5e41b0cdada",
+                        "rel": "self"
+                    }
+                ],
+                "name": "hotfix111314",
+                "privatePort": 80,
+                "publicIP": "63.251.170.219",
+                "publicPort": 80
+            },
+            "locationId": "WA1",
+            "policyId": "6cf7f7d139ee4d4f98a09bd0400b1a56",
+            "scaleDirection": "None",
+            "scaleResourceReason": "Cpu",
+            "targetSize": 1
+        },
+        "ResParameters": null
     },
     {
         "Method": "PATCH",
@@ -4678,7 +4990,10 @@
                 "Children": null
             }
         ],
-        "ContentExample": null,
+        "ContentExample": [
+            "WA1ALIASWB01",
+            "WA1ALIASWB02"
+        ],
         "ResExample": [
             {
                 "isQueued": true,
