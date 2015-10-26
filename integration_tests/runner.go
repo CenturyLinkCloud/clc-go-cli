@@ -319,6 +319,7 @@ func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 		{"POST", "https://api.ctl.io/v2/vmImport/{accountAlias}", "memoryGB", "memoryGb"},
 		{"POST", "https://api.ctl.io/v2/antiAffinityPolicies/{accountAlias}", "location", "dataCenter"},
 		{"PUT", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/cpuAutoscalePolicy", "id", "policyId"},
+		{"PUT", "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/horizontalAutoscalePolicy/", "loadBalancerPool", "loadBalancer"},
 	}
 	data, err := json.Marshal(contentExample)
 	if err != nil {

@@ -1120,6 +1120,55 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&group.SetHAPolicy{}, &group.HAPolicy{}, commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/horizontalAutoscalePolicy/",
+		Resource: "group",
+		Command:  "set-horizontal-autoscale-policy",
+		Help: help.Command{
+			Brief: []string{"Applies a horizontal autoscale policy to a group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
+				},
+				{
+					"--policy-id",
+					[]string{"Required. The unique identifier of the horizontal autoscale policy."},
+				},
+				{
+					"--load-balancer",
+					[]string{
+						"Required. Information about the load balancer.",
+						"An object with the following required fields: Id, PublicPort, PrivatePort.",
+					},
+				},
+			},
+		},
+	})
+	registerCommandBase(&group.GetHAPolicy{}, &group.HAPolicy{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/horizontalAutoscalePolicy/",
+		Resource: "group",
+		Command:  "get-horizontal-autoscale-policy",
+		Help: help.Command{
+			Brief: []string{"Retrieves the details of a horizontal autoscale policy associated with a group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
