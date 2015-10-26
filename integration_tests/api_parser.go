@@ -114,7 +114,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 	if err != nil {
 		return nil, err
 	}
-	res.ContentExample, err = p.parseExample(reqSec, resSec, "Examples")
+	res.ContentExample, err = p.parseExample(p.findNextNode(reqSec, nil, "Request"), resSec, "Examples", "Example")
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (p *parser) parseApiNode(n *html.Node) (*ApiDef, error) {
 	if err != nil {
 		return nil, err
 	}
-	res.ResExample, err = p.parseExample(resSec, nil, "Examples")
+	res.ResExample, err = p.parseExample(resSec, nil, "Examples", "Example")
 	return res, err
 }
 
@@ -146,9 +146,9 @@ func (p *parser) parseUrl(startNode, endNode *html.Node, headerText string) (str
 	return array[0], strings.TrimSpace(array[1]), nil
 }
 
-func (p *parser) parseExample(startNode, endNode *html.Node, headerText string) (interface{}, error) {
+func (p *parser) parseExample(startNode, endNode *html.Node, headerText ...string) (interface{}, error) {
 	p.logger.Logf("parseExample called")
-	res, err := p.findNodeByHeader(startNode, endNode, []atom.Atom{atom.Pre, atom.P}, atom.Code, 2, headerText)
+	res, err := p.findNodeByHeader(startNode, endNode, []atom.Atom{atom.Pre, atom.P}, atom.Code, 2, headerText...)
 	if err != nil {
 		return nil, err
 	}
