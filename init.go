@@ -1169,6 +1169,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&group.GetScheduledActivities{}, &[]group.ScheduledActivities{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/ScheduledActivities/",
+		Resource: "group",
+		Command:  "get-scheduled-activities",
+		Help: help.Command{
+			Brief: []string{"Gets the scheduled activities associated with a group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",

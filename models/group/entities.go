@@ -40,3 +40,22 @@ type HAPolicy struct {
 	LoadBalancer        LBForHA
 	Timestamp           base.Time
 }
+
+type ScheduledActivities struct {
+	Id                    string
+	LocationId            string
+	ChangeInfo            models.ChangeInfo
+	Status                string
+	Type                  string
+	BeginDateUTC          base.Time
+	Repeat                string
+	CustomWeeklyDays      []string
+	Expire                string
+	ExpireCount           int64
+	ExpireDateUTC         base.Time
+	TimeZoneOffset        string
+	IsExpired             bool
+	LastOccurrenceDateUTC base.Time
+	OccurrenceCount       int64
+	NextOccurrenceDateUTC base.Time
+}
