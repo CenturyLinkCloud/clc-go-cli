@@ -59,3 +59,42 @@ type ScheduledActivities struct {
 	OccurrenceCount       int64
 	NextOccurrenceDateUTC base.Time
 }
+
+type CPU struct {
+	Value     int64
+	Inherited bool
+}
+
+type Memory struct {
+	Value     int64
+	Inherited bool
+}
+
+type Network struct {
+	Value     string
+	Inherited bool
+}
+
+type PrimaryDNS struct {
+	Value     string
+	Inherited bool
+}
+
+type SecondaryDNS struct {
+	Value     string
+	Inherited bool
+}
+
+type TemplateName struct {
+	Value     string
+	Inherited bool
+}
+
+type Defaults struct {
+	Cpu          CPU
+	MemoryGB     Memory
+	NetworkId    Network
+	PrimaryDns   PrimaryDNS
+	SecondaryDns SecondaryDNS
+	TemplateName TemplateName
+}

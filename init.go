@@ -1188,6 +1188,49 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&group.SetDefaults{}, &group.Defaults{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/defaults",
+		Resource: "group",
+		Command:  "set-defaults",
+		Help: help.Command{
+			Brief: []string{"Sets the defaults for a group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
+				},
+				{
+					"--cpu",
+					[]string{"Number of processors to configure the server with (1-16) (ignored for bare metal servers)"},
+				},
+				{
+					"--memory-gb",
+					[]string{"Number of GB of memory to configure the server with (1-128) (ignored for bare metal servers)"},
+				},
+				{
+					"--network-id",
+					[]string{"ID of the Network."},
+				},
+				{
+					"--primary-dns",
+					[]string{"Primary DNS to set on the server. If not supplied the default value set on the account will be used."},
+				},
+				{
+					"--secondary-dns",
+					[]string{"Secondary DNS to set on the server. If not supplied the default value set on the account will be used."},
+				},
+				{
+					"--template-name",
+					[]string{"Name of the template to use as the source. (Ignored for bare metal servers.)"},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
