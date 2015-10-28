@@ -3487,7 +3487,7 @@
     },
     {
         "Method": "POST",
-        "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}",
+        "Url": "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/defaults",
         "UrlExample": "https://api.ctl.io/v2/groups/ALIAS/2a5c0b9662cf4fc8bf6180f139facdc0",
         "UrlParameters": [
             {
