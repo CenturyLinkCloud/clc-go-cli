@@ -98,8 +98,8 @@ defaultformat: "table"
 defaultdatacenter: "CA1"
 profiles:
   alice:
-    username: alice
-    passwod: pa33w0rd
+    user: alice
+    password: pa33w0rd
 ```
 
 ### Profiles
