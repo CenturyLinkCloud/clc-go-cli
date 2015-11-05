@@ -11,6 +11,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"reflect"
+	"runtime"
 	"strings"
 
 	"github.com/centurylinkcloud/clc-go-cli/base"
@@ -149,6 +150,7 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 	url = FilterQuery(url)
 	req, err = http.NewRequest(verb, url, inputData)
 	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("User-Agent", fmt.Sprintf("clc-go-cli-%s-%s", base.VERSION, runtime.GOOS))
 	if err != nil {
 		return nil, err
 	}
