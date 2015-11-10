@@ -318,6 +318,10 @@ instructions below may not work properly on Windows.
 
 * If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
 
+## Security
+
+The CenturyLink Cloud Go CLI leverages our public API that serves all requests over HTTPS. Therefore credentials are encrypted when being transfered. Credentials stored on the local machine in the config.yml are not encrypted during installation and you are encouraged to use industry standard encryption tools in order to provide additional protection for them.
+
 ## License
 
 The project is licensed under the [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
