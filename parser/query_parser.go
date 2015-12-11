@@ -135,7 +135,7 @@ func parseModelByQuery(path, fields []string, model interface{}, current, next s
 	} else if hash, ok := model.(map[string]interface{}); ok {
 		if next == "" {
 			for _, f := range fields {
-				if _, ok := hash[f]; !ok {
+				if _, ok := hash[NormalizePropertyName(f)]; !ok {
 					return nil, noSuchPath(path, f)
 				}
 			}

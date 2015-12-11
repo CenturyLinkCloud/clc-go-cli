@@ -1,9 +1,10 @@
 package parser_test
 
 import (
-	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
 	"testing"
+
+	"github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 type testParam struct {
@@ -90,6 +91,15 @@ var testQueryCases = []testParam{
 	{
 		input: testStruct,
 		query: "FieldString,FieldInt",
+		res: map[string]interface{}{
+			"FieldString": "some string",
+			"FieldInt":    1.,
+		},
+	},
+	// Understands keys with the first letter both in the lower and in the upper case.
+	{
+		input: testStruct,
+		query: "fieldString,fieldInt",
 		res: map[string]interface{}{
 			"FieldString": "some string",
 			"FieldInt":    1.,
