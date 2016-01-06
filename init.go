@@ -1188,6 +1188,61 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&group.SetScheduledActivities{}, &group.ScheduledActivities{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/ScheduledActivities/",
+		Resource: "group",
+		Command:  "set-scheduled-activities",
+		Help: help.Command{
+			Brief: []string{"Sets scheduled activities for a group."},
+			Arguments: []help.Argument{
+				{
+					"--group-id",
+					[]string{"Required unless --group-name is specified. ID of the group being queried."},
+				},
+				{
+					"--group-name",
+					[]string{"Required unless --group-id is specified. Name of the group being queried."},
+				},
+				{
+					"--status",
+					[]string{"Required. State of scheduled activity: on or off."},
+				},
+				{
+					"--type",
+					[]string{"Required. Type of activity: archive, createsnapshot, delete, deletesnapshot, pause, poweron, reboot, shutdown."},
+				},
+				{
+					"--begin-date-utc",
+					[]string{"Required. Time when scheduled activity should start."},
+				},
+				{
+					"--repeat",
+					[]string{"Required. How often to repeat: never, daily, weekly, monthly, customWeekly."},
+				},
+				{
+					"--custom-weekly-days",
+					[]string{"Required if --repeat is customWeekly. An array of strings for the days of the week: sun, mon, tue, wed, thu, fri, sat."},
+				},
+				{
+					"--expire",
+					[]string{"Required. When the scheduled activities are set to expire: never, afterDate, afterCount."},
+				},
+				{
+					"--expire-count",
+					[]string{"Required if --expire is afterCount. Number of times scheduled activity should run before expiring."},
+				},
+				{
+					"--expire-date-utc",
+					[]string{"Required if --expire is afterDate. When the scheduled activity should expire."},
+				},
+				{
+					"--time-zone-offset",
+					[]string{"Required. To display in local time."},
+				},
+			},
+		},
+	})
 	registerCommandBase(&group.SetDefaults{}, &group.Defaults{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2/groups/{accountAlias}/{GroupId}/defaults",
