@@ -314,7 +314,7 @@ instructions below may not work properly on Windows.
 
 * Before making a pull request check that `gofmt -d=true ./..` and `go vet ./...` do not produce any output (except for that coming from `Godeps/_workspace` - ignore it).
 
-* Do not commit until the unit (`./run_tests`) and integration (`./run_integration_tests`) tests have passed.
+* Do not commit until the unit tests have passed (`./run_tests`).
 
 * If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
 
