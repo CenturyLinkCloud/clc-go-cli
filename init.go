@@ -1362,7 +1362,7 @@ func init() {
 			},
 		},
 	})
-	registerCommandBase(&network.CreateReq{}, &network.Entity{}, commands.CommandExcInfo{
+	registerCommandBase(&network.CreateReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/claim",
 		Resource: "network",
