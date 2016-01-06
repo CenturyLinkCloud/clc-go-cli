@@ -2,10 +2,13 @@ package model_validator
 
 import (
 	"fmt"
-	"github.com/asaskevich/govalidator"
-	"github.com/centurylinkcloud/clc-go-cli/base"
 	"reflect"
 	"strings"
+
+	"github.com/asaskevich/govalidator"
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/errors"
+	"github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 func ValidateModel(model interface{}) error {
@@ -15,7 +18,10 @@ func ValidateModel(model interface{}) error {
 	_, err := govalidator.ValidateStruct(model)
 	if err != nil {
 		parts := strings.Split(err.Error(), ";")
-		errors := parts[:len(parts)-1]
+		errors := []string{}
+		for _, p := range parts[:len(parts)-1] {
+			errors = append(errors, pretifyError(p))
+		}
 		return fmt.Errorf(strings.Join(errors, "\n"))
 	}
 	err = validateEnums(model)
@@ -84,4 +90,16 @@ OverFields:
 		}
 	}
 	return nil
+}
+
+func pretifyError(err string) string {
+	// FIXME Since error messages can't be customized in govalidator we parse
+	// messages manually here.
+	parts := strings.Split(err, ":")
+	field := parts[0]
+	msg := parts[1]
+	if strings.Contains(msg, "non zero value required") {
+		return errors.EmptyField(strings.TrimPrefix(parser.DenormalizePropertyName(field), "--")).Error()
+	}
+	return err
 }

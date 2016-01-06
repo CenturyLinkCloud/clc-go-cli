@@ -1,8 +1,8 @@
 package server
 
 import (
-	"fmt"
 	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/errors"
 )
 
 type List struct {
@@ -12,7 +12,7 @@ type List struct {
 
 func (l *List) Validate() error {
 	if !l.All.Set && l.DataCenter == "" {
-		return fmt.Errorf("DataCenter: non zero value required")
+		return errors.EmptyField("data-center")
 	}
 	return nil
 }

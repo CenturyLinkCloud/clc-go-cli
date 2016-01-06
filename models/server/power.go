@@ -2,7 +2,8 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
+
+	"github.com/centurylinkcloud/clc-go-cli/errors"
 )
 
 type PowerReq struct {
@@ -15,7 +16,7 @@ func (pr *PowerReq) MarshalJSON() ([]byte, error) {
 
 func (pr *PowerReq) Validate() error {
 	if len(pr.ServerIds) == 0 {
-		return fmt.Errorf("ServerIds: non zero value required")
+		return errors.EmptyField("server-ids")
 	}
 	return nil
 }

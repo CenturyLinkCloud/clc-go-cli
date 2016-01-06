@@ -2,8 +2,9 @@ package model_validator_test
 
 import (
 	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/model_validator"
 	"testing"
+
+	"github.com/centurylinkcloud/clc-go-cli/model_validator"
 )
 
 type testModel struct {
@@ -44,7 +45,7 @@ var testCases = []modelValidatorTestCase{
 		model: testModel{
 			FieldRequired: "",
 		},
-		err: "FieldRequired: non zero value required",
+		err: "The field-required field must be set and non-empty",
 	},
 	{
 		model: testModel{

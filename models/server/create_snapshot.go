@@ -1,8 +1,6 @@
 package server
 
-import (
-	"fmt"
-)
+import "github.com/centurylinkcloud/clc-go-cli/errors"
 
 type CreateSnapshotReq struct {
 	SnapshotExpirationDays int64 `valid:"required"`
@@ -11,7 +9,7 @@ type CreateSnapshotReq struct {
 
 func (cr *CreateSnapshotReq) Validate() error {
 	if len(cr.ServerIds) == 0 {
-		return fmt.Errorf("ServerIds: non zero value required")
+		return errors.EmptyField("server-ids")
 	}
 	return nil
 }
