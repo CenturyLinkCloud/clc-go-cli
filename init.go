@@ -2461,6 +2461,28 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.List{}, &db.ListRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/list?status={Status}&dataCenter={DataCenter}",
+		Resource: "db",
+		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Shows the database subscriptions"},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Queries by the data center."},
+				},
+				{
+					"--status",
+					[]string{
+						"Queries by the subscription status.",
+						"Either 'PENDING' or 'READY' or 'ACTIVE' or 'DELETED' or 'FAILED' or 'UNKNOWN' or 'SUCCESS' or 'CONFIGURING' or 'TERMINATED'.",
+					},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
