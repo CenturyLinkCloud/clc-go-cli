@@ -201,6 +201,15 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 		*stringPtr = ""
 		return
 	}
+	if binaryModel, ok := resModel.(*base.BinaryResponse); ok {
+		var byts []byte
+		byts, err = ioutil.ReadAll(res.Body)
+		if err != nil {
+			return err
+		}
+		*binaryModel = base.BinaryResponse(byts)
+		return
+	}
 	err = cn.decodeResponse(res, resModel)
 	return
 }

@@ -35,3 +35,5 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 func (t *Time) MarshalJSON() ([]byte, error) {
 	return json.Marshal(string(*t))
 }
+
+type BinaryResponse string
