@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"reflect"
+
+	"github.com/centurylinkcloud/clc-go-cli/base"
 )
 
 func ArgumentsToJSON(args map[string]interface{}, model interface{}) (string, error) {
@@ -14,6 +16,9 @@ func ArgumentsToJSON(args map[string]interface{}, model interface{}) (string, er
 		if numFields != 0 {
 			for i := 0; i < numFields; i++ {
 				name, value := getField(meta, i)
+				if _, isNil := value.(base.NilField); isNil {
+					continue
+				}
 				if _, ok := args[name]; !ok {
 					args[name] = value
 				}

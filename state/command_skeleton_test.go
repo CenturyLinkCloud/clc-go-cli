@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/config"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
 	"github.com/centurylinkcloud/clc-go-cli/state"
@@ -15,6 +16,11 @@ import (
 type Model struct {
 	A string
 	B string
+}
+
+type ModelWithNil struct {
+	X string
+	N base.NilField
 }
 
 func TestArgumentsToJSON(t *testing.T) {
@@ -50,6 +56,49 @@ func TestArgumentsToJSON(t *testing.T) {
 		"A": "A value",
 		"B": "B value overriden",
 		"C": "C value",
+	}
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Invalid result\nExpected %v\nGot %v", expected, got)
+	}
+
+	// Test a model with a nil field
+	args = map[string]interface{}{
+		"X": "X value",
+	}
+	mWithNil := ModelWithNil{}
+	data, err = state.ArgumentsToJSON(args, &mWithNil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got = map[string]interface{}{}
+	err = json.Unmarshal([]byte(data), &got)
+	if err != nil {
+		t.Errorf("Unmarshalling failed: %s", err.Error())
+	}
+	expected = map[string]interface{}{
+		"X": "X value",
+	}
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("Invalid result\nExpected %v\nGot %v", expected, got)
+	}
+
+	args = map[string]interface{}{
+		"X": "X value",
+		"N": nil,
+	}
+	mWithNil = ModelWithNil{}
+	data, err = state.ArgumentsToJSON(args, &mWithNil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got = map[string]interface{}{}
+	err = json.Unmarshal([]byte(data), &got)
+	if err != nil {
+		t.Errorf("Unmarshalling failed: %s", err.Error())
+	}
+	expected = map[string]interface{}{
+		"X": "X value",
+		"N": nil,
 	}
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result\nExpected %v\nGot %v", expected, got)
