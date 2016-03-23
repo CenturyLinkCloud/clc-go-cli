@@ -167,6 +167,7 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 		reason := ""
 		if resBody, err := ioutil.ReadAll(res.Body); err == nil {
 			var payload map[string]interface{}
+			var payloadArray []interface{}
 			if err := json.Unmarshal(resBody, &payload); err == nil {
 				if errors, ok := payload["modelState"]; ok {
 					bytes, err := json.Marshal(errors)
@@ -176,6 +177,16 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 				} else if errors, ok := payload["message"]; ok {
 					if errMsg, ok := errors.(string); ok {
 						reason = errMsg
+					}
+				}
+			} else if err := json.Unmarshal(resBody, &payloadArray); err == nil {
+				for _, p := range payloadArray {
+					if pMap, ok := p.(map[string]interface{}); ok {
+						if errors, ok := pMap["message"]; ok {
+							if errMsg, ok := errors.(string); ok {
+								reason += "\n  " + errMsg
+							}
+						}
 					}
 				}
 			}
