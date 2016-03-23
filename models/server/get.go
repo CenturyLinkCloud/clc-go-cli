@@ -11,6 +11,7 @@ type GetReq struct {
 type GetRes struct {
 	Id          string
 	Name        string
+	DisplayName string
 	Description string
 	GroupId     string
 	IsTemplate  bool
