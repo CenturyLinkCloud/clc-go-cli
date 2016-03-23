@@ -14,6 +14,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/billing"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
+	"github.com/centurylinkcloud/clc-go-cli/models/db"
 	"github.com/centurylinkcloud/clc-go-cli/models/firewall"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
@@ -2401,6 +2402,61 @@ func init() {
 				{
 					"--server-name",
 					[]string{"Required unless --server-id is specified. Name of the server."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&db.Create{}, &db.CreateRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription",
+		Resource: "db",
+		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a database subscription"},
+			Arguments: []help.Argument{
+				{
+					"--instance-type",
+					[]string{"Required. 'MySQL' or 'MySQL_REPLICATION'."},
+				},
+				{
+					"--external-id",
+					[]string{"Requried. A service ID."},
+				},
+				{
+					"--machine-config",
+					[]string{"Required. An object with the keys: cpu, memory, and storage. All keys are integers."},
+				},
+				{
+					"--backup-retention-days",
+					[]string{"Required. A number of days defining the backup living time."},
+				},
+				{
+					"--users",
+					[]string{"Required. An array of objects with the name and password fields."},
+				},
+				{
+					"--data-center",
+					[]string{"A data-center location identifier. The server default (is applied if no client default is set) is VA1."},
+				},
+				{
+					"--destinations",
+					[]string{
+						"An array of the objects to set up the notifications.",
+						"Each object has the following keys:",
+						"  destination-type: 'EMAIL' or 'SMS'",
+						"  data-center: a data-center location identifier",
+						"  notifications: an array of the notification objects",
+						"Each notification object has the following fields:",
+						"  notification-type: 'CPU_UTILIZATION' or 'MEMORY_UTILIZATION' or 'STORAGE_UTILIZATION'",
+					},
+				},
+				{
+					"--instances",
+					[]string{"An array of the instance objects with the name property."},
+				},
+				{
+					"--backup-time",
+					[]string{"An object with the hour and minute fields. Both fields are integers. Defines the time to make backups at."},
 				},
 			},
 		},
