@@ -2513,6 +2513,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.Get{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}",
+		Resource: "db",
+		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes the database subscription"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to delete"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
