@@ -2498,6 +2498,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.Get{}, new(base.BinaryResponse), commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/certificate",
+		Resource: "db",
+		Command:  "get-certificate",
+		Help: help.Command{
+			Brief: []string{"Shows the database certificate info"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
