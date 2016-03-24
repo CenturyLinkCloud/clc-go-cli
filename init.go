@@ -2638,6 +2638,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.Get{}, &[]db.Destination{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/notification",
+		Resource: "db",
+		Command:  "get-destinations",
+		Help: help.Command{
+			Brief: []string{"Retrieves destinations receiving notifications for a subscription"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
