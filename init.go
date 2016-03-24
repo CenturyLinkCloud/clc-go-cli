@@ -2694,7 +2694,7 @@ func init() {
 		Resource: "db",
 		Command:  "delete-notification",
 		Help: help.Command{
-			Brief: []string{"Remove a destination from a subscription"},
+			Brief: []string{"Removes a destination from a subscription"},
 			Arguments: []help.Argument{
 				{
 					"--subscription-id",
@@ -2703,6 +2703,29 @@ func init() {
 				{
 					"--destination-id",
 					[]string{"Required. ID of a destination to delete"},
+				},
+			},
+		},
+	})
+	registerCommandBase(&db.VerifyDestination{}, &db.Destination{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/notification/{DestinationId}/verify/{Token}",
+		Resource: "db",
+		Command:  "verify-destination",
+		Help: help.Command{
+			Brief: []string{"Verifies a destination for notifications"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+				{
+					"--destination-id",
+					[]string{"Required. ID of a destination to verify"},
+				},
+				{
+					"--token",
+					[]string{"Required. A token to use for verification"},
 				},
 			},
 		},

@@ -43,3 +43,9 @@ type DeleteNotification struct {
 	DestinationId  string `json:"-" URIParam:"yes" valid:"required"`
 	SubscriptionId string `json:"-" URIParam:"yes" valid:"required"`
 }
+
+type VerifyDestination struct {
+	DestinationId  string `json:"-" URIParam:"yes" valid:"required"`
+	SubscriptionId string `json:"-" URIParam:"yes" valid:"required"`
+	Token          string `json:"-" URIParam:"yes" valid:"required"`
+}
