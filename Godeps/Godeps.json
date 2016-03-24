@@ -1,14 +1,15 @@
 {
 	"ImportPath": "github.com/centurylinkcloud/clc-go-cli",
 	"GoVersion": "go1.4.2",
+	"GodepVersion": "v60",
 	"Packages": [
 		"./..."
 	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/asaskevich/govalidator",
-			"Comment": "v2",
-			"Rev": "5fe52de9fffecc6df9539fcfd6ac6ae6aa6fc626"
+			"Comment": "v3",
+			"Rev": "5208815a79dd0135690e0d716d4663c2fbd41ac4"
 		},
 		{
 			"ImportPath": "github.com/ldmberman/tablewriter",

@@ -5,8 +5,11 @@ import (
 	"regexp"
 )
 
-// Validator is a wrapper for validator functions, that returns bool and accepts string.
+// Validator is a wrapper for a validator function that returns bool and accepts string.
 type Validator func(str string) bool
+
+// CustomTypeValidator is a wrapper for validator functions that returns bool and accepts any type.
+type CustomTypeValidator func(i interface{}) bool
 
 // ParamValidator is a wrapper for validator functions that accepts additional parameters.
 type ParamValidator func(str string, params ...string) bool
@@ -23,17 +26,27 @@ type stringValues []reflect.Value
 
 // ParamTagMap is a map of functions accept variants parameters
 var ParamTagMap = map[string]ParamValidator{
-	"length": ByteLength,
+	"length":       ByteLength,
+	"stringlength": StringLength,
+	"matches":      StringMatches,
 }
 
 var ParamTagRegexMap = map[string]*regexp.Regexp{
-	"length": regexp.MustCompile("^length\\((\\d+)\\|(\\d+)\\)$"),
+	"length":       regexp.MustCompile("^length\\((\\d+)\\|(\\d+)\\)$"),
+	"stringlength": regexp.MustCompile("^stringlength\\((\\d+)\\|(\\d+)\\)$"),
+	"matches":      regexp.MustCompile(`matches\(([^)]+)\)`),
 }
+
+// CustomTypeTagMap is a map of functions that can be used as tags for ValidateStruct function.
+// Use this to validate compound or custom types that need to be handled as a whole, e.g.
+// `type UUID [16]byte` (this would be handled as an array of bytes).
+var CustomTypeTagMap = map[string]CustomTypeValidator{}
 
 // TagMap is a map of functions, that can be used as tags for ValidateStruct function.
 var TagMap = map[string]Validator{
 	"email":          IsEmail,
 	"url":            IsURL,
+	"dialstring":     IsDialString,
 	"requrl":         IsRequestURL,
 	"requri":         IsRequestURI,
 	"alpha":          IsAlpha,
@@ -68,12 +81,16 @@ var TagMap = map[string]Validator{
 	"base64":         IsBase64,
 	"datauri":        IsDataURI,
 	"ip":             IsIP,
+	"port":           IsPort,
 	"ipv4":           IsIPv4,
 	"ipv6":           IsIPv6,
+	"dns":            IsDNSName,
+	"host":           IsHost,
 	"mac":            IsMAC,
 	"latitude":       IsLatitude,
 	"longitude":      IsLongitude,
 	"ssn":            IsSSN,
+	"semver":         IsSemver,
 }
 
 // ISO3166Entry stores country codes

@@ -31,6 +31,8 @@ import (
 func Abs(value float64) float64
 func BlackList(str, chars string) string
 func ByteLength(str string, params ...string) bool
+func StringLength(str string, params ...string) bool
+func StringMatches(s string, params ...string) bool
 func CamelCaseToUnderscore(str string) string
 func Contains(str, substring string) bool
 func Count(array []interface{}, iterator ConditionIterator) int
@@ -40,6 +42,7 @@ func Filter(array []interface{}, iterator ConditionIterator) []interface{}
 func Find(array []interface{}, iterator ConditionIterator) interface{}
 func GetLine(s string, index int) (string, error)
 func GetLines(s string) []string
+func IsHost(s string) bool
 func InRange(value, left, right float64) bool
 func IsASCII(str string) bool
 func IsAlpha(str string) bool
@@ -48,6 +51,8 @@ func IsBase64(str string) bool
 func IsByteLength(str string, min, max int) bool
 func IsCreditCard(str string) bool
 func IsDataURI(str string) bool
+func IsDialString(str string) bool
+func IsDNSName(str string) bool
 func IsDivisibleBy(str, num string) bool
 func IsEmail(str string) bool
 func IsFilePath(str string) (bool, int)
@@ -78,12 +83,14 @@ func IsNonNegative(value float64) bool
 func IsNonPositive(value float64) bool
 func IsNull(str string) bool
 func IsNumeric(str string) bool
+func IsPort(str string) bool
 func IsPositive(value float64) bool
 func IsPrintableASCII(str string) bool
 func IsRGBcolor(str string) bool
 func IsRequestURI(rawurl string) bool
 func IsRequestURL(rawurl string) bool
 func IsSSN(str string) bool
+func IsSemver(str string) bool
 func IsURL(str string) bool
 func IsUTFDigit(str string) bool
 func IsUTFLetter(str string) bool
@@ -143,7 +150,7 @@ type User struct {
 	LastName string
 }
 
-str, _ := govalidator.ToString(&User{"John", "Juan"})
+str := govalidator.ToString(&User{"John", "Juan"})
 println(str)
 ```
 ###### Each, Map, Filter, Count for slices
@@ -179,53 +186,59 @@ govalidator.TagMap["duck"] = govalidator.Validator(func(str string) bool {
 ```
 Here is a list of available validators for struct fields (validator - used function):
 ```go
-"email":          IsEmail,
-"url":            IsURL,
-"requrl":         IsRequestURL,
-"requri":         IsRequestURI,
 "alpha":          IsAlpha,
-"utfletter":      IsUTFLetter,
 "alphanum":       IsAlphanumeric,
-"utfletternum":   IsUTFLetterNumeric,
-"numeric":        IsNumeric,
-"utfnumeric":     IsUTFNumeric,
-"utfdigit":       IsUTFDigit,
+"ascii":          IsASCII,
+"base64":         IsBase64,
+"creditcard":     IsCreditCard,
+"datauri":        IsDataURI,
+"dialstring":     IsDialString,
+"dns":            IsDNSName,
+"email":          IsEmail,
+"float":          IsFloat,
+"fullwidth":      IsFullWidth,
+"halfwidth":      IsHalfWidth,
 "hexadecimal":    IsHexadecimal,
 "hexcolor":       IsHexcolor,
-"rgbcolor":       IsRGBcolor,
-"lowercase":      IsLowerCase,
-"uppercase":      IsUpperCase,
+"host":           IsHost,
 "int":            IsInt,
-"float":          IsFloat,
+"ip":             IsIP,
+"ipv4":           IsIPv4,
+"ipv6":           IsIPv6,
+"isbn10":         IsISBN10,
+"isbn13":         IsISBN13,
+"json":           IsJSON,
+"latitude":       IsLatitude,
+"longitude":      IsLongitude,
+"lowercase":      IsLowerCase,
+"mac":            IsMAC,
+"multibyte":      IsMultibyte,
 "null":           IsNull,
+"numeric":        IsNumeric,
+"port":           IsPort,
+"printableascii": IsPrintableASCII,
+"requri":         IsRequestURI,
+"requrl":         IsRequestURL,
+"rgbcolor":       IsRGBcolor,
+"ssn":            IsSSN,
+"semver":         IsSemver,
+"uppercase":      IsUpperCase,
+"url":            IsURL,
+"utfdigit":       IsUTFDigit,
+"utfletter":      IsUTFLetter,
+"utfletternum":   IsUTFLetterNumeric,
+"utfnumeric":     IsUTFNumeric,
 "uuid":           IsUUID,
 "uuidv3":         IsUUIDv3,
 "uuidv4":         IsUUIDv4,
 "uuidv5":         IsUUIDv5,
-"creditcard":     IsCreditCard,
-"isbn10":         IsISBN10,
-"isbn13":         IsISBN13,
-"json":           IsJSON,
-"multibyte":      IsMultibyte,
-"ascii":          IsASCII,
-"printableascii": IsPrintableASCII,
-"fullwidth":      IsFullWidth,
-"halfwidth":      IsHalfWidth,
 "variablewidth":  IsVariableWidth,
-"base64":         IsBase64,
-"datauri":        IsDataURI,
-"ip":             IsIP,
-"ipv4":           IsIPv4,
-"ipv6":           IsIPv6,
-"mac":            IsMAC,
-"latitude":       IsLatitude,
-"longitude":      IsLongitude,
-"ssn":            IsSSN
 ```
 Validators with parameters
 
 ```go
-"legnth(min|max)": ByteLength,
+"length(min|max)": ByteLength,
+"matches(pattern)": StringMatches,
 ```
 
 And here is small example of usage:
@@ -277,4 +290,3 @@ If you do have a contribution for the package feel free to put up a Pull Request
 * [Simon ccl1115](https://github.com/ccl1115)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/asaskevich/govalidator/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
