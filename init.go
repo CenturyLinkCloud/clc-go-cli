@@ -17,6 +17,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/db"
 	"github.com/centurylinkcloud/clc-go-cli/models/firewall"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
+	"github.com/centurylinkcloud/clc-go-cli/models/ips"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
@@ -2753,6 +2754,22 @@ func init() {
 				{
 					"--backup-time",
 					[]string{"An object with the hour and minute fields. Both fields are integers. Defines the time to make backups at."},
+				},
+			},
+		},
+	})
+
+	registerCommandBase(&ips.Install{}, new(string), commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.client-security.ctl.io/ips/api/app",
+		Resource: "ips",
+		Command:  "install",
+		Help: help.Command{
+			Brief: []string{"Installs an IPS agent on the designated host"},
+			Arguments: []help.Argument{
+				{
+					"--server-name",
+					[]string{"Required. The name of the server that the destination should be set for"},
 				},
 			},
 		},
