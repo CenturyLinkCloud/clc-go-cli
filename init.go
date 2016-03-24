@@ -2774,6 +2774,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&ips.Install{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.client-security.ctl.io/ips/api/app",
+		Resource: "ips",
+		Command:  "uninstall",
+		Help: help.Command{
+			Brief: []string{"Uninstalls an IPS agent from a designated host"},
+			Arguments: []help.Argument{
+				{
+					"--server-name",
+					[]string{"Required. The name of the server that the agent should be uninstalled from"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
