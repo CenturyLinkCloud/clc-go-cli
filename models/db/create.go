@@ -88,7 +88,7 @@ type Server struct {
 type BackupResponse struct {
 	Id         int64
 	FileName   string
-	BackupTime string
+	BackupTime int64
 	Status     string
 	Size       int64
 }
