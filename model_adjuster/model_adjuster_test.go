@@ -2,10 +2,11 @@ package model_adjuster_test
 
 import (
 	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/base"
-	"github.com/centurylinkcloud/clc-go-cli/model_adjuster"
 	"reflect"
 	"testing"
+
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/model_adjuster"
 )
 
 type testModel struct {
@@ -52,6 +53,10 @@ func (t *testModelIDInferable) GetNames(cn base.Connection, name string) ([]stri
 
 func (c connStub) ExecuteRequest(verb string, url string, reqModel interface{}, resModel interface{}) (err error) {
 	return nil
+}
+
+func (c connStub) GetAccountAlias() string {
+	return ""
 }
 
 var applyDefaultTestCases = []modelAdjusterTestCase{

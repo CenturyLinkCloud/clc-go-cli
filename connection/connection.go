@@ -50,6 +50,10 @@ var NewConnection = func(username, password, accountAlias string, logger *log.Lo
 	return cn, nil
 }
 
+func (cn *connection) GetAccountAlias() string {
+	return cn.accountAlias
+}
+
 func (cn *connection) ExecuteRequest(verb string, url string, reqModel interface{}, resModel interface{}) (err error) {
 	req, err := cn.prepareRequest(verb, url, reqModel)
 	if err != nil {
