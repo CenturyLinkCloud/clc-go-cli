@@ -2528,6 +2528,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.Get{}, new(string), commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/failover",
+		Resource: "db",
+		Command:  "failover",
+		Help: help.Command{
+			Brief: []string{"Performs an update to the connection to cause a failover to the secondary server"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
