@@ -2688,6 +2688,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.DeleteNotification{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/notification/{DestinationId}",
+		Resource: "db",
+		Command:  "delete-notification",
+		Help: help.Command{
+			Brief: []string{"Remove a destination from a subscription"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+				{
+					"--destination-id",
+					[]string{"Required. ID of a destination to delete"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {

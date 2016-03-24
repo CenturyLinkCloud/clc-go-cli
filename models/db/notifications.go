@@ -38,3 +38,8 @@ func (c *UpdateNotification) Validate() error {
 	}
 	return nil
 }
+
+type DeleteNotification struct {
+	DestinationId  string `json:"-" URIParam:"yes" valid:"required"`
+	SubscriptionId string `json:"-" URIParam:"yes" valid:"required"`
+}
