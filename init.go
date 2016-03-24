@@ -2597,6 +2597,16 @@ func init() {
 			Arguments: []help.Argument{},
 		},
 	})
+	registerCommandBase(nil, &[]db.DataCenterInfo{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/datacenter/list",
+		Resource: "db",
+		Command:  "list-datacenters",
+		Help: help.Command{
+			Brief:     []string{"Displays available datacenters"},
+			Arguments: []help.Argument{},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
