@@ -189,8 +189,6 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 						}
 					}
 				}
-			} else if res.StatusCode == 400 {
-				reason = string(resBody)
 			}
 		}
 		return &errors.ApiError{
