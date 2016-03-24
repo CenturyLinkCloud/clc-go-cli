@@ -2607,6 +2607,37 @@ func init() {
 			Arguments: []help.Argument{},
 		},
 	})
+	registerCommandBase(&db.CreateNotification{}, &db.Destination{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/notification",
+		Resource: "db",
+		Command:  "create-notification",
+		Help: help.Command{
+			Brief: []string{"Adds a destination to a subscription to receive notifications"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+				{
+					"--destination-type",
+					[]string{"Required. 'EMAIL' or 'SMS'"},
+				},
+				{
+					"--location",
+					[]string{"Required. An email address or a phone number"},
+				},
+				{
+					"--notifications",
+					[]string{
+						"Required. An array of the notification objects.",
+						"Each notification object has the following fields:",
+						"  notification-type: 'CPU_UTILIZATION' or 'MEMORY_UTILIZATION' or 'STORAGE_UTILIZATION'",
+					},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {

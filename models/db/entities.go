@@ -17,3 +17,16 @@ type DataCenterInfo struct {
 	FriendlyName string
 	Active       bool
 }
+
+type Destination struct {
+	Id              int64
+	DestinationType string
+	Location        string
+	Notifications   []Notification
+	Verified        bool
+}
+
+type Notification struct {
+	Id               int64
+	NotificationType string
+}
