@@ -2577,6 +2577,16 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(nil, &[]db.ActionLogEntry{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/customer/history",
+		Resource: "db",
+		Command:  "history",
+		Help: help.Command{
+			Brief:     []string{"Get up to 10 most recent actions performed by the account"},
+			Arguments: []help.Argument{},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
