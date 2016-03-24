@@ -2730,6 +2730,33 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.Update{}, new(string), commands.CommandExcInfo{
+		Verb:     "PATCH",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}",
+		Resource: "db",
+		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates the database subscription"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to update"},
+				},
+				{
+					"--machine-config",
+					[]string{"An object with the keys: cpu, memory, and storage. All keys are integers."},
+				},
+				{
+					"--backup-retention-days",
+					[]string{"A number of days defining the backup living time."},
+				},
+				{
+					"--backup-time",
+					[]string{"An object with the hour and minute fields. Both fields are integers. Defines the time to make backups at."},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
