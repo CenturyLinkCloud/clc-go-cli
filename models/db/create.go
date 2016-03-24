@@ -1,6 +1,10 @@
 package db
 
-import "github.com/centurylinkcloud/clc-go-cli/errors"
+import (
+	"fmt"
+
+	"github.com/centurylinkcloud/clc-go-cli/errors"
+)
 
 type Create struct {
 	InstanceType        string               `valid:"required" oneOf:"MySQL,MySQL_REPLICATION" json:"instanceType"`
@@ -11,7 +15,8 @@ type Create struct {
 	DataCenter          string               `json:"location"`
 	Destinations        []DestinationRequest `json:"destinations,omitempty"`
 	Instances           []Instance           `json:"instances,omitempty"`
-	BackupTime          BackupTime           `json:"backupTime"`
+	BackupTime          BackupTime           `json:"-"`
+	BackupTimeValue     *BackupTime          `json:"backupTime,omitempty" argument:ignore`
 }
 
 func (c *Create) Validate() error {
@@ -22,13 +27,27 @@ func (c *Create) Validate() error {
 	if c.MachineConfig == emptyConfig {
 		return errors.EmptyField("--machine-config")
 	}
+
+	m := c.MachineConfig
+	if m.Cpu == nil || m.Memory == nil || m.Storage == nil {
+		return fmt.Errorf("All of the cpu, memory, and storage have to be set")
+	}
+
+	emptyBackup := BackupTime{}
+	if c.BackupTime != emptyBackup {
+		b := c.BackupTime
+		if b.Hour == nil || b.Minute == nil {
+			return fmt.Errorf("Both hour and minute have to be set")
+		}
+		c.BackupTimeValue = &b
+	}
 	return nil
 }
 
 type MachineConfig struct {
-	Cpu     int64 `json:"cpu"`
-	Memory  int64 `json:"memory"`
-	Storage int64 `json:"storage"`
+	Cpu     *int64 `json:"cpu,omitempty"`
+	Memory  *int64 `json:"memory,omitempty"`
+	Storage *int64 `json:"storage,omitempty"`
 }
 
 type User struct {
@@ -51,8 +70,8 @@ type Instance struct {
 }
 
 type BackupTime struct {
-	Hour   int64 `json:"hour"`
-	Minute int64 `json:"minute"`
+	Hour   *int64 `json:"hour,omitempty"`
+	Minute *int64 `json:"minute,omitempty"`
 }
 
 type CreateRes struct {
