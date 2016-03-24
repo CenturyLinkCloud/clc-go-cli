@@ -2583,7 +2583,17 @@ func init() {
 		Resource: "db",
 		Command:  "history",
 		Help: help.Command{
-			Brief:     []string{"Get up to 10 most recent actions performed by the account"},
+			Brief:     []string{"Gets up to 10 most recent actions performed by the account"},
+			Arguments: []help.Argument{},
+		},
+	})
+	registerCommandBase(nil, &[]db.Promotion{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/customer/promotion",
+		Resource: "db",
+		Command:  "promotions",
+		Help: help.Command{
+			Brief:     []string{"Gets promotions applied to the account"},
 			Arguments: []help.Argument{},
 		},
 	})

@@ -6,3 +6,8 @@ type ActionLogEntry struct {
 	Details   string
 	User      string
 }
+
+type Promotion struct {
+	Id   int64
+	Code string
+}
