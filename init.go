@@ -2789,6 +2789,35 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&ips.SetNotifications{}, new(string), commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.client-security.ctl.io/ips/api/notifications/{accountAlias}/{ServerName}",
+		Resource: "ips",
+		Command:  "set-notifications",
+		Help: help.Command{
+			Brief: []string{"Sets a notification destination"},
+			Arguments: []help.Argument{
+				{
+					"--server-name",
+					[]string{"Required. The name of the server that the destination should be set for"},
+				},
+				{
+					"--notification-destinations",
+					[]string{
+						"Required. An array of the notification destination objects.",
+						"Each object has the following keys:",
+						"  url: the URL endpoint for WEBHOOK or SLACK notification",
+						"  type-code: the type of destination. 'SYSLOG' or 'EMAIL' or 'WEBHOOK'",
+						"  email-address: a string with the options for an EMAIL notification",
+						"  sys-log-settings: an object with the options for SYSLOG; contains the following fields:",
+						"    ip-address: an IP address of a syslog server",
+						"    udp-port: the port the server is listening on",
+						"    facility: a syslog facility code; 16-23",
+					},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
