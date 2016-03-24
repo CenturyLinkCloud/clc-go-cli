@@ -139,7 +139,7 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 	}
 	var inputData io.Reader
 	if reqModel != nil {
-		if verb == "POST" || verb == "PUT" || verb == "PATCH" {
+		if verb == "POST" || verb == "PUT" || verb == "PATCH" || verb == "DELETE" {
 			b, err := json.Marshal(reqModel)
 			if err != nil {
 				return nil, err
