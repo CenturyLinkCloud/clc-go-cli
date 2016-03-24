@@ -2558,6 +2558,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.DeleteBackup{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/backup/{BackupId}",
+		Resource: "db",
+		Command:  "delete-backup",
+		Help: help.Command{
+			Brief: []string{"Deletes the backup"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+				{
+					"--backup-id",
+					[]string{"Required. ID of a backup to delete"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
