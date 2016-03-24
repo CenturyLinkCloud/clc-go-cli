@@ -38,7 +38,7 @@ type User struct {
 
 type DestinationRequest struct {
 	DestinationType string                `oneOf:"EMAIL,SMS" json:"destinationType"`
-	DataCenter      string                `json:"location"`
+	Location        string                `json:"location"`
 	Notifications   []NotificationRequest `json:"notifications"`
 }
 

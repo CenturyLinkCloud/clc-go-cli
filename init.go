@@ -2444,7 +2444,7 @@ func init() {
 						"An array of the objects to set up the notifications.",
 						"Each object has the following keys:",
 						"  destination-type: 'EMAIL' or 'SMS'",
-						"  data-center: a data-center location identifier",
+						"  location: an email address or a phone number",
 						"  notifications: an array of the notification objects",
 						"Each notification object has the following fields:",
 						"  notification-type: 'CPU_UTILIZATION' or 'MEMORY_UTILIZATION' or 'STORAGE_UTILIZATION'",
