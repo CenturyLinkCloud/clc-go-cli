@@ -2543,6 +2543,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&db.Get{}, &[]db.BackupResponse{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.rdbs.ctl.io/{accountAlias}/subscription/{SubscriptionId}/backup",
+		Resource: "db",
+		Command:  "list-backups",
+		Help: help.Command{
+			Brief: []string{"Shows the backups list"},
+			Arguments: []help.Argument{
+				{
+					"--subscription-id",
+					[]string{"Required. ID of a subscription to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
