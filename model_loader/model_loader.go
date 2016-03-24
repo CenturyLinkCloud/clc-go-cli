@@ -3,12 +3,13 @@ package model_loader
 import (
 	"encoding/json"
 	"fmt"
-	valid "github.com/asaskevich/govalidator"
-	"github.com/centurylinkcloud/clc-go-cli/base"
-	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
 	"strconv"
 	"time"
+
+	valid "github.com/asaskevich/govalidator"
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error {
@@ -34,7 +35,7 @@ func LoadModel(parsedArgs map[string]interface{}, inputModel interface{}) error 
 
 func loadValue(key string, arg interface{}, field reflect.Value) error {
 	switch field.Interface().(type) {
-	case int64:
+	case int64, *int64:
 		var argInt int64
 		var mismatch = true
 		if reflect.ValueOf(arg).Kind() == reflect.Int {
@@ -63,7 +64,11 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 		if mismatch {
 			return fmt.Errorf("Type mismatch: %s value must be integer.", key)
 		} else {
-			field.SetInt(argInt)
+			if field.Kind() == reflect.Ptr {
+				field.Set(reflect.ValueOf(&argInt))
+			} else {
+				field.SetInt(argInt)
+			}
 			return nil
 		}
 	case float64:

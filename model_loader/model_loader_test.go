@@ -2,13 +2,16 @@ package model_loader_test
 
 import (
 	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/base"
-	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/model_loader"
 )
+
+var two int64 = 2
 
 type modelLoaderTestCase struct {
 	args map[string]interface{}
@@ -27,6 +30,7 @@ type testModel struct {
 	FieldArray      []testFieldObject
 	FieldNil        base.NilField
 	testInnerObject `argument:"composed"`
+	FieldIntPtr     *int64
 }
 
 type testFieldObject struct {
@@ -84,6 +88,15 @@ var testCases = []modelLoaderTestCase{
 			"FieldNil": nil,
 		},
 		res: testModel{FieldNil: base.NilField{Set: true}},
+	},
+	// Handles pointers
+	{
+		args: map[string]interface{}{
+			"FieldIntPtr": "2",
+		},
+		res: testModel{
+			FieldIntPtr: &two,
+		},
 	},
 	// Parses JSON and loads it into object field.
 	{
