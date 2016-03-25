@@ -2,9 +2,11 @@ package network
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
-	"time"
 )
 
 const (
@@ -68,7 +70,7 @@ func IDByName(cn base.Connection, dataCenter string, name string) (string, error
 
 	matched := []string{}
 	for _, n := range networks {
-		if n.Name == name {
+		if strings.ToLower(n.Name) == strings.ToLower(name) {
 			matched = append(matched, n.Id)
 		}
 	}

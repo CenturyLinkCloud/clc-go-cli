@@ -2,10 +2,12 @@ package server
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
-	"time"
 )
 
 var (
@@ -60,7 +62,7 @@ func IDByName(cn base.Connection, name string) (string, error) {
 
 	matched := []string{}
 	for _, s := range servers {
-		if s.Name == name {
+		if strings.ToLower(s.Name) == strings.ToLower(name) {
 			matched = append(matched, s.Id)
 		}
 	}

@@ -2,10 +2,12 @@ package group
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
-	"time"
 )
 
 var (
@@ -64,7 +66,7 @@ func IDByName(cn base.Connection, dataCenter string, name string) (string, error
 	var searchForID func(groups []Entity)
 	searchForID = func(groups []Entity) {
 		for _, group := range groups {
-			if group.Name == name {
+			if strings.ToLower(group.Name) == strings.ToLower(name) {
 				matched = append(matched, group.Id)
 			}
 			searchForID(group.Groups)

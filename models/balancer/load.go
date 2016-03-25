@@ -2,6 +2,8 @@ package balancer
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 )
 
@@ -24,7 +26,7 @@ func IDByName(cn base.Connection, dataCenter string, name string) (string, error
 
 	matched := []string{}
 	for _, b := range balancers {
-		if b.Name == name {
+		if strings.ToLower(b.Name) == strings.ToLower(name) {
 			matched = append(matched, b.Id)
 		}
 	}
