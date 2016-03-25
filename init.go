@@ -2833,6 +2833,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&ips.GetNotifications{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.client-security.ctl.io/ips/api/notifications/{accountAlias}/{ServerName}",
+		Resource: "ips",
+		Command:  "delete-notifications",
+		Help: help.Command{
+			Brief: []string{"Deletes the server's notification destination"},
+			Arguments: []help.Argument{
+				{
+					"--server-name",
+					[]string{"Required. The name of the server to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
