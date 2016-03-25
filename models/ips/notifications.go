@@ -43,3 +43,15 @@ type SysLogSettings struct {
 	UdpPort   int64  `json:"udpPort"`
 	Facility  int64  `json:"facility"`
 }
+
+type GetNotifications struct {
+	ServerName string `json:"-" URIParam:"yes" valid:"required"`
+}
+
+type Notification struct {
+	EmailAddress   string
+	IntervalCod    string
+	SysLogSettings SysLogSettings
+	TypeCode       string
+	Url            string
+}
