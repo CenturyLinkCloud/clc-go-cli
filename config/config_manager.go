@@ -79,7 +79,7 @@ func loadConfigInner() (*Config, error) {
 }
 
 var GetPath = func() (string, error) {
-	homeDir := os.Getenv("HOME")
+	homeDir := os.Getenv(HOME_VAR)
 	if homeDir == "" {
 		return "", fmt.Errorf("The HOME environment variable is not set. Please, set it so that we can store your configuration there")
 	}
