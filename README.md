@@ -342,7 +342,16 @@ At first, the script updates `base/constants.go` with the given version. This is
 - Windows/amd64
 - MacOS/amd64
 
-The binaries are packaged along with utility scripts as described in the [Install](#install-it) section. The folders are then archived - a `.tar.gz` is made for Linux/Mac; a `.zip` is made for Windows.
+The binaries are packaged along with utility scripts as described in the [Install](#install-it) section. The folders are then archived - a `.tar.gz` file is made for Linux and Mac; a `.zip` file is made for Windows.
+
+Here is a full list of the created artifacts:
+
+* `clc-$version-linux-amd64/`
+* `clc-$version-linux-amd64.tar.gz`
+* `clc-$version-darwin-amd64`
+* `clc-$version-darwin-amd64.tar.gz`
+* `clc-$version-windows-amd64/`
+* `clc-$version-windows-amd64.zip`
 
 #### Building a .pkg for MacOS
 
@@ -355,6 +364,11 @@ The binaries are packaged along with utility scripts as described in the [Instal
 ```
 
 **Note:** the version has to match the version you specified in the previous section.
+
+You should see 2 artifacts after executing this script:
+
+* `clc-$version-pkg`
+* `clc-$version.pkg`
 
 ## Security
 
