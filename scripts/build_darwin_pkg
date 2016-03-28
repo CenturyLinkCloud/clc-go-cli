@@ -1,0 +1,23 @@
+#!/bin/bash
+
+version=$1
+
+if [ -z $version ]
+then
+  echo "Usage: build_darwin_pkg <version>"
+  exit 1
+fi
+
+build_dir=clc-$version-pkg
+scripts_dir=$build_dir/pkg-scripts
+bin_dir=$build_dir/root/usr/local/bin
+mkdir -p $scripts_dir
+mkdir -p $bin_dir
+
+release_folder=clc-$version-darwin-amd64
+cp $release_folder/clc $bin_dir
+cp -r $release_folder/autocomplete $scripts_dir
+cp $release_folder/install_autocompletion $scripts_dir/postinstall
+
+pkgbuild --scripts $scripts_dir --identifier centurylink.go-cli --root $build_dir/root clc-$version.pkg
+

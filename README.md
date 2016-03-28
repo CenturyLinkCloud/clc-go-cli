@@ -320,6 +320,8 @@ instructions below may not work properly on Windows.
 
 ### Building the releases
 
+Generally, any Linux/Darwin machine should work for building the releases. A Darwin machine is required though if you want to build a `MacOS .pkg`.
+
 * Install [gvm](https://github.com/moovweb/gvm)
 
 * Install the cross-compilation prerequisites:
@@ -341,6 +343,18 @@ At first, the script updates `base/constants.go` with the given version. This is
 - MacOS/amd64
 
 The binaries are packaged along with utility scripts as described in the [Install](#install-it) section. The folders are then archived - a `.tar.gz` is made for Linux/Mac; a `.zip` is made for Windows.
+
+#### Building a .pkg for MacOS
+
+* Build a regular MacOS release using the command from the previous section
+
+* Execute the following script to build a `.pkg` file:
+
+```
+./scripts/build_darwin_pkg <version>
+```
+
+**Note:** the version has to match the version you specified in the previous section.
 
 ## Security
 
