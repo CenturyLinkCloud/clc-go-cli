@@ -2,11 +2,11 @@ package config
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
-	"os/user"
 	"path"
+
+	"gopkg.in/yaml.v2"
 )
 
 func LoadConfig() (*Config, error) {
@@ -79,12 +79,12 @@ func loadConfigInner() (*Config, error) {
 }
 
 var GetPath = func() (string, error) {
-	u, err := user.Current()
-	if err != nil {
-		return "", err
+	homeDir := os.Getenv("HOME")
+	if homeDir == "" {
+		return "", fmt.Errorf("The HOME environment variable is not set. Please, set it so that we can store your configuration there")
 	}
 
-	return path.Join(u.HomeDir, CONFIG_FOLDER_NAME), nil
+	return path.Join(homeDir, CONFIG_FOLDER_NAME), nil
 }
 
 func CreateIfNotExists() error {
