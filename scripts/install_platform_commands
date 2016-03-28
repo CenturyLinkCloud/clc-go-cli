@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for GOOS in linux darwin windows
+do
+  for GOARCH in amd64
+  do
+    gvm cross $GOOS $GOARCH
+  done
+done
+

@@ -296,7 +296,7 @@ instructions below may not work properly on Windows.
 * [Install Go](https://golang.org/).
 * Install Godep: `go get github.com/tools/godep`.
 * Clone this repo (do **not** use `go get`).
-* [Ensure your $GOPATH is set correctly](http://golang.org/cmd/go/#hdr-GOPATH_environment_variable). Working in a clean environment without any other packages on $GOPATH is highly encouraged to avoid conflicts with the dependencies of the tool. Using a [gvm tool](https://github.com/moovweb/gvm) is a good choice for setting up a clean environment.
+* [Ensure your $GOPATH is set correctly](http://golang.org/cmd/go/#hdr-GOPATH_environment_variable). Working in a clean environment without any other packages on $GOPATH is highly encouraged to avoid conflicts with the dependencies of the tool. Using a [gvm tool](https://github.com/moovweb/gvm) is a good choice for setting up a clean environment. Also, gvm is a convenient tool for installing cross-compilation prerequisites.
 * Install dependencies with Godep: enter the repo's root and `godep restore`.
 * Install go vet: `go get code.google.com/p/go.tools/cmd/vet`.
 
@@ -317,6 +317,30 @@ instructions below may not work properly on Windows.
 * Do not commit until the unit tests have passed (`./run_tests`).
 
 * If you want to make an executable, simply run `./scripts/build`. The binary will appear in the `./out` folder.
+
+### Building the releases
+
+* Install [gvm](https://github.com/moovweb/gvm)
+
+* Install the cross-compilation prerequisites:
+
+```
+./scripts/install_platform_commands
+```
+
+* Build the releases:
+
+```
+./scripts/build_releases <version>
+```
+
+The script builds a binary for each of the following OS/arch flavors:
+
+- Linux/amd4
+- Windows/amd64
+- MacOS/amd64
+
+The binaries are packaged along with utility scripts as described in the [Install](#install-it) section. The folders are then archived - a `.tar.gz` is made for Linux/Mac; a `.zip` is made for Windows.
 
 ## Security
 

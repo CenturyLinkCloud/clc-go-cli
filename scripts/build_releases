@@ -1,0 +1,55 @@
+#!/bin/bash
+
+version=$1
+
+if [ -z $version ]
+then
+  echo "Usage: build_releases <version>"
+  exit 1
+fi
+
+echo "Building the version $version .."
+echo
+
+for GOOS in linux windows darwin
+do
+  for GOARCH in amd64
+  do
+    release_folder=clc-$version-$GOOS-$GOARCH
+    mkdir -p $release_folder
+    if [ $GOOS == windows ]
+    then
+      binary=$release_folder/clc.exe
+    else
+      binary=$release_folder/clc
+    fi
+
+    echo "Building $binary for $GOOS/$GOARCH.."
+
+    GO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o $binary cmd/clc/*
+
+    echo "Adding autocomplete files for $GOOS/$GOARCH.."
+
+    mkdir -p $release_folder/autocomplete
+    if [ $GOOS == linux ]
+    then
+      cp scripts/install_autocompletion_linux $release_folder/install_autocompletion
+      cp autocomplete/bash_autocomplete $release_folder/autocomplete
+    elif [ $GOOS == darwin ]
+    then
+      cp scripts/install_autocompletion_macos $release_folder/install_autocompletion
+      cp autocomplete/bash_autocomplete $release_folder/autocomplete
+    else
+      cp autocomplete/powershell3_autocomplete.ps1 $release_folder/autocomplete
+    fi
+
+    echo "Archiving $release_folder.."
+    if [ $GOOS == windows ]
+    then
+      zip -r $release_folder.zip $release_folder
+    else
+      tar -czf $release_folder.tar.gz $release_folder
+    fi
+  done
+done
+
