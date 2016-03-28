@@ -24,6 +24,9 @@ do
       binary=$release_folder/clc
     fi
 
+    echo "Overriding the user agent.."
+    sed "s/VERSION = \".*\"/VERSION = \"$version\"/g" base/constants.go > _constants && mv _constants base/constants.go
+
     echo "Building $binary for $GOOS/$GOARCH.."
 
     GO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o $binary cmd/clc/*

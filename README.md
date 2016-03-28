@@ -334,7 +334,7 @@ instructions below may not work properly on Windows.
 ./scripts/build_releases <version>
 ```
 
-The script builds a binary for each of the following OS/arch flavors:
+At first, the script updates `base/constants.go` with the given version. This is needed for the tool to use the relevant user agent information. After that, the script builds a binary for each of the following OS/arch flavors:
 
 - Linux/amd4
 - Windows/amd64
