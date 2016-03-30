@@ -1,6 +1,9 @@
 package server
 
 import (
+	"encoding/json"
+	"strings"
+
 	"github.com/centurylinkcloud/clc-go-cli/models"
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
@@ -56,5 +59,41 @@ type IPAddresses struct {
 
 type Snapshot struct {
 	Name  string
+	Id    string
 	Links []models.LinkEntity
+}
+
+func (s *Snapshot) UnmarshalJSON(data []byte) error {
+	// Here we are getting the snapshot ID out of the server links. Looks
+	// rather hacky but there doesn't seem to be another way for retrieving it.
+	id := func() string {
+		m := struct {
+			Links []struct {
+				Rel  string
+				Href string
+			}
+		}{}
+		if err := json.Unmarshal(data, &m); err != nil {
+			return ""
+		}
+		for _, link := range m.Links {
+			if link.Rel != "self" {
+				continue
+			}
+			tokens := strings.Split(link.Href, "/")
+			return tokens[len(tokens)-1]
+		}
+		return ""
+	}()
+
+	if id != "" {
+		s.Id = id
+	}
+
+	type SimpleSnapshot Snapshot
+	return json.Unmarshal(data, &struct {
+		*SimpleSnapshot
+	}{
+		SimpleSnapshot: (*SimpleSnapshot)(s),
+	})
 }
