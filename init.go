@@ -2921,7 +2921,7 @@ func init() {
 	})
 	registerCommandBase(&backup.GetAccountPolicy{}, &backup.AccountPolicy{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{PolicyId}",
 		Resource: "backup",
 		Command:  "get-account-policy",
 		Help: help.Command{

@@ -42,13 +42,7 @@ type AccountPoliciesRes struct {
 }
 
 type GetAccountPolicy struct {
-	AccountPolicyId string `URIParam:"yes" argument:"ignore"`
-	PolicyId        string `valid:"required"`
-}
-
-func (g *GetAccountPolicy) Validate() error {
-	g.AccountPolicyId = g.PolicyId
-	return nil
+	PolicyId string `URIParam:"yes" valid:"required"`
 }
 
 type AllowedAccountPoliciesReq struct {
