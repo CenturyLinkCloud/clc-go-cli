@@ -182,6 +182,10 @@ func (cn *connection) processResponse(res *http.Response, resModel interface{}) 
 					if errMsg, ok := errors.(string); ok {
 						reason = errMsg
 					}
+				} else if errors, ok := payload["error"]; ok {
+					if errMsg, ok := errors.(string); ok {
+						reason = errMsg
+					}
 				}
 			} else if err := json.Unmarshal(resBody, &payloadArray); err == nil {
 				for _, p := range payloadArray {
