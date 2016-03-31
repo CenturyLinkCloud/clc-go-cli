@@ -23,3 +23,19 @@ func (a *AccountPolicyReq) InferID(cn base.Connection) error {
 func (a *AccountPolicyReq) GetNames(cn base.Connection, property string) ([]string, error) {
 	return nil, nil
 }
+
+type AccountPoliciesReq struct {
+	Limit         string `URIParam:"yes"`
+	Offset        string `URIParam:"yes"`
+	WithStatus    string `URIParam:"yes"`
+	SortBy        string `URIParam:"yes" oneOf:"status,osType,name,policyId,backupIntervalHours,retentionDays"`
+	AscendingSort string `URIParam:"yes" oneOf:"true,false"`
+}
+
+type AccountPoliciesRes struct {
+	Limit      int64
+	NextOffset int64
+	Offset     int64
+	Results    []AccountPolicy
+	TotalCount int64
+}

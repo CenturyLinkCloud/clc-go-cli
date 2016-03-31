@@ -2885,6 +2885,40 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.AccountPoliciesReq{}, &backup.AccountPoliciesRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies?limit={Limit}&offset={Offset}&withStatus={WithStatus}&sortBy={SortBy}&ascendingSort={AscendingSort}",
+		Resource: "backup",
+		Command:  "get-account-policies",
+		Help: help.Command{
+			Brief: []string{"Shows the list of the account backup policies"},
+			Arguments: []help.Argument{
+				{
+					"--limit",
+					[]string{"A number of results to show"},
+				},
+				{
+					"--offset",
+					[]string{""},
+				},
+				{
+					"--with-status",
+					[]string{"A status to filter the results by"},
+				},
+				{
+					"--sort-by",
+					[]string{
+						"A field to sort the results by.",
+						"'status' or 'osType' or 'name' or 'policyId' or 'backupIntervalHours' or 'retentionDays'",
+					},
+				},
+				{
+					"--ascending-sort",
+					[]string{"Defines in which order to sort the results. 'true' or 'false'"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
