@@ -17,3 +17,20 @@ type Region struct {
 	Name        string
 	RegionLabel string
 }
+
+type ServerPolicy struct {
+	AccountPolicyId     string
+	AccountPolicyStatus string
+	BackupIntervalHours int64
+	BackupProvider      string
+	ClcAccountAlias     string
+	EligibleForBackup   bool
+	Name                string
+	OsType              string
+	Paths               []string
+	RetentionDays       int64
+	ServerId            string
+	ServerPolicyId      string
+	ServerPolicyStatus  string
+	StorageRegion       string
+}

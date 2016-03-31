@@ -3053,6 +3053,29 @@ func init() {
 			Arguments: []help.Argument{},
 		},
 	})
+	registerCommandBase(&backup.GetServerPolicies{}, &[]backup.ServerPolicy{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/serverPolicyDetails?serverId={ServerId}&withStatus={WithStatus}",
+		Resource: "backup",
+		Command:  "get-server-policies",
+		Help: help.Command{
+			Brief: []string{"Show the backup policies for the given server"},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. An ID of a server to query"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. A name of a server to query"},
+				},
+				{
+					"--with-status",
+					[]string{"A policy status to filter by"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
