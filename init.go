@@ -2899,7 +2899,7 @@ func init() {
 				},
 				{
 					"--offset",
-					[]string{""},
+					[]string{"A number of a result to start from"},
 				},
 				{
 					"--with-status",
