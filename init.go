@@ -10,6 +10,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/alert"
 	"github.com/centurylinkcloud/clc-go-cli/models/autoscale"
+	"github.com/centurylinkcloud/clc-go-cli/models/backup"
 	"github.com/centurylinkcloud/clc-go-cli/models/balancer"
 	"github.com/centurylinkcloud/clc-go-cli/models/billing"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
@@ -2844,6 +2845,42 @@ func init() {
 				{
 					"--server-name",
 					[]string{"Required. The name of the server to query"},
+				},
+			},
+		},
+	})
+
+	registerCommandBase(&backup.AccountPolicyReq{}, &backup.AccountPolicy{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies",
+		Resource: "backup",
+		Command:  "create-account-policy",
+		Help: help.Command{
+			Brief: []string{"Creates a backup policy for the account"},
+			Arguments: []help.Argument{
+				{
+					"--name",
+					[]string{"Required. A name for the policy"},
+				},
+				{
+					"--os-type",
+					[]string{"Required. Either 'Linux' or 'Windows'"},
+				},
+				{
+					"--paths",
+					[]string{"Required. A list of paths to backup"},
+				},
+				{
+					"--excluded-directory-paths",
+					[]string{"A list of paths to exclude from the backup"},
+				},
+				{
+					"--backup-interval-hours",
+					[]string{"Required. A number of hours defining the backup interval"},
+				},
+				{
+					"--retention-days",
+					[]string{"Required. A number of days to keep backups for"},
 				},
 			},
 		},
