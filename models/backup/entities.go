@@ -11,3 +11,9 @@ type AccountPolicy struct {
 	RetentionDays          int64
 	Status                 string
 }
+
+type Region struct {
+	Messages    []string
+	Name        string
+	RegionLabel string
+}

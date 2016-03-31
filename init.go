@@ -3043,6 +3043,16 @@ func init() {
 			Arguments: []help.Argument{},
 		},
 	})
+	registerCommandBase(nil, &[]backup.Region{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/regions",
+		Resource: "backup",
+		Command:  "get-regions",
+		Help: help.Command{
+			Brief:     []string{"Show the list of the supported backup regions"},
+			Arguments: []help.Argument{},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
