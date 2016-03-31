@@ -3114,6 +3114,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.GetAccountServerPolicy{}, &backup.ServerPolicy{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies/{ServerPolicyId}",
+		Resource: "backup",
+		Command:  "get-account-server-policy",
+		Help: help.Command{
+			Brief: []string{"Shows the given server policy for the given account"},
+			Arguments: []help.Argument{
+				{
+					"--account-policy-id",
+					[]string{"Required. The ID of an account policy to query"},
+				},
+				{
+					"--server-policy-id",
+					[]string{"Required. The ID of a server policy to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {

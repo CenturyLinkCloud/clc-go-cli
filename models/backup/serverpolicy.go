@@ -23,3 +23,8 @@ type AccountServerPoliciesRes struct {
 	TotalCount int64
 	Results    []ServerPolicy
 }
+
+type GetAccountServerPolicy struct {
+	AccountPolicyId string `URIParam:"yes" valid:"required"`
+	ServerPolicyId  string `URIParam:"yes" valid:"required"`
+}
