@@ -2,6 +2,7 @@ package backup
 
 import (
 	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
 type AccountPolicyReq struct {
@@ -48,4 +49,13 @@ type GetAccountPolicy struct {
 func (g *GetAccountPolicy) Validate() error {
 	g.AccountPolicyId = g.PolicyId
 	return nil
+}
+
+type AllowedAccountPoliciesReq struct {
+	server.Server `argument:"composed" URIParam:"ServerId"`
+	Limit         string `URIParam:"yes"`
+	Offset        string `URIParam:"yes"`
+	WithStatus    string `URIParam:"yes"`
+	SortBy        string `URIParam:"yes" oneOf:"status,osType,name,policyId,backupIntervalHours,retentionDays"`
+	AscendingSort string `URIParam:"yes" oneOf:"true,false"`
 }

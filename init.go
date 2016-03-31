@@ -2934,6 +2934,48 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.AllowedAccountPoliciesReq{}, &backup.AccountPoliciesRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/servers/{ServerId}?limit={Limit}&offset={Offset}&withStatus={WithStatus}&sortBy={SortBy}&ascendingSort={AscendingSort}",
+		Resource: "backup",
+		Command:  "get-allowed-account-policies",
+		Help: help.Command{
+			Brief: []string{"Shows the list of the account backup policies eligible for the given server"},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. An ID of a server to query"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. A name of a server to query"},
+				},
+				{
+					"--limit",
+					[]string{"A number of results to show"},
+				},
+				{
+					"--offset",
+					[]string{"A number of a result to start from"},
+				},
+				{
+					"--with-status",
+					[]string{"A status to filter the results by"},
+				},
+				{
+					"--sort-by",
+					[]string{
+						"A field to sort the results by.",
+						"'status' or 'osType' or 'name' or 'policyId' or 'backupIntervalHours' or 'retentionDays'",
+					},
+				},
+				{
+					"--ascending-sort",
+					[]string{"Defines in which order to sort the results. 'true' or 'false'"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
