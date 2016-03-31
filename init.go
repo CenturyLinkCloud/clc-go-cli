@@ -3033,6 +3033,16 @@ func init() {
 			Arguments: []help.Argument{},
 		},
 	})
+	registerCommandBase(nil, &backup.OSTypes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/osTypes",
+		Resource: "backup",
+		Command:  "get-os-types",
+		Help: help.Command{
+			Brief:     []string{"Show the list of the supported OS types for backup"},
+			Arguments: []help.Argument{},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
