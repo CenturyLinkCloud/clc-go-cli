@@ -39,3 +39,13 @@ type AccountPoliciesRes struct {
 	Results    []AccountPolicy
 	TotalCount int64
 }
+
+type GetAccountPolicy struct {
+	AccountPolicyId string `URIParam:"yes" argument:"ignore"`
+	PolicyId        string `valid:"required"`
+}
+
+func (g *GetAccountPolicy) Validate() error {
+	g.AccountPolicyId = g.PolicyId
+	return nil
+}
