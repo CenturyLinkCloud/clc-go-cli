@@ -21,15 +21,5 @@ type AccountServerPoliciesRes struct {
 	NextOffset int64
 	Offset     int64
 	TotalCount int64
-	Results    []struct {
-		AccountPolicyId  string
-		ClcAccountAlias  string
-		ExpirationDate   int64
-		ServerId         string
-		ServerPolicyId   string
-		Status           string
-		StorageAccountId string
-		StorageRegion    string
-		UnsubscribedDate int64
-	}
+	Results    []ServerPolicy
 }

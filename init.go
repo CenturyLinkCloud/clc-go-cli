@@ -3053,7 +3053,7 @@ func init() {
 			Arguments: []help.Argument{},
 		},
 	})
-	registerCommandBase(&backup.GetServerPolicies{}, &[]backup.ServerPolicy{}, commands.CommandExcInfo{
+	registerCommandBase(&backup.GetServerPolicies{}, &[]backup.ServerPolicyDetails{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/serverPolicyDetails?serverId={ServerId}&withStatus={WithStatus}",
 		Resource: "backup",

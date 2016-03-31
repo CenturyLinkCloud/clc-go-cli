@@ -18,7 +18,7 @@ type Region struct {
 	RegionLabel string
 }
 
-type ServerPolicy struct {
+type ServerPolicyDetails struct {
 	AccountPolicyId     string
 	AccountPolicyStatus string
 	BackupIntervalHours int64
@@ -33,4 +33,16 @@ type ServerPolicy struct {
 	ServerPolicyId      string
 	ServerPolicyStatus  string
 	StorageRegion       string
+}
+
+type ServerPolicy struct {
+	AccountPolicyId  string
+	ClcAccountAlias  string
+	ExpirationDate   int64
+	ServerId         string
+	ServerPolicyId   string
+	Status           string
+	StorageAccountId string
+	StorageRegion    string
+	UnsubscribedDate int64
 }
