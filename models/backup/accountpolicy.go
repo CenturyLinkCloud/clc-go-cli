@@ -53,3 +53,15 @@ type AllowedAccountPoliciesReq struct {
 	SortBy        string `URIParam:"yes" oneOf:"status,osType,name,policyId,backupIntervalHours,retentionDays"`
 	AscendingSort string `URIParam:"yes" oneOf:"true,false"`
 }
+
+type UpdateAccountPolicy struct {
+	PolicyId               string   `valid:"required" URIParam:"yes" json:"policyId"`
+	ClcAccountAlias        string   `json:"clcAccountAlias,omitempty"`
+	BackupIntervalHours    *int64   `json:"backupIntervalHours" valid:"required"`
+	ExcludedDirectoryPaths []string `json:"excludedDirectoryPaths,omitempty"`
+	Name                   string   `json:"name" valid:"required"`
+	OsType                 string   `json:"osType" oneOf:"Linux,Windows"`
+	Paths                  []string `json:"paths" valid:"required"`
+	RetentionDays          *int64   `json:"retentionDays" valid:"required"`
+	Status                 string   `json:"status" valid:"required"`
+}

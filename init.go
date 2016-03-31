@@ -2976,6 +2976,53 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.UpdateAccountPolicy{}, &backup.AccountPolicy{}, commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{PolicyId}",
+		Resource: "backup",
+		Command:  "update-account-policy",
+		Help: help.Command{
+			Brief: []string{"Updates the given backup account policy"},
+			Arguments: []help.Argument{
+				{
+					"--policy-id",
+					[]string{"Required. An ID of a policy to update"},
+				},
+				{
+					"--name",
+					[]string{"Required. A name for the policy"},
+				},
+				{
+					"--clc-account-alias",
+					[]string{"An alias of a Centurylink Cloud account to bind the policy to"},
+				},
+				{
+					"--os-type",
+					[]string{"Required. Either 'Linux' or 'Windows'"},
+				},
+				{
+					"--paths",
+					[]string{"Required. A list of paths to backup"},
+				},
+				{
+					"--excluded-directory-paths",
+					[]string{"A list of paths to exclude from the backup"},
+				},
+				{
+					"--backup-interval-hours",
+					[]string{"Required. A number of hours defining the backup interval"},
+				},
+				{
+					"--retention-days",
+					[]string{"Required. A number of days to keep backups for"},
+				},
+				{
+					"--status",
+					[]string{"Required. The policy status"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
