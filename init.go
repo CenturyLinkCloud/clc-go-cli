@@ -3057,9 +3057,9 @@ func init() {
 		Verb:     "GET",
 		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/serverPolicyDetails?serverId={ServerId}&withStatus={WithStatus}",
 		Resource: "backup",
-		Command:  "get-server-policies",
+		Command:  "get-applied-server-policies",
 		Help: help.Command{
-			Brief: []string{"Show the backup policies for the given server"},
+			Brief: []string{"Shows the backup policies applied to the given server"},
 			Arguments: []help.Argument{
 				{
 					"--server-id",
@@ -3080,9 +3080,9 @@ func init() {
 		Verb:     "GET",
 		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{PolicyId}/serverPolicies?limit={Limit}&offset={Offset}&withStatus={WithStatus}&sortBy={SortBy}&ascendingSort={AscendingSort}",
 		Resource: "backup",
-		Command:  "get-account-server-policies",
+		Command:  "get-applied-account-policies",
 		Help: help.Command{
-			Brief: []string{"Show the list of the server backup policies for the given account"},
+			Brief: []string{"Shows the list of applied backup policies in the given account"},
 			Arguments: []help.Argument{
 				{
 					"--policy-id",
@@ -3118,9 +3118,9 @@ func init() {
 		Verb:     "GET",
 		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies/{ServerPolicyId}",
 		Resource: "backup",
-		Command:  "get-account-server-policy",
+		Command:  "get-applied-policy",
 		Help: help.Command{
-			Brief: []string{"Shows the given server policy for the given account"},
+			Brief: []string{"Shows the applied backup policy to the server in the given account"},
 			Arguments: []help.Argument{
 				{
 					"--account-policy-id",
