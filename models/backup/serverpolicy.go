@@ -1,6 +1,9 @@
 package backup
 
-import "github.com/centurylinkcloud/clc-go-cli/models/server"
+import (
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/models/server"
+)
 
 type GetServerPolicies struct {
 	server.Server `argument:"compose" URIParam:"ServerId"`
@@ -27,4 +30,22 @@ type AccountServerPoliciesRes struct {
 type GetAccountServerPolicy struct {
 	AccountPolicyId string `URIParam:"yes" valid:"required"`
 	ServerPolicyId  string `URIParam:"yes" valid:"required"`
+}
+
+type CreateServerPolicy struct {
+	AccountPolicyId  string `URIParam:"yes" valid:"required" json:"accountPolicyId"`
+	AccountAlias     string `json:"clcAccountAlias" argument:"ignore"`
+	server.Server    `argument:"composed" json:"-"`
+	ServerID         string `json:"serverId" argument:"ignore"`
+	StorageAccountId string `json:"storageAccountId"`
+	StorageRegion    string `json:"storageRegion" valid:"required"`
+}
+
+func (c *CreateServerPolicy) InferID(cn base.Connection) error {
+	c.AccountAlias = cn.GetAccountAlias()
+	if err := c.Server.InferID(cn); err != nil {
+		return err
+	}
+	c.ServerID = c.Server.ServerId
+	return nil
 }

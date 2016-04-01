@@ -3133,6 +3133,37 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.CreateServerPolicy{}, &backup.ServerPolicy{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies",
+		Resource: "backup",
+		Command:  "apply-policy",
+		Help: help.Command{
+			Brief: []string{"Applies a backup policy to the given server"},
+			Arguments: []help.Argument{
+				{
+					"--account-policy-id",
+					[]string{"Required. The ID of an account policy to bind the server policy to"},
+				},
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. The ID of a server to backup"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. The name of a server to backup"},
+				},
+				{
+					"--storage-region",
+					[]string{"Required. A region to store backups in"},
+				},
+				{
+					"--storage-account-id",
+					[]string{"The ID of a storage account"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
