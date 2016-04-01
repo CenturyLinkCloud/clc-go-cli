@@ -1,6 +1,9 @@
 package backup
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
@@ -53,4 +56,17 @@ func (c *CreateServerPolicy) InferID(cn base.Connection) error {
 type DeleteServerPolicy struct {
 	AccountPolicyId string `URIParam:"yes" valid:"required"`
 	ServerPolicyId  string `URIParam:"yes" valid:"required"`
+}
+
+type GetStoredData struct {
+	AccountPolicyId string `URIParam:"yes" valid:"required"`
+	ServerPolicyId  string `URIParam:"yes" valid:"required"`
+	SearchDate      string `URIParam:"yes" valid:"required"`
+}
+
+func (g *GetStoredData) Validate() error {
+	if _, err := time.Parse(base.DATE_FORMAT, g.SearchDate); err != nil {
+		return fmt.Errorf("The search-date value must be a valid date in YYYY-MM-DD format")
+	}
+	return nil
 }

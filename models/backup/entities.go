@@ -46,3 +46,8 @@ type ServerPolicy struct {
 	StorageRegion    string
 	UnsubscribedDate int64
 }
+
+type StoredData struct {
+	BytesStored     string
+	GigabytesStored string
+}

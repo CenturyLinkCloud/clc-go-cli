@@ -3183,6 +3183,29 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.GetStoredData{}, &backup.StoredData{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies/{ServerPolicyId}/storedData?searchDate={SearchDate}",
+		Resource: "backup",
+		Command:  "get-stored-data",
+		Help: help.Command{
+			Brief: []string{"Shows the size of the backup data"},
+			Arguments: []help.Argument{
+				{
+					"--account-policy-id",
+					[]string{"Required. The ID of the account policy to query"},
+				},
+				{
+					"--server-policy-id",
+					[]string{"Required. The ID of the server policy to query"},
+				},
+				{
+					"--search-date",
+					[]string{"Required. A date to show the backup state at"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
