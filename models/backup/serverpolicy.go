@@ -49,3 +49,8 @@ func (c *CreateServerPolicy) InferID(cn base.Connection) error {
 	c.ServerID = c.Server.ServerId
 	return nil
 }
+
+type DeleteServerPolicy struct {
+	AccountPolicyId string `URIParam:"yes" valid:"required"`
+	ServerPolicyId  string `URIParam:"yes" valid:"required"`
+}

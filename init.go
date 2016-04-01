@@ -3164,6 +3164,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.DeleteServerPolicy{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies/{ServerPolicyId}",
+		Resource: "backup",
+		Command:  "unapply-policy",
+		Help: help.Command{
+			Brief: []string{"Unapplies the given backup policy from the given server"},
+			Arguments: []help.Argument{
+				{
+					"--account-policy-id",
+					[]string{"Required. The ID of the account policy to unbind"},
+				},
+				{
+					"--server-policy-id",
+					[]string{"Required. The ID of the server policy to remove"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
