@@ -206,6 +206,7 @@ func isSlice(model reflect.Value) bool {
 // If arg is already of type map[string]interface{} returns it as is.
 func parseStruct(arg interface{}) (map[string]interface{}, error) {
 	if argMap, isMap := arg.(map[string]interface{}); isMap {
+		parser.NormalizeKeys(argMap)
 		return argMap, nil
 	}
 
@@ -219,14 +220,13 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	if parsed, err := parser.ParseObject(argString); err == nil {
+	if parsed, err := parser.ParseObject(argString, true); err == nil {
 		return parsed, nil
 	}
 	return nil, fmt.Errorf("`%s` must be an object specified either in JSON or in key=value,.. format", argString)
 }
 
 // Parses an object of type []interface{} either from JSON.
-// Also, calls NormalizeKeys with the parsed object.
 // If arg is already of type []interface{} returns it as is.
 func parseSlice(arg interface{}) ([]interface{}, error) {
 	if argSlice, isSlice := arg.([]interface{}); isSlice {
@@ -240,7 +240,6 @@ func parseSlice(arg interface{}) ([]interface{}, error) {
 
 	parsed := make([]interface{}, 0)
 	if err := json.Unmarshal([]byte(argString), &parsed); err == nil {
-		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
 	return []interface{}{arg}, nil

@@ -47,7 +47,7 @@ func ParseArguments(args []string) (res map[string]interface{}, err error) {
 			parsedArg := map[string]interface{}{}
 			err = json.Unmarshal([]byte(args[i]), &parsedArg)
 			if err != nil {
-				parsedArg, err = ParseObject(args[i])
+				parsedArg, err = ParseObject(args[i], true)
 				if err != nil {
 					return nil, fmt.Errorf("%s is neither a valid JSON object nor a valid object in a=b,c=d.. format.", args[i])
 				}
@@ -121,7 +121,7 @@ var nextRune rune
 var prevRune rune
 var conditions []string
 
-func ParseObject(obj string) (map[string]interface{}, error) {
+func ParseObject(obj string, normalizeKeys bool) (map[string]interface{}, error) {
 	curState = startParseKey
 	curQuote = '\000'
 	curItem = []rune{}
@@ -139,7 +139,10 @@ func ParseObject(obj string) (map[string]interface{}, error) {
 	}
 	res := make(map[string]interface{}, 0)
 	for i := 0; i < len(items); i += 2 {
-		key := NormalizePropertyName(items[i])
+		key := items[i]
+		if normalizeKeys {
+			key = NormalizePropertyName(key)
+		}
 		if i == len(items)-1 {
 			res[key] = nil
 		} else {
