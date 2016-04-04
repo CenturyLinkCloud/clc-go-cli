@@ -72,11 +72,6 @@ func NormalizeKeys(arg interface{}) {
 			n := NormalizePropertyName(k)
 			delete(argObj, k)
 			(argObj)[n] = v
-			NormalizeKeys(v)
-		}
-	} else if argArray, isArray := arg.([]interface{}); isArray {
-		for _, v := range argArray {
-			NormalizeKeys(v)
 		}
 	}
 }
