@@ -3206,6 +3206,59 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.GetRestoreDetails{}, &backup.GetRestoreDetailsRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies/{ServerPolicyId}/restorePointDetails?backupFinishedStartDate={BackupFinishedStartDate}&backupFinishedEndDate={BackupFinishedEndDate}&limit={Limit}&offset={Offset}&inRetentionOnly={InRetentionOnly}&sortBy={SortBy}&ascendingSort={AscendingSort}",
+		Resource: "backup",
+		Command:  "get-restore-point-details",
+		Help: help.Command{
+			Brief: []string{"Shows some details about the restore points"},
+			Arguments: []help.Argument{
+				{
+					"--account-policy-id",
+					[]string{"Required. The ID of the account policy to query"},
+				},
+				{
+					"--server-policy-id",
+					[]string{"Required. The ID of the server policy to query"},
+				},
+				{
+					"--backup-finished-start-date",
+					[]string{"Required. A start date to query the finished backups from."},
+				},
+				{
+					"--backup-finished-end-date",
+					[]string{"Required. An end date to query the finished backups at."},
+				},
+				{
+					"--limit",
+					[]string{"A number of results to show"},
+				},
+				{
+					"--offset",
+					[]string{"The number of a result to show results from"},
+				},
+				{
+					"--in-retention-only",
+					[]string{"'true' or 'false'. A retention filter"},
+				},
+				{
+					"--sort-by",
+					[]string{
+						"A field to sort the results by.",
+						"'policyId' or 'retentionDay' or 'backupStartedDate' or 'backupFinishedDate' or 'retentionExpiredDate' or",
+						"'backupStatus' or 'filesTransferredToStorage' or 'bytesTransferredToStorage' or 'filesFailedTransferToStorage' or",
+						"'bytesFailedToTransfer' or 'unchangedFilesNotTransferred' or 'unchangedBytesNotTransferred' or",
+						"'filesRemovedFromDisk' or 'bytesRemovedFromDisk'",
+					},
+				},
+				{
+					"--ascending-sort",
+					[]string{"'true' or 'false'. Defines a sort order"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {

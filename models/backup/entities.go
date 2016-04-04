@@ -51,3 +51,22 @@ type StoredData struct {
 	BytesStored     string
 	GigabytesStored string
 }
+
+type RestoreDetails struct {
+	BackupFinishedDate            string
+	BackupStartedDate             string
+	BytesFailedToTransfer         int64
+	BytesInStorageForItemsRemoved int64
+	BytesTransferredToStorage     int64
+	FilesFailedTransferToStorage  int64
+	FilesRemovedFromDisk          int64
+	FilesTransferredToStorage     int64
+	NumberOfProtectedFiles        int64
+	PolicyId                      string
+	RestorePointCreationStatus    string
+	RestorePointId                string
+	RetentionDays                 int64
+	RetentionExpiredDate          string
+	UnchangedBytesInStorage       int64
+	UnchangedFilesNotTransferred  int64
+}

@@ -70,3 +70,33 @@ func (g *GetStoredData) Validate() error {
 	}
 	return nil
 }
+
+type GetRestoreDetails struct {
+	AccountPolicyId         string `URIParam:"yes" valid:"required"`
+	ServerPolicyId          string `URIParam:"yes" valid:"required"`
+	BackupFinishedStartDate string `URIParam:"yes" valid:"required"`
+	BackupFinishedEndDate   string `URIParam:"yes" valid:"required"`
+	Limit                   string `URIParam:"yes"`
+	Offset                  string `URIParam:"yes"`
+	InRetentionOnly         string `URIParam:"yes" oneOf:"true,false"`
+	SortBy                  string `URIParam:"yes" oneOf:"policyId,retentionDay,backupStartedDate,backupFinishedDate,retentionExpiredDate,backupStatus,filesTransferredToStorage,bytesTransferredToStorage,filesFailedTransferToStorage,bytesFailedToTransfer,unchangedFilesNotTransferred,unchangedBytesNotTransferred,filesRemovedFromDisk,bytesRemovedFromDisk"`
+	AscendingSort           string `URIParam:"yes" oneOf:"true,false"`
+}
+
+func (g *GetRestoreDetails) Validate() error {
+	if _, err := time.Parse(base.DATE_FORMAT, g.BackupFinishedEndDate); err != nil {
+		return fmt.Errorf("The backup-finished-end-date value must be a valid date in YYYY-MM-DD format")
+	}
+	if _, err := time.Parse(base.DATE_FORMAT, g.BackupFinishedStartDate); err != nil {
+		return fmt.Errorf("The backup-finished-start-date value must be a valid date in YYYY-MM-DD format")
+	}
+	return nil
+}
+
+type GetRestoreDetailsRes struct {
+	Limit      int64
+	NextOffset int64
+	Offset     int64
+	TotalCount int64
+	Results    []RestoreDetails
+}
