@@ -2897,6 +2897,25 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&ospatch.List{}, &[]ospatch.PatchInfo{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://patching.useast.appfog.ctl.io/rest/servers/{accountAlias}/server/{ServerId}/patch",
+		Resource: "os-patch",
+		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Shows a history of all the patches deployed to a given server"},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. The ID of a server to query"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. The name of a server to query"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {

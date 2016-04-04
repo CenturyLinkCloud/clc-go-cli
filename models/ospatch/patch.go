@@ -39,3 +39,7 @@ func (p *Patch) MarshalJSON() ([]byte, error) {
 		Package:   packages[p.OsType],
 	})
 }
+
+type List struct {
+	server.Server `argument:"composed" URIParam:"ServerId"`
+}
