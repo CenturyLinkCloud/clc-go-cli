@@ -19,6 +19,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/ips"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
+	"github.com/centurylinkcloud/clc-go-cli/models/ospatch"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
@@ -2868,6 +2869,30 @@ func init() {
 				{
 					"--server-name",
 					[]string{"Required. The name of the server to query"},
+				},
+			},
+		},
+	})
+
+	registerCommandBase(&ospatch.Patch{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/executePackage",
+		Resource: "os-patch",
+		Command:  "apply",
+		Help: help.Command{
+			Brief: []string{"Patches the given servers with the latest available patches provided by the OS vendor"},
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"Required. A list of server IDs to execute the package on"},
+				},
+				{
+					"--os-type",
+					[]string{
+						"Required. 'Windows2012' or 'RedHat'",
+						"'Windows2012' patches Windows 2012 and Windows 2012R2",
+						"'RedHat' patches RedHat Enterprise Linux 5,6,7, and CentOS 5,6",
+					},
 				},
 			},
 		},
