@@ -873,6 +873,30 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&server.ExecutePackage{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/executePackage",
+		Resource: "server",
+		Command:  "execute-package",
+		Help: help.Command{
+			Brief: []string{"Executes a single package on one or more servers"},
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"Required. A list of server IDs to execute the package on"},
+				},
+				{
+					"--package",
+					[]string{
+						"Required. The package entity describing which package to run on the specified servers.",
+						"It has to contain the following fields:",
+						"  package-id: unique identifier of the package to execute",
+						"  paramaters: a JSON string containing a set of key-value pairs for setting the package-specific parameters defined",
+					},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&group.GetReq{}, &group.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
