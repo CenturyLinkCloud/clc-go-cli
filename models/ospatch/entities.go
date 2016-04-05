@@ -14,3 +14,20 @@ type PatchInfo struct {
 		Init_end_message   string
 	}
 }
+
+type PatchDetails struct {
+	Execution_id  string
+	Status        string
+	Start_time    base.Time
+	End_time      base.Time
+	Duration      string
+	Begin_message string
+	End_message   string
+	Patches       []struct {
+		Start_time          base.Time
+		End_time            base.Time
+		Patch_begin_message string
+		Patch_end_message   string
+		Status              string
+	}
+}

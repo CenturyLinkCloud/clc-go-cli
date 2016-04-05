@@ -43,3 +43,8 @@ func (p *Patch) MarshalJSON() ([]byte, error) {
 type List struct {
 	server.Server `argument:"composed" URIParam:"ServerId"`
 }
+
+type ListDetails struct {
+	server.Server `argument:"composed" URIParam:"ServerId"`
+	ExecutionId   string `URIParam:"yes" valid:"required"`
+}

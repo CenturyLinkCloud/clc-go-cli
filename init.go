@@ -2916,6 +2916,32 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&ospatch.ListDetails{}, &ospatch.PatchDetails{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://patching.useast.appfog.ctl.io/rest/servers/{accountAlias}/server/{ServerId}/patch/{ExecutionId}",
+		Resource: "os-patch",
+		Command:  "list-details",
+		Help: help.Command{
+			Brief: []string{"Returns details on all attempted patches for a single execution against a server"},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. The ID of a server to query"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. The name of a server to query"},
+				},
+				{
+					"--execution-id",
+					[]string{
+						"Required. Correlation ID for all the patches included with a single update execution, obtained from the os-patch list response",
+						"or emails regarding a patch request. The execution ID format will be aa#-######",
+					},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
