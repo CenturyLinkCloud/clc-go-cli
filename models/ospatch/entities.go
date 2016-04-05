@@ -1,11 +1,11 @@
 package ospatch
 
-import "time"
+import "github.com/centurylinkcloud/clc-go-cli/base"
 
 type PatchInfo struct {
 	Execution_id  string
 	Status        string
-	Start_time    time.Time
-	End_time      time.Time
+	Start_time    base.Time
+	End_time      base.Time
 	Init_messages []map[string]interface{}
 }
