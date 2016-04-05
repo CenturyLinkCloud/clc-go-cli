@@ -7,5 +7,10 @@ type PatchInfo struct {
 	Status        string
 	Start_time    base.Time
 	End_time      base.Time
-	Init_messages []map[string]interface{}
+	Init_messages []struct {
+		Start_time         base.Time
+		End_time           base.Time
+		Init_begin_message string
+		Init_end_message   string
+	}
 }
