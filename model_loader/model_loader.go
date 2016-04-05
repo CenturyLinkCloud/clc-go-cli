@@ -143,6 +143,16 @@ func loadValue(key string, arg interface{}, field reflect.Value) error {
 			return nil
 		}
 		return fmt.Errorf("%s does not accept any value.", key)
+	case map[string]string:
+		argMapStringString, err := parseMapStringString(arg)
+		if err != nil {
+			if _, ok := err.(ParseObjWrongTypeError); ok {
+				return fmt.Errorf("Type mismatch: %s must be an object", key)
+			}
+			return err
+		}
+		field.Set(reflect.ValueOf(argMapStringString))
+		return nil
 	}
 	if isStruct(field) {
 		argStruct, err := parseStruct(arg)
@@ -206,6 +216,7 @@ func isSlice(model reflect.Value) bool {
 // If arg is already of type map[string]interface{} returns it as is.
 func parseStruct(arg interface{}) (map[string]interface{}, error) {
 	if argMap, isMap := arg.(map[string]interface{}); isMap {
+		parser.NormalizeKeys(argMap)
 		return argMap, nil
 	}
 
@@ -219,14 +230,13 @@ func parseStruct(arg interface{}) (map[string]interface{}, error) {
 		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
-	if parsed, err := parser.ParseObject(argString); err == nil {
+	if parsed, err := parser.ParseObject(argString, true); err == nil {
 		return parsed, nil
 	}
 	return nil, fmt.Errorf("`%s` must be an object specified either in JSON or in key=value,.. format", argString)
 }
 
 // Parses an object of type []interface{} either from JSON.
-// Also, calls NormalizeKeys with the parsed object.
 // If arg is already of type []interface{} returns it as is.
 func parseSlice(arg interface{}) ([]interface{}, error) {
 	if argSlice, isSlice := arg.([]interface{}); isSlice {
@@ -240,10 +250,37 @@ func parseSlice(arg interface{}) ([]interface{}, error) {
 
 	parsed := make([]interface{}, 0)
 	if err := json.Unmarshal([]byte(argString), &parsed); err == nil {
-		parser.NormalizeKeys(parsed)
 		return parsed, nil
 	}
 	return []interface{}{arg}, nil
+}
+
+// Parses an object of type map[string]string either from JSON or from a=b,c=d,.. notation.
+func parseMapStringString(arg interface{}) (map[string]string, error) {
+	var argMapStringString = make(map[string]string, 0)
+
+	argMap, isMap := arg.(map[string]interface{})
+	if !isMap {
+		argString, isString := arg.(string)
+		if !isString {
+			return nil, ParseObjWrongTypeError{}
+		}
+		argMap = make(map[string]interface{}, 0)
+		err := json.Unmarshal([]byte(argString), &argMap)
+		if err != nil {
+			argMap, err = parser.ParseObject(argString, false)
+		}
+		if err != nil {
+			return nil, ParseObjWrongTypeError{}
+		}
+	}
+	for k, v := range argMap {
+		if _, isString := v.(string); !isString {
+			return nil, fmt.Errorf("Type mismatch: `%s` must be string", k)
+		}
+		argMapStringString[k] = v.(string)
+	}
+	return argMapStringString, nil
 }
 
 func getEmplySliceType(slice reflect.Value) reflect.Value {

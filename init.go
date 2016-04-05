@@ -20,6 +20,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/ips"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
+	"github.com/centurylinkcloud/clc-go-cli/models/ospatch"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 )
 
@@ -870,6 +871,30 @@ func init() {
 				{
 					"--network-name",
 					[]string{"Required unless --network-id is specified. Name of the network."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&server.ExecutePackage{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/executePackage",
+		Resource: "server",
+		Command:  "execute-package",
+		Help: help.Command{
+			Brief: []string{"Executes a single package on one or more servers"},
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"Required. A list of server IDs to execute the package on"},
+				},
+				{
+					"--package",
+					[]string{
+						"Required. The package entity describing which package to run on the specified servers.",
+						"It has to contain the following fields:",
+						"  package-id: unique identifier of the package to execute",
+						"  paramaters: a JSON string containing a set of key-value pairs for setting the package-specific parameters defined",
+					},
 				},
 			},
 		},
@@ -2845,6 +2870,75 @@ func init() {
 				{
 					"--server-name",
 					[]string{"Required. The name of the server to query"},
+				},
+			},
+		},
+	})
+
+	registerCommandBase(&ospatch.Patch{}, &[]server.ServerRes{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/operations/{accountAlias}/servers/executePackage",
+		Resource: "os-patch",
+		Command:  "apply",
+		Help: help.Command{
+			Brief: []string{"Patches the given servers with the latest available patches provided by the OS vendor"},
+			Arguments: []help.Argument{
+				{
+					"--server-ids",
+					[]string{"Required. A list of server IDs to execute the package on"},
+				},
+				{
+					"--os-type",
+					[]string{
+						"Required. 'Windows2012' or 'RedHat'",
+						"'Windows2012' patches Windows 2012 and Windows 2012R2",
+						"'RedHat' patches RedHat Enterprise Linux 5,6,7, and CentOS 5,6",
+					},
+				},
+			},
+		},
+	})
+	registerCommandBase(&ospatch.List{}, &[]ospatch.PatchInfo{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://patching.useast.appfog.ctl.io/rest/servers/{accountAlias}/server/{ServerId}/patch",
+		Resource: "os-patch",
+		Command:  "list",
+		Help: help.Command{
+			Brief: []string{"Shows a history of all the patches deployed to a given server"},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. The ID of a server to query"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. The name of a server to query"},
+				},
+			},
+		},
+	})
+	registerCommandBase(&ospatch.ListDetails{}, &ospatch.PatchDetails{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://patching.useast.appfog.ctl.io/rest/servers/{accountAlias}/server/{ServerId}/patch/{ExecutionId}",
+		Resource: "os-patch",
+		Command:  "list-details",
+		Help: help.Command{
+			Brief: []string{"Returns details on all attempted patches for a single execution against a server"},
+			Arguments: []help.Argument{
+				{
+					"--server-id",
+					[]string{"Required unless --server-name is specified. The ID of a server to query"},
+				},
+				{
+					"--server-name",
+					[]string{"Required unless --server-id is specified. The name of a server to query"},
+				},
+				{
+					"--execution-id",
+					[]string{
+						"Required. Correlation ID for all the patches included with a single update execution, obtained from the os-patch list response",
+						"or emails regarding a patch request. The execution ID format will be aa#-######",
+					},
 				},
 			},
 		},

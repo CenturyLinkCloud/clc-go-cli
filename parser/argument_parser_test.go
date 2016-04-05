@@ -1,9 +1,10 @@
 package parser_test
 
 import (
-	"github.com/centurylinkcloud/clc-go-cli/parser"
 	"reflect"
 	"testing"
+
+	"github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 type parserTestParam struct {
@@ -84,8 +85,8 @@ var testCases = []parserTestParam{
 	// Parses nested JSON objects and arrays properly.
 	{input: []string{`{"k1":{"k2":{"k3":[1,2,3]}}}`}, res: map[string]interface{}{
 		"K1": map[string]interface{}{
-			"K2": map[string]interface{}{
-				"K3": []interface{}{1.0, 2.0, 3.0},
+			"k2": map[string]interface{}{
+				"k3": []interface{}{1.0, 2.0, 3.0},
 			},
 		},
 	}},
@@ -93,7 +94,7 @@ var testCases = []parserTestParam{
 	{
 		input: []string{`{"a":{"b":"c"}}`, "--some-long-key", "--another-key", `{"a":"b"}`, "a=b?,c=d", "--yet-another-key"},
 		res: map[string]interface{}{
-			"A":             map[string]interface{}{"B": "c"},
+			"A":             map[string]interface{}{"b": "c"},
 			"SomeLongKey":   nil,
 			"AnotherKey":    []interface{}{`{"a":"b"}`, "a=b?,c=d"},
 			"YetAnotherKey": nil,
@@ -102,7 +103,7 @@ var testCases = []parserTestParam{
 	// Parses JSON arrays of objects properly.
 	{
 		input: []string{`{"k":[{"knested":"value"}]}`},
-		res:   map[string]interface{}{"K": []interface{}{map[string]interface{}{"Knested": "value"}}},
+		res:   map[string]interface{}{"K": []interface{}{map[string]interface{}{"knested": "value"}}},
 	},
 }
 

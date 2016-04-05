@@ -8,7 +8,7 @@ This is the Command Line Interface (CLI) for the CenturyLink Cloud.
 
 Click a link below to download the latest release for each OS.
 
-[MacOS tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-03-30/clc-2016-03-30-darwin-amd64.tar.gz) | [MacOS pkg](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-03-28/clc-2016-03-28.pkg) | [Linux tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-03-30/clc-2016-03-30-linux-amd64.tar.gz) | [Windows zip](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-03-30/clc-2016-03-30-windows-amd64.zip)
+[MacOS tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-04-05/clc-2016-04-05-darwin-amd64.tar.gz) | [MacOS pkg](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-03-28/clc-2016-03-28.pkg) | [Linux tar.gz](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-04-05/clc-2016-04-05-linux-amd64.tar.gz) | [Windows zip](https://github.com/CenturyLinkCloud/clc-go-cli/releases/download/2016-04-05/clc-2016-04-05-windows-amd64.zip)
 
 **Note:** You can see previous releases and release notes on the [releases page](https://github.com/CenturyLinkCloud/clc-go-cli/releases).
 

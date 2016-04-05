@@ -21,22 +21,24 @@ type modelLoaderTestCase struct {
 }
 
 type testModel struct {
-	FieldString     string
-	FieldInt        int64
-	FieldFloat      float64
-	FieldBool       bool
-	FieldDateTime   time.Time
-	FieldObject     testFieldObject
-	FieldArray      []testFieldObject
-	FieldNil        base.NilField
-	testInnerObject `argument:"composed"`
-	FieldIntPtr     *int64
+	FieldString          string
+	FieldInt             int64
+	FieldFloat           float64
+	FieldBool            bool
+	FieldDateTime        time.Time
+	FieldObject          testFieldObject
+	FieldArray           []testFieldObject
+	FieldNil             base.NilField
+	testInnerObject      `argument:"composed"`
+	FieldIntPtr          *int64
+	FieldMapStringString map[string]string
 }
 
 type testFieldObject struct {
-	FieldString      string
-	FieldInnerObject testFieldInnerObject
-	FieldInnerArray  []testFieldObject
+	FieldString          string
+	FieldInnerObject     testFieldInnerObject
+	FieldMapStringString map[string]string
+	FieldInnerArray      []testFieldObject
 }
 
 type testFieldInnerObject struct {
@@ -96,6 +98,42 @@ var testCases = []modelLoaderTestCase{
 		},
 		res: testModel{
 			FieldIntPtr: &two,
+		},
+	},
+	// Handles map[string]string objects.
+	{
+		args: map[string]interface{}{
+			"FieldMapStringString": `{"key1":"value1","key2":"value2"}`,
+		},
+		res: testModel{
+			FieldMapStringString: map[string]string{
+				"key1": "value1",
+				"key2": "value2",
+			},
+		},
+	},
+	{
+		args: map[string]interface{}{
+			"FieldMapStringString": `key1=value1,key2=value2`,
+		},
+		res: testModel{
+			FieldMapStringString: map[string]string{
+				"key1": "value1",
+				"key2": "value2",
+			},
+		},
+	},
+	{
+		args: map[string]interface{}{
+			"FieldObject": `{"FieldMapStringString":{"key1":"value1","key2":"value2"}}`,
+		},
+		res: testModel{
+			FieldObject: testFieldObject{
+				FieldMapStringString: map[string]string{
+					"key1": "value1",
+					"key2": "value2",
+				},
+			},
 		},
 	},
 	// Parses JSON and loads it into object field.
@@ -271,6 +309,24 @@ var testCases = []modelLoaderTestCase{
 			"FieldDateTime": "2012 04 05",
 		},
 		err: "Type mismatch: FieldDateTime value must be datetime in `YYYY-MM-DD hh:mm:ss` format.",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldMapStringString": `just string`,
+		},
+		err: "Type mismatch: FieldMapStringString must be an object",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldMapStringString": `[{"key":"value"}]`,
+		},
+		err: "Type mismatch: FieldMapStringString must be an object",
+	},
+	{
+		args: map[string]interface{}{
+			"FieldObject": `{"FieldMapStringString":{"key":5}}`,
+		},
+		err: "Type mismatch: `key` must be string",
 	},
 	// Does not accept any values for base.NilField's.
 	{
