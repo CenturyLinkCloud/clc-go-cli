@@ -3376,6 +3376,21 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.GetServers{}, &backup.DataCenterServers{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/datacenters/{DataCenterName}/servers",
+		Resource: "backup",
+		Command:  "get-servers",
+		Help: help.Command{
+			Brief: []string{"Shows the servers in the given data center"},
+			Arguments: []help.Argument{
+				{
+					"--data-center-name",
+					[]string{"Required. The name of a data center to query. For example, `UC1 - US West (Santa Clara)`"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {
