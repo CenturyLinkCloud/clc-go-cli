@@ -3353,6 +3353,29 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&backup.UpdateServerPolicy{}, &backup.ServerPolicy{}, commands.CommandExcInfo{
+		Verb:     "PATCH",
+		Url:      "https://api-va1.backup.ctl.io/clc-backup-api/api/accountPolicies/{AccountPolicyId}/serverPolicies/{ServerPolicyId}",
+		Resource: "backup",
+		Command:  "update-server-policy",
+		Help: help.Command{
+			Brief: []string{"Updates the given backup policy of the given server"},
+			Arguments: []help.Argument{
+				{
+					"--account-policy-id",
+					[]string{"Required. The ID of the account policy the server policy is bound to"},
+				},
+				{
+					"--server-policy-id",
+					[]string{"Required. The ID of the server policy to update"},
+				},
+				{
+					"--status",
+					[]string{"Required. A new status value. 'ACTIVE' or 'INACTIVE'"},
+				},
+			},
+		},
+	})
 }
 
 func registerCommandBase(inputModel interface{}, outputModel interface{}, info commands.CommandExcInfo) {

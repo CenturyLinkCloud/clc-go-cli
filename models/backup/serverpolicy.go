@@ -71,6 +71,28 @@ func (g *GetStoredData) Validate() error {
 	return nil
 }
 
+type UpdateServerPolicy struct {
+	AccountPolicyId string                        `URIParam:"yes" valid:"required"`
+	ServerPolicyId  string                        `URIParam:"yes" valid:"required"`
+	Operations      []UpdateServerPolicyOperation `argument:"ignore" json:"operations"`
+	Status          string                        `json:"-" oneOf:"ACTIVE,INACTIVE" valid:"required"`
+}
+
+func (u *UpdateServerPolicy) Validate() error {
+	u.Operations = append(u.Operations, UpdateServerPolicyOperation{
+		Op:    "replace",
+		Path:  "/status",
+		Value: u.Status,
+	})
+	return nil
+}
+
+type UpdateServerPolicyOperation struct {
+	Op    string `json:"op"`
+	Path  string `json:"path"`
+	Value string `json:"value"`
+}
+
 type GetRestoreDetails struct {
 	AccountPolicyId         string `URIParam:"yes" valid:"required"`
 	ServerPolicyId          string `URIParam:"yes" valid:"required"`
