@@ -1,7 +1,8 @@
-package main
+package cmd_runner
 
 import (
 	"fmt"
+
 	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 	"github.com/centurylinkcloud/clc-go-cli/commands"

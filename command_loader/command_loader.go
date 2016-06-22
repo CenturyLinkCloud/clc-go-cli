@@ -2,10 +2,11 @@ package command_loader
 
 import (
 	"fmt"
+	"sort"
+
 	cli "github.com/centurylinkcloud/clc-go-cli"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/help"
-	"sort"
 )
 
 func LoadResource(resource string) (string, error) {

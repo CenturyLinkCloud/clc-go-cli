@@ -13,6 +13,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/backup"
 	"github.com/centurylinkcloud/clc-go-cli/models/balancer"
 	"github.com/centurylinkcloud/clc-go-cli/models/billing"
+	"github.com/centurylinkcloud/clc-go-cli/models/crossdc_firewall"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/datacenter"
 	"github.com/centurylinkcloud/clc-go-cli/models/db"
@@ -1861,6 +1862,125 @@ func init() {
 		Command:  "delete",
 		Help: help.Command{
 			Brief: []string{"Deletes a firewall policy for a given account in a given data center ('intra data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the data center you are querying."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"Required. ID of the firewall policy."},
+				},
+			},
+		},
+	})
+
+	registerCommandBase(&crossdc_firewall.CreateReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}",
+		Resource: "crossdc-firewall-policy",
+		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a firewall policy for a given account, between networks in different data centers ('cross data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the target data center for the new policy."},
+				},
+				{
+					"--destination-account-id",
+					[]string{"Required. Short code for a particular account."},
+				},
+				{
+					"--destination-location-id",
+					[]string{"Required. Short code for a particular location."},
+				},
+				{
+					"--destination-cidr",
+					[]string{"Required. Destination address for traffic on the terminating firewall, specified using CIDR notation."},
+				},
+				{
+					"--source-cidr",
+					[]string{"Required. Source address for traffic on the originating firewall, specified using CIDR notation, on the originating firewall."},
+				},
+				{
+					"--enabled",
+					[]string{"Indicates if the policy is enabled (true) or disabled (false)."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&crossdc_firewall.ListReq{}, &[]crossdc_firewall.Entity{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}?destinationAccount={DestinationAccountAlias}",
+		Resource: "crossdc-firewall-policy",
+		Command:  "list",
+		Help: help.Command{
+			Brief: []string{
+				"Gets the list of firewall policies associated with a given account, between networks in different data centers ('cross data center firewall policies').",
+				"Users can optionally filter results by requesting policies associated with a second 'destination' account",
+			},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the data center you are querying."},
+				},
+				{
+					"--destination-account-alias",
+					[]string{"Short code for a particular account."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&crossdc_firewall.GetReq{}, &crossdc_firewall.Entity{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}/{FirewallPolicy}",
+		Resource: "crossdc-firewall-policy",
+		Command:  "get",
+		Help: help.Command{
+			Brief: []string{"Gets the details of a specific firewall policy associated with a given account in a given data center (an 'cross data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the data center you are querying."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"Required. ID of the firewall policy."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&crossdc_firewall.UpdateReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}/{FirewallPolicy}?enabled={Enabled}",
+		Resource: "crossdc-firewall-policy",
+		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates a given firewall policy associated with a given account in a given data center (an 'cross data center firewall policy')."},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the data center associated with the policy of interest."},
+				},
+				{
+					"--firewall-policy",
+					[]string{"Required. ID of the firewall policy."},
+				},
+				{
+					"--enabled",
+					[]string{"Indicates if the policy is enabled (true) or disabled (false)."},
+				},
+			},
+		},
+	})
+	registerCommandBase(&crossdc_firewall.DeleteReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}/{FirewallPolicy}",
+		Resource: "crossdc-firewall-policy",
+		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a firewall policy for a given account in a given data center ('cross data center firewall policy')."},
 			Arguments: []help.Argument{
 				{
 					"--data-center",

@@ -3,21 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	cli "github.com/centurylinkcloud/clc-go-cli"
-	"github.com/centurylinkcloud/clc-go-cli/base"
-	clc "github.com/centurylinkcloud/clc-go-cli/cmd/clc"
-	"github.com/centurylinkcloud/clc-go-cli/commands"
-	"github.com/centurylinkcloud/clc-go-cli/connection"
-	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
-	arg_parser "github.com/centurylinkcloud/clc-go-cli/parser"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
-	//"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	cli "github.com/centurylinkcloud/clc-go-cli"
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	clc "github.com/centurylinkcloud/clc-go-cli/cmd_runner"
+	"github.com/centurylinkcloud/clc-go-cli/commands"
+	"github.com/centurylinkcloud/clc-go-cli/connection"
+	"github.com/centurylinkcloud/clc-go-cli/models/authentication"
+	arg_parser "github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 type Runner interface {

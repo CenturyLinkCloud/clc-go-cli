@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/autocomplete"
-	"github.com/centurylinkcloud/clc-go-cli/state"
 	"os"
+
+	"github.com/centurylinkcloud/clc-go-cli/autocomplete"
+	runner "github.com/centurylinkcloud/clc-go-cli/cmd_runner"
+	"github.com/centurylinkcloud/clc-go-cli/state"
 )
 
 func main() {
@@ -18,7 +20,7 @@ func main() {
 		state.WriteToFile([]byte(output), "completion", 0666)
 		return
 	} else {
-		output = Run(args)
+		output = runner.Run(args)
 	}
 	if output != "" {
 		fmt.Printf("%s\n", output)
