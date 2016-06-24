@@ -1,37 +1,84 @@
 package model_validator
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/centurylinkcloud/clc-go-cli/base"
-	"github.com/centurylinkcloud/clc-go-cli/errors"
+	clc_errors "github.com/centurylinkcloud/clc-go-cli/errors"
 	"github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
 func ValidateModel(model interface{}) error {
-	if model == nil {
+	err := validateStruct(model)
+	if err != nil {
+		return err
+	}
+
+	if m, ok := model.(base.ValidatableModel); ok {
+		err = m.Validate()
+	}
+
+	return err
+}
+
+func validateStruct(s interface{}) error {
+	if s == nil {
 		return nil
 	}
-	_, err := govalidator.ValidateStruct(model)
+
+	var err error
+	var errMsgs []string
+
+	err = validateWithGovalidator(s)
+	if err != nil {
+		errMsgs = append(errMsgs, err.Error())
+	}
+
+	err = validateEnums(s)
+	if err != nil {
+		errMsgs = append(errMsgs, err.Error())
+	}
+
+	v := reflect.ValueOf(s)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		if field.Kind() == reflect.Struct {
+			err = validateStruct(field.Interface())
+			if err != nil {
+				err = fmt.Errorf("The %s field has following errors:\n%s", strings.ToLower(v.Type().Field(i).Name), err)
+				errMsgs = append(errMsgs, err.Error())
+			}
+		}
+	}
+
+	if len(errMsgs) > 0 {
+		return errors.New(strings.Join(errMsgs, "\n"))
+	}
+	return nil
+}
+
+func validateWithGovalidator(s interface{}) error {
+	_, err := govalidator.ValidateStruct(s)
 	if err != nil {
 		parts := strings.Split(err.Error(), ";")
 		errors := []string{}
 		for _, p := range parts[:len(parts)-1] {
+			if len(p) == 0 {
+				continue
+			}
 			errors = append(errors, pretifyError(p))
 		}
 		return fmt.Errorf(strings.Join(errors, "\n"))
 	}
-	err = validateEnums(model)
-	if err != nil {
-		return err
-	}
-	if m, ok := model.(base.ValidatableModel); ok {
-		err = m.Validate()
-	}
-	return err
+
+	return nil
 }
 
 func FieldOptions(model interface{}, name string) ([]string, bool) {
@@ -71,24 +118,34 @@ func validateEnums(model interface{}) error {
 	}
 	v, typ = meta, meta.Type()
 
+	var errs []string
+
 	numFields := typ.NumField()
 OverFields:
 	for i := 0; i < numFields; i++ {
 		name := typ.FieldByIndex([]int{i}).Name
 		opts, exist := FieldOptions(model, name)
+		// fmt.Println(name, "exist=", exist, "opts=", opts)
 		if exist {
 			field := v.FieldByIndex([]int{i})
-			if field.String() == "" {
+			fieldValue := field.String()
+			if fieldValue == "" && opts[len(opts)-1] == "optional" {
+				// fmt.Println("field is optional")
 				continue
 			}
 			for _, o := range opts {
-				if strings.ToLower(o) == strings.ToLower(field.String()) {
+				if strings.ToLower(o) == strings.ToLower(fieldValue) {
 					continue OverFields
 				}
 			}
-			return fmt.Errorf("%s value must be one of %s.", name, strings.Join(opts, ", "))
+			errMsg := fmt.Sprintf("%s value must be one of %s", strings.ToLower(name), strings.Join(opts, ", "))
+			errs = append(errs, errMsg)
 		}
 	}
+	if len(errs) > 0 {
+		return errors.New(strings.Join(errs, "\n"))
+	}
+
 	return nil
 }
 
@@ -99,7 +156,7 @@ func pretifyError(err string) string {
 	field := parts[0]
 	msg := parts[1]
 	if strings.Contains(msg, "non zero value required") {
-		return errors.EmptyField(strings.TrimPrefix(parser.DenormalizePropertyName(field), "--")).Error()
+		return clc_errors.EmptyField(strings.TrimPrefix(parser.DenormalizePropertyName(field), "--")).Error()
 	}
 	return err
 }

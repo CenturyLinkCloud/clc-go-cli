@@ -2,6 +2,7 @@ package model_validator_test
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/centurylinkcloud/clc-go-cli/model_validator"
@@ -84,7 +85,7 @@ var testCases = []modelValidatorTestCase{
 			FieldRequired:       "checked",
 			FieldRequiredCustom: "checked",
 		},
-		err: "Enumerable value must be one of v1, v2, v3.",
+		err: "enumerable value must be one of v1, v2, v3",
 	},
 }
 
@@ -96,8 +97,8 @@ func TestModelValidator(t *testing.T) {
 		}
 		t.Logf("Executing %d test case.", i+1)
 		err := model_validator.ValidateModel(testCase.model)
-		if (err != nil || testCase.err != "") && err.Error() != testCase.err {
-			t.Errorf("Invalid error.\n Expected: %s,\n obtained %s", testCase.err, err.Error())
+		if (err != nil || testCase.err != "") && !strings.Contains(err.Error(), testCase.err) {
+			t.Errorf("Invalid error.\n Expected error to contain: %s\n obtained: %s", testCase.err, err.Error())
 		}
 	}
 }

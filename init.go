@@ -23,6 +23,7 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
 	"github.com/centurylinkcloud/clc-go-cli/models/ospatch"
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
+	"github.com/centurylinkcloud/clc-go-cli/models/vpn"
 )
 
 var AllCommands []base.Command = make([]base.Command, 0)
@@ -3507,6 +3508,205 @@ func init() {
 				{
 					"--data-center-name",
 					[]string{"Required. The name of a data center to query. For example, `UC1 - US West (Santa Clara)`"},
+				},
+			},
+		},
+	})
+
+	registerCommandBase(&vpn.CreateReq{}, &vpn.Entity{}, commands.CommandExcInfo{
+		Verb:     "POST",
+		Url:      "https://api.ctl.io/v2/siteToSiteVpn?account={accountAlias}",
+		Resource: "site-to-site-vpn",
+		Command:  "create",
+		Help: help.Command{
+			Brief: []string{"Creates a Site to Site VPN for a given account."},
+			Arguments: []help.Argument{
+				{
+					"--local",
+					[]string{
+						"Required. Local site properties",
+						"",
+						"alias – short code for a particular location (required)",
+						"subnets - local address for Site to Site VPN, specified using CIDR notation (required)",
+					},
+				},
+				{
+					"--remote",
+					[]string{
+						"Required. Remote site properties",
+						"",
+						"siteName   - friendly name of the site (required)",
+						"deviceType - friendly name of the device type (required)",
+						"address    - remote address for Site to Site VPN, specified using CIDR notation (required)",
+						"subnets    - remote network address for Site to Site VPN, specified using CIDR notation (required)",
+					},
+				},
+				{
+					"--ipsec",
+					[]string{
+						"Required. IPSec properties",
+						"",
+						"encryption - encryption algorithm.",
+						"             Valid values are: 'aes128', 'aes192', 'aes256', 'tripleDES' (required)",
+						"hashing    - hashing algorithm.",
+						"             Valid values are: 'sha1_96', 'sha1_256', 'md5' (required)",
+						"protocol   - IPSec protocol.",
+						"             Valid values are: 'esp', 'ah' (required)",
+						"pfs        - PFS enabled or disabled",
+						"             (we suggest enabled, using Group 2, though Group 5 is ",
+						"             recommended with SHA2 hashing or AES-192 or AES-256).",
+						"             Valid values are: 'disabled', 'group1', 'group2', 'group5' (required)",
+						"lifetime   - Lifetime is set to 1 hour (and unlimited KB).",
+						"             This setting is not required to match, as the negotiation ",
+						"             process will choose the shortest value supplied by either peer.",
+						"             Valid values are: 3600, 28800, 86400 (required)",
+					},
+				},
+				{
+					"--ike",
+					[]string{
+						"Required. IKE properties",
+						"",
+						"encryption        - encryption algorithm.",
+						"                    Valid values are: 'aes128', 'aes192', 'aes256', 'tripleDES' (required)",
+						"hashing           - hashing algorithm.",
+						"                    Valid values are: 'sha1_96', 'sha1_256', 'md5' (required)",
+						"diffieHelmanGroup - Group 1 (legacy), Group 2 or Group 5.",
+						"                    If using AES with a cipher strength greater than 128-bit,",
+						"                    or SHA2 for hashing, we recommend Group 5, otherwise Group 2 is sufficient",
+						"                    Valid values are: 'group1', 'group2', 'group5' (required)",
+						"preSharedKey      - The pre-shared key is a shared secret that secures the VPN tunnel.",
+						"                    This value must be identical on both ends of the connection (required)",
+						"lifetime          - Lifetime is set to 1 hour (and unlimited KB).",
+						"                    This setting is not required to match, as the negotiation ",
+						"                    process will choose the shortest value supplied by either peer.",
+						"                    Valid values are: 3600, 28800, 86400 (required)",
+						"mode              - protocol mode.",
+						"                    Valid values are: 'main', 'aggressive' (required)",
+						"deadPeerDetection - specify if you wish this enabled or disabled. ",
+						"                    Check your device defaults; for example, Cisco ASA defaults to 'on',",
+						"                    while Netscreen/Juniper SSG or Juniper SRX default to 'off'. Our default is 'off'.",
+						"                    Valid values are: true, false",
+						"natTraversal      - NAT-Traversal: Allows connections to VPN end-points behind a NAT device.",
+						"                    Defaults to 'off'. If you require NAT-T, you also need to provide the",
+						"                    private IP address that your VPN endpoint will use to identify itself.",
+						"                    Valid values are: true, false",
+						"remoteIdentity    - The private IP address that your VPN endpoint will use to identify itself.",
+						"                    Required only when NAT-T state is on",
+					},
+				},
+			},
+		},
+	})
+	registerCommandBase(&vpn.UpdateReq{}, &vpn.Entity{}, commands.CommandExcInfo{
+		Verb:     "PUT",
+		Url:      "https://api.ctl.io/v2/siteToSiteVpn/{VpnId}?account={accountAlias}",
+		Resource: "site-to-site-vpn",
+		Command:  "update",
+		Help: help.Command{
+			Brief: []string{"Updates a Site to Site VPN for a given account."},
+			Arguments: []help.Argument{
+				{
+					"--vpn-id",
+					[]string{"Required. The ID of the VPN to update"},
+				},
+				{
+					"--local",
+					[]string{
+						"Local site properties",
+						"",
+						"subnets - local address for Site to Site VPN, specified using CIDR notation",
+					},
+				},
+				{
+					"--remote",
+					[]string{
+						"Remote site properties",
+						"",
+						"siteName   - friendly name of the site (required)",
+						"deviceType - friendly name of the device type (required)",
+						"address    - remote address for Site to Site VPN, specified using CIDR notation",
+						"subnets    - remote network address for Site to Site VPN, specified using CIDR notation",
+					},
+				},
+				{
+					"--ipsec",
+					[]string{
+						"IPSec properties",
+						"",
+						"encryption - encryption algorithm.",
+						"             Valid values are: 'aes128', 'aes192', 'aes256', 'tripleDES'",
+						"hashing    - hashing algorithm.",
+						"             Valid values are: 'sha1_96', 'sha1_256', 'md5'",
+						"protocol   - IPSec protocol.",
+						"             Valid values are: 'esp', 'ah'",
+						"pfs        - PFS enabled or disabled",
+						"             (we suggest enabled, using Group 2, though Group 5 is ",
+						"             recommended with SHA2 hashing or AES-192 or AES-256).",
+						"             Valid values are: 'disabled', 'group1', 'group2', 'group5'",
+						"lifetime   - Lifetime is set to 1 hour (and unlimited KB).",
+						"             This setting is not required to match, as the negotiation ",
+						"             process will choose the shortest value supplied by either peer.",
+						"             Valid values are: 3600, 28800, 86400",
+					},
+				},
+				{
+					"--ike",
+					[]string{
+						"Required. IKE properties",
+						"",
+						"encryption        - encryption algorithm.",
+						"                    Valid values are: 'aes128', 'aes192', 'aes256', 'tripleDES'",
+						"hashing           - hashing algorithm.",
+						"                    Valid values are: 'sha1_96', 'sha1_256', 'md5'",
+						"diffieHelmanGroup - Group 1 (legacy), Group 2 or Group 5.",
+						"                    If using AES with a cipher strength greater than 128-bit,",
+						"                    or SHA2 for hashing, we recommend Group 5, otherwise Group 2 is sufficient",
+						"                    Valid values are: 'group1', 'group2', 'group5'",
+						"preSharedKey      - The pre-shared key is a shared secret that secures the VPN tunnel.",
+						"                    This value must be identical on both ends of the connection",
+						"lifetime          - Lifetime is set to 1 hour (and unlimited KB).",
+						"                    This setting is not required to match, as the negotiation ",
+						"                    process will choose the shortest value supplied by either peer.",
+						"                    Valid values are: 3600, 28800, 86400",
+						"mode              - protocol mode.",
+						"                    Valid values are: 'main', 'aggressive'",
+						"deadPeerDetection - specify if you wish this enabled or disabled. ",
+						"                    Check your device defaults; for example, Cisco ASA defaults to 'on',",
+						"                    while Netscreen/Juniper SSG or Juniper SRX default to 'off'. Our default is 'off'.",
+						"                    Valid values are: true, false",
+						"natTraversal      - NAT-Traversal: Allows connections to VPN end-points behind a NAT device.",
+						"                    Defaults to 'off'. If you require NAT-T, you also need to provide the",
+						"                    private IP address that your VPN endpoint will use to identify itself.",
+						"                    Valid values are: true, false",
+						"remoteIdentity    - The private IP address that your VPN endpoint will use to identify itself.",
+						"                    Required only when NAT-T state is on",
+					},
+				},
+			},
+		},
+	})
+	registerCommandBase(&vpn.ListReq{}, &[]vpn.Entity{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/siteToSiteVpn?account={accountAlias}",
+		Resource: "site-to-site-vpn",
+		Command:  "list",
+		Help: help.Command{
+			Brief:     []string{"Gets all Site to Site VPNs for a given account."},
+			Arguments: []help.Argument{},
+		},
+	})
+	registerCommandBase(&vpn.DeleteReq{}, new(string), commands.CommandExcInfo{
+		Verb:     "DELETE",
+		Url:      "https://api.ctl.io/v2/siteToSiteVpn/{VpnId}?account={accountAlias}",
+		Resource: "site-to-site-vpn",
+		Command:  "delete",
+		Help: help.Command{
+			Brief: []string{"Deletes a Site to Site VPN for a given account."},
+			Arguments: []help.Argument{
+				{
+					"--vpn-id",
+					[]string{"Required. ID of the VPN."},
 				},
 			},
 		},
