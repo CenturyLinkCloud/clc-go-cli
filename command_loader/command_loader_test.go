@@ -1,12 +1,13 @@
 package command_loader_test
 
 import (
-	cli "github.com/centurylinkcloud/clc-go-cli"
-	"github.com/centurylinkcloud/clc-go-cli/base"
-	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 	"reflect"
 	"sort"
 	"testing"
+
+	cli "github.com/centurylinkcloud/clc-go-cli"
+	"github.com/centurylinkcloud/clc-go-cli/base"
+	"github.com/centurylinkcloud/clc-go-cli/command_loader"
 )
 
 type command struct {
@@ -104,8 +105,13 @@ func TestCommandNotFound(t *testing.T) {
 		t.Error(err.Error())
 	}
 	_, err = command_loader.LoadCommand(resource, "")
-	if err == nil || err.Error() != "Command should be specified. Use 'clc resource2 --help' to list all avaliable commands." {
-		t.Errorf("Incorrect error %s", err)
+	expected := `Command should be specified
+
+Usage: clc resource2 <command>
+
+Use 'clc resource2 --help' to list all avaliable commands`
+	if err == nil || err.Error() != expected {
+		t.Errorf("Incorrect error.\nExpected:\n \"%s\"\nGot:\n \"%s\"", expected, err)
 	}
 }
 
