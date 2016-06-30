@@ -159,10 +159,14 @@ func Run(args []string) string {
 }
 
 func help() string {
-	res := `Usage: clc <resource> [<command>] [options and parameters].
+	res := `Usage: clc <resource> [<command>] [options and parameters]
 
-To get a list of all available commands for the given resource if any or to get a direct resource description use 'clc <resource> --help'.
-To get a command description and a list of all available parameters for the given command use 'clc <resource> <command> --help'.
+clc <resource> --help
+    get a list of all available commands for the given
+    resource if any or to get a direct resource description
+clc <resource> <command> --help
+    get a command description and a list of all available
+    parameters for the given command
 
 Available resources:
 

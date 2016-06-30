@@ -1,6 +1,7 @@
 package command_loader
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 
@@ -25,7 +26,11 @@ func LoadCommand(resource, command string) (base.Command, error) {
 		}
 	}
 	if command == "" {
-		return nil, fmt.Errorf("Command should be specified. Use 'clc %s --help' to list all avaliable commands.", resource)
+		msg := "Command should be specified\n\n"
+		msg += fmt.Sprintf("Usage: clc %s <command>\n\n", resource)
+		msg += fmt.Sprintf("Use 'clc %s --help' to list all avaliable commands", resource)
+
+		return nil, errors.New(msg)
 	}
 	return nil, fmt.Errorf("Command %s %s not found. Use 'clc %s --help' to list all avaliable commands.", resource, command, resource)
 }
