@@ -19,7 +19,7 @@ import (
 
 func Run(args []string) string {
 	if len(args) == 0 {
-		return usage()
+		return help()
 	}
 	if len(args) == 1 && args[0] == "--help" {
 		return help()
@@ -158,16 +158,11 @@ func Run(args []string) string {
 	return output
 }
 
-func usage() string {
-	res := "Usage: clc <resource> [<command>] [options and parameters].\n\n"
-	res += "To get a list of all avaliable resources, use 'clc --help'.\n"
-	res += "To get a list of all available commands for the given resource if any or to get a direct resource description use 'clc <resource> --help'.\n"
-	res += "To get a command description and a list of all available parameters for the given command use 'clc <resource> <command> --help'."
-	return res
-}
-
 func help() string {
-	res := "To get full usage information run clc without arguments.\n\nAvailable resources:\n\n"
+	res := "Usage: clc <resource> [<command>] [options and parameters].\n\n"
+	res += "To get a list of all available commands for the given resource if any or to get a direct resource description use 'clc <resource> --help'.\n"
+	res += "To get a command description and a list of all available parameters for the given command use 'clc <resource> <command> --help'.\n\n"
+	res += "Available resources:\n\n"
 	resources := command_loader.GetResources()
 	for _, rsr := range resources {
 		res += fmt.Sprintf("\t%v\n", rsr)
