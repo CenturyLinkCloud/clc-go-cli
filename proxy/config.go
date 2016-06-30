@@ -1,14 +1,15 @@
 package proxy
 
 import (
-	"github.com/centurylinkcloud/clc-go-cli/config"
 	"io/ioutil"
 	"os"
+
+	"github.com/centurylinkcloud/clc-go-cli/config"
 )
 
 var (
 	configDir    string
-	configPathFn = config.GetPath
+	configPathFn = config.GetClcHome
 )
 
 // Config replaces the configuration directory with a temporary one. It is a
@@ -20,8 +21,8 @@ func Config() {
 	if err != nil {
 		panic(err)
 	}
-	config.SetConfigPathFunc(func() (string, error) {
-		return configDir, nil
+	config.SetConfigPathFunc(func() string {
+		return configDir
 	})
 }
 

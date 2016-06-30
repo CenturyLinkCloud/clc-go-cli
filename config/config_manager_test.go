@@ -1,45 +1,45 @@
 package config_test
 
 import (
-	"fmt"
-	"github.com/centurylinkcloud/clc-go-cli/config"
 	"io/ioutil"
 	"os"
 	"path"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/centurylinkcloud/clc-go-cli/config"
 )
 
 var configDir, configPath string
 
-func initTest(confPath string, content []byte, err error) {
-	config.SetConfigPathFunc(func() (string, error) {
+func initTest(confPath string, content []byte) {
+	config.SetConfigPathFunc(func() string {
+		var err error
+
 		if confPath != "" {
-			return confPath, nil
-		}
-		if err != nil {
-			return "", err
+			return confPath
 		}
 		if configDir == "" {
 			configDir, err = ioutil.TempDir(os.TempDir(), "")
 			if err != nil {
-				return "", err
+				panic(err.Error())
 			}
 		}
-		configPath = path.Join(configDir, "config.yml")
+
 		if content != nil {
+			configPath = path.Join(configDir, "config.yml")
 			f, err := os.Create(configPath)
 			if err != nil {
-				return "", err
+				panic(err.Error())
 			}
 			defer f.Close()
 			_, err = f.Write(content)
 			if err != nil {
-				return "", err
+				panic(err.Error())
 			}
 		}
-		return configDir, nil
+		return configDir
 	})
 }
 
@@ -49,7 +49,7 @@ func finishTest() {
 }
 
 func TestCreateNewConfig(t *testing.T) {
-	initTest("", nil, nil)
+	initTest("", nil)
 	defer finishTest()
 	c, err := config.LoadConfig()
 	if err != nil {
@@ -60,18 +60,9 @@ func TestCreateNewConfig(t *testing.T) {
 	}
 }
 
-func TestErrorConfigPath(t *testing.T) {
-	initTest("", nil, fmt.Errorf("Test error"))
-	defer finishTest()
-	_, err := config.LoadConfig()
-	if err == nil || err.Error() != "Failed to load config file, error: Test error" {
-		t.Errorf("Unexpected error: %s", err)
-	}
-}
-
-func TestCreatesConfigDir(t *testing.T) {
+func TestLoadConfigWhenFileDoesNotExist(t *testing.T) {
 	configDir = "/tmp/non-existent_path"
-	initTest(configDir, nil, nil)
+	initTest(configDir, nil)
 	defer finishTest()
 	c, err := config.LoadConfig()
 	if err != nil {
@@ -82,18 +73,18 @@ func TestCreatesConfigDir(t *testing.T) {
 	}
 }
 
-func TestInvalidConfigContent(t *testing.T) {
-	initTest("", []byte("some invalid content"), nil)
+func TestLoadConfigWithInvalidConfigContent(t *testing.T) {
+	initTest("", []byte("some invalid content"))
 	defer finishTest()
 	_, err := config.LoadConfig()
-	if err == nil || !strings.HasPrefix(err.Error(), "Failed to load config file, error: yaml: unmarshal errors:") {
+	if err == nil || !strings.HasPrefix(err.Error(), "Failed to load config file: yaml: unmarshal errors:") {
 		t.Errorf("Unexpected error: %s", err)
 	}
 }
 
-func TestCorrectConfigContent(t *testing.T) {
+func TestLoadConfigWithCorrectConfigContent(t *testing.T) {
 	c := &config.Config{User: "user", Password: "password", Profiles: map[string]config.Profile{}}
-	initTest("", nil, nil)
+	initTest("", nil)
 	defer finishTest()
 	config.Save(c)
 	c1, err := config.LoadConfig()

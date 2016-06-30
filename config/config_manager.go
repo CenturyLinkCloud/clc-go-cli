@@ -9,91 +9,96 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const configFileName = "config.yml"
+
 func LoadConfig() (*Config, error) {
 	c, err := loadConfigInner()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to load config file, error: %s", err.Error())
+		return nil, fmt.Errorf("Failed to load config file: %s", err.Error())
 	}
 	return c, nil
 }
 
 func Save(c *Config) error {
-	p, err := GetPath()
+	err := saveInner(c)
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed to save config file: %s", err.Error())
 	}
-	file := path.Join(p, "config.yml")
+	return nil
+}
+
+func saveInner(c *Config) error {
+	clcHome := GetClcHome()
+	if clcHome == "" {
+		return nil
+	}
+
+	file := path.Join(clcHome, configFileName)
 	data, err := yaml.Marshal(c)
 	if err != nil {
 		return err
 	}
-	ioutil.WriteFile(file, data, 0777)
-	return nil
+	return ioutil.WriteFile(file, data, 0777)
 }
 
 func loadConfigInner() (*Config, error) {
 	c := &Config{}
 
-	p, err := GetPath()
+	clcHome := GetClcHome()
+	if clcHome == "" {
+		return c, nil
+	}
+
+	CreateIfNotExists()
+
+	filepath := path.Join(clcHome, configFileName)
+	_, err := os.Stat(filepath)
+	if err != nil {
+		// Config file does not exist. It's ok
+		if os.IsNotExist(err) {
+			return c, nil
+		}
+		return nil, fmt.Errorf("error stat file %s: %s", filepath, err)
+	}
+
+	f, err := os.Open(filepath)
+	if err != nil {
+		return nil, fmt.Errorf("error opening file %s: %s", filepath, err)
+	}
+	defer f.Close()
+
+	// Read config file
+	content, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, fmt.Errorf("error reading file %s: %s", filepath, err)
+	}
+	// Unmarshal config
+	err = yaml.Unmarshal(content, c)
 	if err != nil {
 		return nil, err
 	}
-	CreateIfNotExists()
-	var f *os.File
-	filepath := path.Join(p, "config.yml")
-	exist := true
-	if _, err := os.Stat(filepath); os.IsNotExist(err) {
-		f, err = os.Create(filepath)
-		defer f.Close()
-		if err != nil {
-			return nil, err
-		}
-		exist = false
-	} else {
-		f, err = os.Open(filepath)
-		defer f.Close()
-		if err != nil {
-			return nil, err
-		}
-	}
-	if !exist {
-		content, err := yaml.Marshal(c)
-		if err != nil {
-			return nil, err
-		}
-		_, err = f.Write(content)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		content, err := ioutil.ReadAll(f)
-		if err != nil {
-			return nil, err
-		}
-		err = yaml.Unmarshal(content, c)
-		if err != nil {
-			return nil, err
-		}
-	}
+
 	return c, nil
 }
 
-var GetPath = func() (string, error) {
-	homeDir := os.Getenv(HOME_VAR)
-	if homeDir == "" {
-		return "", fmt.Errorf("The HOME environment variable is not set. Please, set it so that we can store your configuration there")
+var GetClcHome = func() string {
+	clcHome := os.Getenv("CLC_HOME")
+	if clcHome != "" {
+		return clcHome
 	}
 
-	return path.Join(homeDir, CONFIG_FOLDER_NAME), nil
+	homeDir := os.Getenv(HOME_VAR)
+	if homeDir == "" {
+		return ""
+	}
+
+	return path.Join(homeDir, CONFIG_FOLDER_NAME)
 }
 
 func CreateIfNotExists() error {
-	p, err := GetPath()
-	if err != nil {
-		return err
-	}
-	if _, err := os.Stat(p); os.IsNotExist(err) {
-		err := os.MkdirAll(p, 0777)
+	clcHome := GetClcHome()
+	if _, err := os.Stat(clcHome); os.IsNotExist(err) {
+		err := os.MkdirAll(clcHome, 0777)
 		if err != nil {
 			return err
 		}

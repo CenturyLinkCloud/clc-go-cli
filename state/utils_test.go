@@ -34,14 +34,14 @@ func TestGetFileInfo(t *testing.T) {
 	proxy.Config()
 	defer proxy.Config()
 
-	p, err := config.GetPath()
-	if err != nil {
-		t.Fatal(err)
-	}
+	p := config.GetClcHome()
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
 	ioutil.WriteFile(path.Join(p, "test"), []byte{}, 0666)
 	defer os.Remove(path.Join(p, "test"))
 	var info os.FileInfo
-	info, err = state.GetFileInfo("test")
+	info, err := state.GetFileInfo("test")
 	if err != nil {
 		t.Fatal(err)
 	}

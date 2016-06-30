@@ -110,12 +110,12 @@ func TestArgumentsFromJSON(t *testing.T) {
 	defer proxy.CloseConfig()
 
 	m := Model{A: "A value", B: "B value"}
-	p, err := config.GetPath()
-	if err != nil {
-		t.Fatal(err)
-	}
+	p := config.GetClcHome()
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
 	var bytes []byte
-	bytes, err = json.Marshal(m)
+	bytes, err := json.Marshal(m)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -221,8 +221,8 @@ func TestOutputOptionAutocomplete(t *testing.T) {
 
 func TestProfileOptionAutocomplete(t *testing.T) {
 	dir, err := ioutil.TempDir("", "")
-	config.SetConfigPathFunc(func() (string, error) {
-		return dir, nil
+	config.SetConfigPathFunc(func() string {
+		return dir
 	})
 	defer func() {
 		os.RemoveAll(dir)

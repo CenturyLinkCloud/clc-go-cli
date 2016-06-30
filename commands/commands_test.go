@@ -2,6 +2,11 @@ package commands_test
 
 import (
 	"fmt"
+	"reflect"
+	"sort"
+	"testing"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/commands"
@@ -13,10 +18,6 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
 	"github.com/centurylinkcloud/clc-go-cli/state"
-	"reflect"
-	"sort"
-	"testing"
-	"time"
 )
 
 type (
