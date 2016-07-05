@@ -72,7 +72,7 @@ func Run(args []string) string {
 	opts, err := options.ExtractFrom(parsed)
 	if err != nil {
 		if last == "--output" {
-			return strings.Join([]string{"json", "table", "text"}, SEP)
+			return strings.Join([]string{"json", "table", "text", "csv"}, SEP)
 		} else if last == "--profile" {
 			profiles := []string{}
 			for k := range conf.Profiles {

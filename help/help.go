@@ -48,7 +48,7 @@ var commandHelpTemplate = `{{range .Brief}}{{ . }}{{ printf " " }}{{ end }}
 {{if .AccountAgnostic}}{{else}}	--account-alias
 			Specifies an account to work in.
 {{end}}	--output
-			Specifies the output format - either 'json', 'text' or 'table'.
+			Specifies the output format - either 'json', 'text', 'table' or 'csv'.
 			Defaults to 'json'.
 	--generate-cli-skeleton
 			If specified, the command is not actually executed.

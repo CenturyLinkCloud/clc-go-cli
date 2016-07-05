@@ -43,12 +43,18 @@ var testCases = []formatterProviderTestCase{
 		},
 		res: &formatters.TableFormatter{},
 	},
+	{
+		opts: options.Options{
+			Output: "csv",
+		},
+		res: &formatters.CsvFormatter{},
+	},
 	// Does not accept other values.
 	{
 		opts: options.Options{
 			Output: "xml",
 		},
-		err: "Unknown output 'xml'. Must be one of the following: json, table, text.",
+		err: "Unknown output 'xml'. Must be one of the following: json, table, text, csv.",
 	},
 	// Reads values from config.
 	{

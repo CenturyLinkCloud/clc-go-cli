@@ -2,6 +2,14 @@ package autocomplete_test
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
+	"reflect"
+	"sort"
+	"strings"
+	"testing"
+
 	cli "github.com/centurylinkcloud/clc-go-cli"
 	"github.com/centurylinkcloud/clc-go-cli/autocomplete"
 	"github.com/centurylinkcloud/clc-go-cli/base"
@@ -12,14 +20,8 @@ import (
 	"github.com/centurylinkcloud/clc-go-cli/models/server"
 	"github.com/centurylinkcloud/clc-go-cli/options"
 	"github.com/centurylinkcloud/clc-go-cli/proxy"
+
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"os"
-	"path"
-	"reflect"
-	"sort"
-	"strings"
-	"testing"
 )
 
 type (
@@ -212,7 +214,7 @@ func TestEnumerablesAutocomplete(t *testing.T) {
 
 func TestOutputOptionAutocomplete(t *testing.T) {
 	args := []string{"server", "create", "--output"}
-	expected := strings.Join([]string{"json", "table", "text"}, autocomplete.SEP)
+	expected := strings.Join([]string{"json", "table", "text", "csv"}, autocomplete.SEP)
 	got := autocomplete.Run(args)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Invalid result.\n Expected: %s,\n obtained: %s", expected, got)

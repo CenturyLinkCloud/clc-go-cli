@@ -21,8 +21,10 @@ func GetOutputFormatter(options *options.Options, conf *config.Config) (base.For
 		return &formatters.TextFormatter{}, nil
 	case "table":
 		return &formatters.TableFormatter{}, nil
+	case "csv":
+		return &formatters.CsvFormatter{}, nil
 	default:
-		return nil, fmt.Errorf("Unknown output '%s'. Must be one of the following: json, table, text.", options.Output)
+		return nil, fmt.Errorf("Unknown output '%s'. Must be one of the following: json, table, text, csv.", options.Output)
 	}
 }
 

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	table "github.com/ldmberman/tablewriter"
-	"sort"
 	"strings"
 )
 
@@ -98,15 +97,6 @@ func setupTable(autowrap bool) (*table.Table, *bytes.Buffer) {
 	}
 	t.SetAutoWrapText(autowrap)
 	return t, buf
-}
-
-func sortedKeys(m map[string]interface{}) (keys []string) {
-	keys = []string{}
-	for k, _ := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	return
 }
 
 func innerTable(keys, values []string, depth int, autowrap bool, vertical bool) string {
