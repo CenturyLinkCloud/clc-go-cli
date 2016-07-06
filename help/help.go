@@ -85,6 +85,7 @@ ENVIRONMENT VARIABLES:
 	CLC_PASSWORD	Specifies the password for the given user.
 	CLC_PROFILE	Specifies a profile to use (one from the config file).
 	CLC_TRACE	If specified (any non-empty value fits), prints out all the HTTP request/response data.
+	CLC_HOME	Specifies directory where CLI keeps it's config files ($HOME/.clc by default)
 {{end}}`
 
 func ForCommand(cmd Command) string {
