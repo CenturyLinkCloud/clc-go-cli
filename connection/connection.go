@@ -21,8 +21,11 @@ import (
 
 const OriginalBaseUrl = "https://api.ctl.io/"
 
-//this made a variable instead of a constant for testing purpoises
-var BaseUrl = OriginalBaseUrl
+var (
+	userAgent = fmt.Sprintf("clc-go-cli-%s-%s", base.VERSION, runtime.GOOS)
+	//this made a variable instead of a constant for testing purpoises
+	BaseUrl = OriginalBaseUrl
+)
 
 type connection struct {
 	bearerToken  string
@@ -154,7 +157,8 @@ func (cn *connection) prepareRequest(verb string, url string, reqModel interface
 	url = FilterQuery(url)
 	req, err = http.NewRequest(verb, url, inputData)
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", fmt.Sprintf("clc-go-cli-%s-%s", base.VERSION, runtime.GOOS))
+	req.Header.Add("User-Agent", userAgent)
+	req.Header.Add("CLC-ALIAS", cn.accountAlias)
 	if err != nil {
 		return nil, err
 	}
