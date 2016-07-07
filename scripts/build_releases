@@ -8,24 +8,30 @@ then
   exit 1
 fi
 
-echo "Building the version $version .."
+echo "Building the version $version"
 echo
+
+echo "Overriding the user agent"
+sed "s/VERSION = \".*\"/VERSION = \"$version\"/g" base/constants.go > _constants && mv _constants base/constants.go
+echo
+
+release_folder=release
+mkdir -p $release_folder
 
 for GOOS in linux windows darwin
 do
   for GOARCH in amd64
   do
-    release_folder=clc-$version-$GOOS-$GOARCH
-    mkdir -p $release_folder
+    echo "=== $GOOS/$GOARCH ==="
+    release_item_name=clc-$version-$GOOS-$GOARCH
+    release_item_folder=$release_folder/$release_item_name
+    mkdir -p $release_item_folder
     if [ $GOOS == windows ]
     then
-      binary=$release_folder/clc.exe
+      binary=$release_item_folder/clc.exe
     else
-      binary=$release_folder/clc
+      binary=$release_item_folder/clc
     fi
-
-    echo "Overriding the user agent.."
-    sed "s/VERSION = \".*\"/VERSION = \"$version\"/g" base/constants.go > _constants && mv _constants base/constants.go
 
     echo "Building $binary for $GOOS/$GOARCH.."
 
@@ -33,26 +39,36 @@ do
 
     echo "Adding autocomplete files for $GOOS/$GOARCH.."
 
-    mkdir -p $release_folder/autocomplete
+    mkdir -p $release_item_folder/autocomplete
     if [ $GOOS == linux ]
     then
-      cp scripts/install_autocompletion_linux $release_folder/install_autocompletion
-      cp autocomplete/bash_autocomplete $release_folder/autocomplete
+      cp scripts/install_autocompletion_linux $release_item_folder/install_autocompletion
+      cp autocomplete/bash_autocomplete $release_item_folder/autocomplete
     elif [ $GOOS == darwin ]
     then
-      cp scripts/install_autocompletion_macos $release_folder/install_autocompletion
-      cp autocomplete/bash_autocomplete $release_folder/autocomplete
+      cp scripts/install_autocompletion_macos $release_item_folder/install_autocompletion
+      cp autocomplete/bash_autocomplete $release_item_folder/autocomplete
     else
-      cp autocomplete/powershell3_autocomplete.ps1 $release_folder/autocomplete
+      cp autocomplete/powershell3_autocomplete.ps1 $release_item_folder/autocomplete
     fi
 
-    echo "Archiving $release_folder.."
+    echo "Archiving $release_item_name.."
+    pushd $release_folder
     if [ $GOOS == windows ]
     then
-      zip -r $release_folder.zip $release_folder
+      zip -r $release_item_name.zip $release_item_name
     else
-      tar -czf $release_folder.tar.gz $release_folder
+      tar -czf $release_item_name.tar.gz $release_item_name
     fi
+    popd
+
+    echo "Removing release folder..."
+    rm -rf $release_item_folder
+
+    echo
+    echo
   done
 done
 
+echo "Reverting the user agent"
+git checkout base/constants.go
