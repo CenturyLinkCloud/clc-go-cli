@@ -1,11 +1,13 @@
 #!/bin/bash
 
-mkdir -p ~/.bash_completion
-cp ./autocomplete/bash_autocomplete ~/.bash_completion/clc
+CLC_AUTOCOMPLETION_PATH=~/.bash_completion.d/clc
 
-source_autocompletion="source ~/.bash_completion/clc"
-if [[ $(grep -c "$source_autocompletion" ~/.bashrc) -eq 0 ]]; then
-    echo $source_autocompletion >> ~/.bashrc
+mkdir -p ~/.bash_completion.d
+cp ./autocomplete/bash_autocomplete $CLC_AUTOCOMPLETION_PATH
+
+if [[ $(grep -c "$CLC_AUTOCOMPLETION_PATH" ~/.bash_completion --no-messages) -eq 0 ]]; then
+    echo ". $CLC_AUTOCOMPLETION_PATH" >> ~/.bash_completion
 fi
 
-source ~/.bash_completion/clc
+echo "Note: To start using CLC CLI autocompletion you need to reload your shell."
+echo "You can do it by login out and in again or by running 'source ~/.bashrc'"
