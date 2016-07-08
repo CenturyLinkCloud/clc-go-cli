@@ -60,6 +60,11 @@ do
     else
       tar -czf $release_item_name.tar.gz $release_item_name
     fi
+
+    if [ $GOOS == darwin ]
+    then
+      sh ../scripts/build_darwin_pkg $version
+    fi
     popd
 
     echo "Removing release folder..."

@@ -21,3 +21,4 @@ cp $release_folder/install_autocompletion $scripts_dir/postinstall
 
 pkgbuild --scripts $scripts_dir --identifier centurylink.go-cli --root $build_dir/root clc-$version.pkg
 
+rm -rf $build_dir
