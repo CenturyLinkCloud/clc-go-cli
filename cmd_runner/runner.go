@@ -2,6 +2,7 @@ package cmd_runner
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/centurylinkcloud/clc-go-cli/auth"
 	"github.com/centurylinkcloud/clc-go-cli/command_loader"
@@ -172,6 +173,7 @@ Available resources:
 
 `
 	resources := command_loader.GetResources()
+	sort.Strings(resources)
 	for _, rsr := range resources {
 		res += fmt.Sprintf("\t%v\n", rsr)
 	}
