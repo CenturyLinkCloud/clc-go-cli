@@ -13,16 +13,7 @@ import (
 )
 
 func ValidateModel(model interface{}) error {
-	err := validateStruct(model)
-	if err != nil {
-		return err
-	}
-
-	if m, ok := model.(base.ValidatableModel); ok {
-		err = m.Validate()
-	}
-
-	return err
+	return validateStruct(model)
 }
 
 func validateStruct(s interface{}) error {
@@ -50,11 +41,18 @@ func validateStruct(s interface{}) error {
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 		if field.Kind() == reflect.Struct {
-			err = validateStruct(field.Interface())
+			err = validateStruct(field.Addr().Interface())
 			if err != nil {
 				err = fmt.Errorf("The %s field has following errors:\n%s", strings.ToLower(v.Type().Field(i).Name), err)
 				errMsgs = append(errMsgs, err.Error())
 			}
+		}
+	}
+
+	if m, ok := s.(base.ValidatableModel); ok {
+		err = m.Validate()
+		if err != nil {
+			errMsgs = append(errMsgs, err.Error())
 		}
 	}
 
@@ -125,12 +123,10 @@ OverFields:
 	for i := 0; i < numFields; i++ {
 		name := typ.FieldByIndex([]int{i}).Name
 		opts, exist := FieldOptions(model, name)
-		// fmt.Println(name, "exist=", exist, "opts=", opts)
 		if exist {
 			field := v.FieldByIndex([]int{i})
 			fieldValue := field.String()
 			if fieldValue == "" && opts[len(opts)-1] == "optional" {
-				// fmt.Println("field is optional")
 				continue
 			}
 			for _, o := range opts {
