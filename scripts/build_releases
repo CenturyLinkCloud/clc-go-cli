@@ -17,6 +17,9 @@ echo
 
 release_folder=release
 mkdir -p $release_folder
+echo "Clening release dir"
+echo
+rm $release_folder/*
 
 for GOOS in linux windows darwin
 do
