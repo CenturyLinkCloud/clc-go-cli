@@ -1,5 +1,10 @@
 package vpn
 
+import (
+	"fmt"
+	"net"
+)
+
 type CreateReq struct {
 	Local  LocalPropertiesCreateReq
 	Remote RemotePropertiesCreateReq
@@ -8,7 +13,7 @@ type CreateReq struct {
 }
 
 type LocalPropertiesCreateReq struct {
-	Alias   string   `valid:"required",json:"locationAlias"`
+	Alias   string   `json:"locationAlias" valid:"required"`
 	Subnets []string `valid:"required"`
 }
 
@@ -36,5 +41,19 @@ type IkeCreateReq struct {
 	Mode              string `oneOf:"main,aggresive"`
 	DeadPeerDetection string `oneOf:"true,false,optional"`
 	NatTraversal      string `oneOf:"true,false,optional"`
-	RemoteIdentity    string `valid:"required"`
+	RemoteIdentity    string
+}
+
+func (r *IkeCreateReq) Validate() error {
+	if r.NatTraversal == "true" {
+		ip := r.RemoteIdentity
+		parsedIP := net.ParseIP(ip)
+		if parsedIP == nil {
+			return fmt.Errorf("remoteIdentity: %s is not valid IPv4", ip)
+		}
+	} else {
+		r.RemoteIdentity = ""
+	}
+
+	return nil
 }
