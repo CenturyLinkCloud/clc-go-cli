@@ -33,15 +33,15 @@ type IpSecCreateReq struct {
 }
 
 type IkeCreateReq struct {
-	Encryption        string `oneOf:"aes128,aes192,aes256,tripleDES"`
-	Hashing           string `oneOf:"sha1_96,sha1_256,md5"`
-	DiffieHelmanGroup string `oneOf:"group1,group2,group5"`
-	PreSharedKey      string `valid:"required"`
-	Lifetime          string `oneOf:"3600,28800,86400"`
-	Mode              string `oneOf:"main,aggresive"`
-	DeadPeerDetection string `oneOf:"true,false,optional"`
-	NatTraversal      string `oneOf:"true,false,optional"`
-	RemoteIdentity    string
+	Encryption         string `oneOf:"aes128,aes192,aes256,tripleDES"`
+	Hashing            string `oneOf:"sha1_96,sha1_256,md5"`
+	DiffieHellmanGroup string `oneOf:"group1,group2,group5"`
+	PreSharedKey       string `valid:"required"`
+	Lifetime           string `oneOf:"3600,28800,86400"`
+	Mode               string `oneOf:"main,aggresive"`
+	DeadPeerDetection  string `oneOf:"true,false,optional"`
+	NatTraversal       string `oneOf:"true,false,optional"`
+	RemoteIdentity     string
 }
 
 func (r *IkeCreateReq) Validate() error {

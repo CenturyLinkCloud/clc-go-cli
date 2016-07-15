@@ -28,14 +28,14 @@ type RemoteProperties struct {
 }
 
 type Ike struct {
-	Encryption        string
-	Hashing           string
-	DiffieHelmanGroup string
-	Lifetime          int64
-	Mode              string
-	DeadPeerDetection bool
-	NatTraversal      bool
-	RemoteIdentity    string
+	Encryption         string
+	Hashing            string
+	DiffieHellmanGroup string
+	Lifetime           int64
+	Mode               string
+	DeadPeerDetection  bool
+	NatTraversal       bool
+	RemoteIdentity     string
 }
 
 type IpSec struct {
