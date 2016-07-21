@@ -1317,18 +1317,32 @@ func init() {
 		},
 	})
 
-	registerCommandBase(&datacenter.ListReq{}, &[]datacenter.ListRes{}, commands.CommandExcInfo{
-		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}",
+	registerCustomCommand(commands.NewDatacenterList(commands.CommandExcInfo{
 		Resource: "data-center",
 		Command:  "list",
 		Help: help.Command{
 			Brief: []string{"Gets the list of data centers that a given account has access to."},
+			Arguments: []help.Argument{
+				{
+					"--with-compute-limits",
+					[]string{"Get compute limits data"},
+				},
+				{
+					"--with-network-limits",
+					[]string{"Get network limits data"},
+				},
+				{
+					"--with-available-ovfs",
+					[]string{"Get available servers for import"},
+				},
+				{
+					"--with-load-balancers",
+					[]string{"Get load balancers"},
+				},
+			},
 		},
-	})
-	registerCommandBase(&datacenter.GetReq{}, &datacenter.GetRes{}, commands.CommandExcInfo{
-		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}?groupLinks={GroupLinks}",
+	}))
+	registerCustomCommand(commands.NewDatacenterGet(commands.CommandExcInfo{
 		Resource: "data-center",
 		Command:  "get",
 		Help: help.Command{
@@ -1339,12 +1353,24 @@ func init() {
 					[]string{"Required. Short string representing the data center you are querying."},
 				},
 				{
-					"--group-links",
-					[]string{"Required. Determine whether link collections are returned for each group."},
+					"--with-compute-limits",
+					[]string{"Get compute limits data"},
+				},
+				{
+					"--with-network-limits",
+					[]string{"Get network limits data"},
+				},
+				{
+					"--with-available-ovfs",
+					[]string{"Get available servers for import"},
+				},
+				{
+					"--with-load-balancers",
+					[]string{"Get load balancers"},
 				},
 			},
 		},
-	})
+	}))
 	registerCommandBase(&datacenter.GetDCReq{}, &datacenter.GetDCRes{}, commands.CommandExcInfo{
 		Verb:     "GET",
 		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}/deploymentCapabilities",

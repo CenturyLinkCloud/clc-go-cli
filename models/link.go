@@ -20,3 +20,14 @@ func GetLink(links []LinkEntity, resource string) (string, error) {
 	}
 	return "", fmt.Errorf("No %s link found", resource)
 }
+
+type Links []LinkEntity
+
+func (l Links) Get(resource string) (string, error) {
+	for _, link := range l {
+		if link.Rel == resource {
+			return link.Href, nil
+		}
+	}
+	return "", fmt.Errorf("No %s link found", resource)
+}

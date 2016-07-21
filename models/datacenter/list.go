@@ -1,13 +1,14 @@
 package datacenter
 
 import (
-	"github.com/centurylinkcloud/clc-go-cli/models"
+	"github.com/centurylinkcloud/clc-go-cli/base"
 )
 
-type ListReq struct{}
-
-type ListRes struct {
-	Id    string
-	Name  string
-	Links []models.LinkEntity
+type ListReq struct {
+	WithComputeLimits base.NilField
+	WithNetworkLimits base.NilField
+	WithAvailableOvfs base.NilField
+	WithLoadBalancers base.NilField
 }
+
+type ListRes GetRes
