@@ -1,4 +1,4 @@
-package main
+package integration_tests
 
 type ApiDef struct {
 	Method            string

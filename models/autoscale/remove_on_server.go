@@ -5,5 +5,5 @@ import (
 )
 
 type RemoveOnServerReq struct {
-	server.Server `argument:"composed" URIParam:"ServerId"`
+	server.Server `argument:"composed" URIParam:"ServerId" json:"-"`
 }
