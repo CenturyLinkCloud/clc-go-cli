@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
 )
@@ -15,10 +16,10 @@ type AddNetwork struct {
 }
 
 type RemoveNetwork struct {
-	ServerId    string `URIParam:"yes"`
-	ServerName  string
-	NetworkId   string `URIParam:"yes"`
-	NetworkName string
+	ServerId    string `URIParam:"yes" json:"-"`
+	ServerName  string `json:"-"`
+	NetworkId   string `URIParam:"yes" json:"-"`
+	NetworkName string `json:"-"`
 }
 
 func (a *AddNetwork) Validate() error {

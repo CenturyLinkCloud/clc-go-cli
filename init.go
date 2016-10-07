@@ -158,15 +158,6 @@ func init() {
 					[]string{"Required. Whether to create a standard, hyperscale, or bareMetal server."},
 				},
 				{
-					"--storage-type",
-					[]string{
-						"For standard servers, whether to use standard or premium storage.",
-						"If not provided, will default to premium storage.",
-						"For hyperscale servers, storage type must be hyperscale.",
-						"Ignored for bare metal servers.",
-					},
-				},
-				{
 					"--anti-affinity-policy-id",
 					[]string{
 						"ID of the Anti-Affinity policy to associate the",
@@ -792,13 +783,6 @@ func init() {
 					[]string{"Required. Whether to create standard or hyperscale server"},
 				},
 				{
-					"--storage-type",
-					[]string{
-						"For standard servers, whether to use standard or premium storage. If not provided, will default to premium storage.",
-						"For hyperscale servers, storage type must be hyperscale.",
-					},
-				},
-				{
 					"--custom-fields",
 					[]string{
 						"Collection of custom field ID-value pairs to set for the server.",
@@ -1380,7 +1364,7 @@ func init() {
 			Brief: []string{
 				"Gets the list of capabilities that a specific data center supports for a given account,",
 				"including the deployable networks, OS templates, and whether features like",
-				"premium storage and shared load balancer configuration are available.",
+				"bare metal servers and shared load balancer configuration are available.",
 			},
 			Arguments: []help.Argument{
 				{
@@ -1473,7 +1457,7 @@ func init() {
 			},
 		},
 	})
-	registerCommandBase(&network.CreateReq{}, &models.LinkEntity{}, commands.CommandExcInfo{
+	registerCommandBase(&network.CreateReq{}, &models.Status{}, commands.CommandExcInfo{
 		Verb:     "POST",
 		Url:      "https://api.ctl.io/v2-experimental/networks/{accountAlias}/{DataCenter}/claim",
 		Resource: "network",

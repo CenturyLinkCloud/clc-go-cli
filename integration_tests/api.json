@@ -1842,7 +1842,6 @@
                 }
             ],
             "supportsBareMetalServers": false,
-            "supportsPremiumStorage": true,
             "supportsSharedLoadBalancer": true,
             "templates": [
                 {
@@ -1939,13 +1938,6 @@
             ]
         },
         "ResParameters": [
-            {
-                "Name": "supportsPremiumStorage",
-                "Type": "boolean",
-                "Description": "Whether or not this data center provides support for servers with premium storage",
-                "IsRequired": false,
-                "Children": null
-            },
             {
                 "Name": "supportsSharedLoadBalancer",
                 "Type": "boolean",
@@ -3848,100 +3840,20 @@
         "ContentParameters": null,
         "ContentExample": null,
         "ResExample": {
-            "cidr": "11.22.33.0/24",
-            "description": "vlan_9999_11.22.33",
-            "gateway": "11.22.33.1",
-            "id": "e1c1ab9ba070486bbbf114d7bbf556c4",
-            "links": [
-                {
-                    "href": "http://api.ctl.io/v2-experimental/networks/ALIAS/WA1/e1c1ab9ba070486bbbf114d7bbf556c4",
-                    "rel": "self",
-                    "verbs": [
-                        "GET",
-                        "PUT"
-                    ]
-                },
-                {
-                    "href": "http://api.ctl.io/v2-experimental/networks/ALIAS/WA1/e1c1ab9ba070486bbbf114d7bbf556c4/ipAddresses",
-                    "rel": "ipAddresses",
-                    "verbs": [
-                        "GET"
-                    ]
-                },
-                {
-                    "href": "http://api.ctl.io/v2-experimental/networks/ALIAS/WA1/e1c1ab9ba070486bbbf114d7bbf556c4/release",
-                    "rel": "release",
-                    "verbs": [
-                        "POST"
-                    ]
-                }
-            ],
-            "name": "vlan_9999_11.22.33",
-            "netmask": "255.255.255.0",
-            "type": "private",
-            "vlan": 9999
-        },
+            "operationId":"3b4aeaf059c545958b7d96093103d7fc",
+            "uri":"/v2-experimental/operations/ALIAS/status/3b4aeaf059c545958b7d96093103d7fc"},
         "ResParameters": [
             {
-                "Name": "id",
+                "Name": "operationId",
                 "Type": "string",
-                "Description": "ID of the network",
+                "Description": "GUID for the item in the queue for completion",
                 "IsRequired": false,
                 "Children": null
             },
             {
-                "Name": "cidr",
+                "Name": "uri",
                 "Type": "string",
-                "Description": "The network address, specified using ",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "description",
-                "Type": "string",
-                "Description": "Description of VLAN, a free text field that defaults to the VLAN number combined with the network address",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "gateway",
-                "Type": "string",
-                "Description": "Gateway IP address of the network",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "name",
-                "Type": "string",
-                "Description": "User-defined name of the network; the default is the VLAN number combined with the network address",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "netmask",
-                "Type": "string",
-                "Description": "A screen of numbers used for routing traffic within a subnet",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "type",
-                "Type": "string",
-                "Description": "Network type, usually ",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "vlan",
-                "Type": "integer",
-                "Description": "Unique number assigned to the VLAN",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "links",
-                "Type": "array",
-                "Description": "Collection of ",
+                "Description": "Link to review status of the operation",
                 "IsRequired": false,
                 "Children": null
             }
@@ -5719,7 +5631,6 @@
             "name": "WA1ALIASWB01",
             "osType": "Windows 2008 64-bit",
             "status": "active",
-            "storageType": "standard",
             "type": "standard"
         },
         "ResParameters": [
@@ -5789,14 +5700,7 @@
             {
                 "Name": "type",
                 "Type": "string",
-                "Description": "Whether a standard or premium server",
-                "IsRequired": false,
-                "Children": null
-            },
-            {
-                "Name": "storageType",
-                "Type": "string",
-                "Description": "Whether it uses standard or premium storage",
+                "Description": "Whether a standard, hyperscale or bareMetal server",
                 "IsRequired": false,
                 "Children": null
             },
@@ -5999,15 +5903,8 @@
             {
                 "Name": "type",
                 "Type": "string",
-                "Description": "Whether to create a ",
+                "Description": "Whether to create a standard, hyperscale or bareMetal server",
                 "IsRequired": true,
-                "Children": null
-            },
-            {
-                "Name": "storageType",
-                "Type": "string",
-                "Description": "For standard servers, whether to use standard or premium storage. If not provided, will default to premium storage. For hyperscale servers, storage type must be hyperscale. (Ignored for bare metal servers.)",
-                "IsRequired": false,
                 "Children": null
             },
             {
@@ -6138,7 +6035,6 @@
             "primaryDns": "172.17.1.26",
             "secondaryDns": "172.17.1.27",
             "sourceServerId": "RHEL-6-64-TEMPLATE",
-            "storageType": "standard",
             "ttl": "2014-12-17T01:17:17Z",
             "type": "standard"
         },
@@ -6455,15 +6351,8 @@
             {
                 "Name": "type",
                 "Type": "string",
-                "Description": "Whether to create standard or hyperscale server",
+                "Description": "Whether to create standard, hyperscale or bareMetal server",
                 "IsRequired": true,
-                "Children": null
-            },
-            {
-                "Name": "storageType",
-                "Type": "string",
-                "Description": "For standard servers, whether to use standard or premium storage. If not provided, will default to premium storage. For hyperscale servers, storage type must be hyperscale.",
-                "IsRequired": false,
                 "Children": null
             },
             {
@@ -6521,7 +6410,6 @@
             "password": "P@ssw0rd1",
             "primaryDns": "172.17.1.26",
             "secondaryDns": "172.17.1.27",
-            "storageType": "standard",
             "type": "standard"
         },
         "ResExample": {

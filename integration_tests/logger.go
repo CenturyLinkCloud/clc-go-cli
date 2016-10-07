@@ -1,13 +1,15 @@
-package main
+package integration_tests
 
 import (
 	"fmt"
+
 	"golang.org/x/net/html"
 )
 
 type Logger interface {
 	Logf(format string, a ...interface{})
 	LogNode(message string, n *html.Node)
+	Warnf(format string, a ...interface{})
 }
 
 type logger struct{}
@@ -18,6 +20,10 @@ func NewLogger() Logger {
 
 func (l *logger) Logf(format string, a ...interface{}) {
 	fmt.Printf(format+"\n", a...)
+}
+
+func (l *logger) Warnf(format string, a ...interface{}) {
+	fmt.Printf("WARN: "+format+"\n", a...)
 }
 
 func (l *logger) LogNode(message string, n *html.Node) {
