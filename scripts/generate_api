@@ -2,8 +2,6 @@
 
 set -e
 
-echo -e "Generating Binary..."
-go build -o ./out/tests integration_tests/*.go
-
 echo -e "Generating API"
-./out/tests -generate -api-path $(readlink -f '.')/integration_tests/api.json
+go test ./integration_tests -v --tags=integration -generate -api-path $(pwd -P)/integration_tests/api_GENERATED.json
+
