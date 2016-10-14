@@ -2,6 +2,8 @@
 
 set -e
 
-echo -e "Generating API"
-go test ./integration_tests -v --tags=integration -generate -api-path $(pwd -P)/integration_tests/api_GENERATED.json
+echo -e "Generating Binary..."
+go build -o ./out/genapi cmd/genapi/*.go
 
+echo -e "Generating API"
+./out/genapi -api-path $(readlink -f '.')/integration_tests/api_GENERATED.json
