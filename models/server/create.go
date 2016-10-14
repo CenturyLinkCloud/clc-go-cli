@@ -2,12 +2,13 @@ package server
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
-	"time"
 )
 
 type CreateReq struct {
@@ -31,7 +32,6 @@ type CreateReq struct {
 	CpuAutoscalePolicyId   string             `json:",omitempty"`
 	MemoryGb               int64              `valid:"required"`
 	Type                   string             `valid:"required" oneOf:"standard,hyperscale,bareMetal"`
-	StorageType            string             `json:",omitempty" oneOf:"standard,premium,hyperscale"`
 	AntiAffinityPolicyId   string             `json:",omitempty"`
 	AntiAffinityPolicyName string             `json:",omitempty"`
 	CustomFields           []customfields.Def `json:",omitempty"`
