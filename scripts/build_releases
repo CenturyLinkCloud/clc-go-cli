@@ -11,9 +11,13 @@ fi
 echo "Building the version $version"
 echo
 
-echo "Overriding the user agent"
-sed "s/VERSION = \".*\"/VERSION = \"$version\"/g" base/constants.go > _constants && mv _constants base/constants.go
-echo
+echo "Generating build variables"
+buildDate=`date -u '+%Y-%m-%d_%I:%M:%S%p'`
+buildCommit=`git rev-parse HEAD`
+echo "Build version: $version"
+echo "Build date: $buildDate"
+echo "Build commit: $buildCommit"
+
 
 release_folder=release
 mkdir -p $release_folder
@@ -38,7 +42,7 @@ do
 
     echo "Building $binary for $GOOS/$GOARCH.."
 
-    GO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o $binary cmd/clc/*
+    GO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o $binary -ldflags "-X github.com/centurylinkcloud/clc-go-cli/base.BuildVersion=$version -X github.com/centurylinkcloud/clc-go-cli/base.BuildDate=$buildDate -X github.com/centurylinkcloud/clc-go-cli/base.BuildGitCommit=$buildCommit" cmd/clc/*
 
     echo "Adding autocomplete files for $GOOS/$GOARCH.."
 
@@ -77,6 +81,3 @@ do
     echo
   done
 done
-
-echo "Reverting the user agent"
-git checkout base/constants.go
