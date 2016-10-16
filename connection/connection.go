@@ -22,7 +22,7 @@ import (
 const OriginalBaseUrl = "https://api.ctl.io/"
 
 var (
-	userAgent = fmt.Sprintf("clc-go-cli-%s-%s", base.VERSION, runtime.GOOS)
+	userAgent = fmt.Sprintf("clc-go-cli-%s-%s", base.BuildVersion, runtime.GOOS)
 	//this made a variable instead of a constant for testing purpoises
 	BaseUrl = OriginalBaseUrl
 )

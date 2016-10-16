@@ -2435,6 +2435,13 @@ func init() {
 			AccountAgnostic: true,
 		},
 	}))
+	registerCustomCommand(commands.NewVersion(commands.CommandExcInfo{
+		Resource: "version",
+		Help: help.Command{
+			Brief:           []string{"Shows version information about the cli."},
+			AccountAgnostic: true,
+		},
+	}))
 	registerCustomCommand(commands.NewLogin(commands.CommandExcInfo{
 		Resource: "login",
 		Help: help.Command{
