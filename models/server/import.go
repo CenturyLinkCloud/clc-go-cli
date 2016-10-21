@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
@@ -21,7 +22,6 @@ type Import struct {
 	Cpu          int64              `valid:"required"`
 	MemoryGb     int64              `valid:"required"`
 	Type         string             `valid:"required" oneOf:"standard,hyperscale"`
-	StorageType  string             `json:",omitempty" oneOf:"standard,premium,hyperscale"`
 	CustomFields []customfields.Def `json:",omitempty"`
 	OvfId        string             `valid:"required"`
 	OvfOsType    string             `valid:"required"`

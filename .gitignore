@@ -2,3 +2,4 @@ out/*
 *.swp
 .DS_Store
 release/*
+.vscode/
