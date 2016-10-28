@@ -1374,6 +1374,24 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&datacenter.GetBMCapReq{}, &datacenter.GetBMCapRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}/bareMetalCapabilities",
+		Resource: "data-center",
+		Command:  "get-baremetal-capabilities",
+		Help: help.Command{
+			Brief: []string{
+				"Gets the list of bare metal capabilities that a specific data center supports for a given account,",
+				"including the list of configuration types and the list of supported operating systems.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the data center you are querying."},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&network.ListReq{}, &[]network.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
