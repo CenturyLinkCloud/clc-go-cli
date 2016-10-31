@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
@@ -141,7 +142,7 @@ func (ur *UpdateReq) ApplyDefaultBehaviour() error {
 		}
 		ur.PatchOperation = append(ur.PatchOperation, op)
 	}
-	if len(ur.Disks.Add) != 0 && len(ur.Disks.Keep) != 0 {
+	if len(ur.Disks.Add) != 0 || len(ur.Disks.Keep) != 0 {
 		op := ServerPatchOperation{
 			Op:     "set",
 			Member: "disks",
