@@ -53,6 +53,7 @@ type Details struct {
 	CustomFields         []customfields.FullDef
 	ProcessorDescription string `json:",omitempty"`
 	StorageDescription   string `json:",omitempty"`
+	IsManagedBackup      bool   `json:",omitempty"`
 }
 
 type IPAddresses struct {

@@ -1941,7 +1941,7 @@ func init() {
 	})
 	registerCommandBase(&crossdc_firewall.ListReq{}, &[]crossdc_firewall.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}?destinationAccount={DestinationAccountAlias}",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}?destinationAccountId={DestinationAccountAlias}",
 		Resource: "crossdc-firewall-policy",
 		Command:  "list",
 		Help: help.Command{
