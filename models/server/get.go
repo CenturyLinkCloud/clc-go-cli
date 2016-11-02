@@ -17,11 +17,11 @@ type GetRes struct {
 	IsTemplate  bool
 	LocationId  string
 	OsType      string
+	IsManagedOS bool
 	Os          string
 	Status      string
 	Details     Details
 	Type        string
-	StorageType string
 	ChangeInfo  models.ChangeInfo
 	Links       []models.LinkEntity
 }

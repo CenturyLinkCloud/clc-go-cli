@@ -37,23 +37,27 @@ type PackageDef struct {
 }
 
 type Details struct {
-	IpAddresses       []IPAddresses
-	AlertPolicies     []alert.AlertPolicy
-	Cpu               int64
-	DiskCount         int64
-	HostName          string
-	InMaintenanceMode bool
-	MemoryMB          int64
-	PowerState        string
-	StorageGB         int64
-	Disks             []Disk
-	Partitions        []Partition
-	Snapshots         []Snapshot
-	CustomFields      []customfields.FullDef
+	IpAddresses          []IPAddresses
+	SecondaryIPAddresses []IPAddresses
+	AlertPolicies        []alert.AlertPolicy
+	Cpu                  int64
+	DiskCount            int64
+	HostName             string
+	InMaintenanceMode    bool
+	MemoryMB             int64
+	PowerState           string
+	StorageGB            int64
+	Disks                []Disk
+	Partitions           []Partition
+	Snapshots            []Snapshot
+	CustomFields         []customfields.FullDef
+	ProcessorDescription string `json:",omitempty"`
+	StorageDescription   string `json:",omitempty"`
+	IsManagedBackup      bool   `json:",omitempty"`
 }
 
 type IPAddresses struct {
-	Public   string
+	Public   string `json:",omitempty"`
 	Internal string
 }
 

@@ -1,4 +1,4 @@
-package main
+package integration_tests
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"testing"
 	"time"
 
 	cli "github.com/centurylinkcloud/clc-go-cli"
@@ -20,132 +21,78 @@ import (
 	arg_parser "github.com/centurylinkcloud/clc-go-cli/parser"
 )
 
+// Runner represents a integration test suite
 type Runner interface {
-	RunTests() error
-}
-
-func NewRunner(api []*ApiDef, logger Logger) Runner {
-	r := &runner{}
-	r.logger = logger
-	r.api = api
-	r.addServeMux()
-	return r
+	RunTests(t *testing.T) error
 }
 
 type runner struct {
 	api      []*ApiDef
-	logger   Logger
 	serveMux *http.ServeMux
 	server   *httptest.Server
+	trace    bool
 }
 
-func (r *runner) addServeMux() {
-	baseMux := http.NewServeMux()
-	r.serveMux = http.NewServeMux()
-	r.server = httptest.NewServer(baseMux)
-	connection.BaseUrl = r.server.URL + "/"
-
-	baseMux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		req.URL.Path = strings.ToLower(req.URL.Path)
-		r.serveMux.ServeHTTP(w, req)
-	}))
+// NewRunner will create a new instance of a Runner
+// for a supplied api definition.
+func NewRunner(api []*ApiDef, trace bool) Runner {
+	r := &runner{}
+	r.api = api
+	r.addServeMux()
+	r.trace = trace
+	return r
 }
 
-func (r *runner) RunTests() error {
-	os.Setenv("CLC_TRACE", "true")
+func (r *runner) RunTests(t *testing.T) error {
+	if r.trace {
+		os.Setenv("CLC_TRACE", "true")
+	}
+
 	for _, command := range cli.AllCommands {
 		if cmdBase, ok := command.(*commands.CommandBase); ok {
-			err := r.TestCommand(cmdBase)
-			if err != nil {
-				return err
-			}
+			var subTestName = fmt.Sprintf("%s %s", cmdBase.ExcInfo.Resource, cmdBase.ExcInfo.Command)
+			t.Run(subTestName, func(t *testing.T) {
+				err := r.TestCommand(cmdBase, t)
+				if err != nil {
+					t.Errorf("Error executing test: %v", err)
+					return
+				}
+
+				t.Logf("Test completed without error")
+
+			})
 		}
 	}
-	r.logger.Logf("Test execution finished succcessfully")
+
 	return nil
 }
 
-func (r *runner) addLoginHandler() error {
-	resModel := &authentication.LoginRes{AccountAlias: "ALIAS", BearerToken: "token"}
-	response, err := json.Marshal(resModel)
-	if err != nil {
-		return err
-	}
-	checker := func(req string) error {
-		reqModel := &authentication.LoginReq{}
-		err := json.Unmarshal([]byte(req), &reqModel)
-		if err != nil {
-			return err
-		}
-		if reqModel.Username != "user" || reqModel.Password != "password" {
-			return fmt.Errorf("Incorrect request model: %#v", reqModel)
-		}
+func (r *runner) TestCommand(cmd *commands.CommandBase, t *testing.T) (err error) {
+	if cmd.ExcInfo.Verb == "PATCH" {
+		t.Skipf("HTTP PATCH isn't supported by the integration tests")
 		return nil
 	}
-	r.addHandlerBase("/v2/authentication/login", string(response), checker)
-	return nil
-}
+	if strings.Contains(cmd.ExcInfo.Url, "?") {
+		t.Skipf("URLs with a query string aren't supported by the integration tests")
+		return nil
+	}
 
-func (r *runner) addHandler(url string, response string, checker func(string) error) error {
-	r.logger.Logf("Adding httpHandler for url: %s", url)
-	r.addServeMux()
-	err := r.addLoginHandler()
-	if err != nil {
-		return err
-	}
-	r.addHandlerBase(url, response, checker)
-	return nil
-}
-
-func (r *runner) addHandlerBase(url string, response string, checker func(string) error) {
-	url = strings.ToLower(url)
-	r.serveMux.HandleFunc(url, func(w http.ResponseWriter, req *http.Request) {
-		reqContent, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			panic(err)
-		}
-		if checker != nil {
-			err := checker(string(reqContent))
-			if err != nil {
-				panic(err)
-			}
-		}
-		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(response))
-	})
-}
-
-func (r *runner) findApiDef(url, method string) (*ApiDef, error) {
-	if method == "PATCH" {
-		return nil, nil
-	}
-	if strings.Contains(url, "?") {
-		return nil, nil
-	}
-	for _, apiDef := range r.api {
-		apiDef.Url = strings.Replace(apiDef.Url, "{sourceAccountAlias}", "{accountAlias}", -1)
-		apiUrl := strings.Replace(apiDef.Url, "locationId", "DataCenter", -1)
-		apiUrl = strings.Replace(apiUrl, "Network", "NetworkId", -1)
-		if strings.EqualFold(apiUrl, url) && apiDef.Method == method {
-			return apiDef, nil
-		}
-	}
-	return nil, fmt.Errorf("Api definition for url %s and method %s not found", url, method)
-}
-
-func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
-	r.logger.Logf("------- Testing command %s %s", cmd.ExcInfo.Resource, cmd.ExcInfo.Command)
-	apiDef, err := r.findApiDef(cmd.ExcInfo.Url, cmd.ExcInfo.Verb)
-	if err != nil {
-		return err
-	}
-	//skip patch operations for now
+	apiDef := r.findApiDef(cmd.ExcInfo.Url, cmd.ExcInfo.Verb)
 	if apiDef == nil {
+		t.Skipf("Api definition for url %s and method %s not found", cmd.ExcInfo.Url, cmd.ExcInfo.Verb)
 		return nil
 	}
+
+	//TODO: Handle commands that are wrappers around execute package. Ignore the commands for now
+	if r.isExecutePackageWrapper(cmd) {
+		t.Skipf("Commands that are a wrapper around execute package aren't supported by the integration tests.")
+		return nil
+	}
+
 	args := []string{cmd.ExcInfo.Resource, cmd.ExcInfo.Command}
-	defaultId := "some-id"
+	defaultID := "some-id"
 	r.initialModifyContent(apiDef)
+	t.Logf("API url: %s\n", apiDef.Url)
 	url := apiDef.Url
 	url = strings.Replace(url, "https://api.ctl.io", "", -1)
 	url = strings.Replace(url, "{accountAlias}", "ALIAS", -1)
@@ -176,24 +123,26 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 		paramName := strings.Replace(param.Name, "IP", "Ip", -1)
 		paramName = strings.Replace(paramName, "ID", "Id", -1)
 		if paramName != "AccountAlias" && paramName != "LocationId" && !strings.EqualFold(paramName, "sourceAccountAlias") {
-			args = append(args, arg_parser.DenormalizePropertyName(paramName), defaultId)
-			url = strings.Replace(url, "{"+strings.ToLower(paramName)+"}", defaultId, -1)
+			args = append(args, arg_parser.DenormalizePropertyName(paramName), defaultID)
+			url = strings.Replace(url, "{"+strings.ToLower(paramName)+"}", defaultID, -1)
 		} else if paramName == "LocationId" {
-			args = append(args, "--data-center", defaultId)
-			url = strings.Replace(url, "{locationid}", defaultId, -1)
+			args = append(args, "--data-center", defaultID)
+			url = strings.Replace(url, "{locationid}", defaultID, -1)
 		}
 	}
 	args = append(args, "--user", "user", "--password", "password")
 	err = r.addHandler(url, string(resExampleString), func(req string) error {
+		t.Logf("Json1: %s", string(contentExampleString))
+		t.Logf("Json2: %s", req)
 		return r.compareJson(string(contentExampleString), req)
 	})
 	if err != nil {
 		return err
 	}
 
-	r.logger.Logf("Args: %v", args)
+	t.Logf("Args: %v", args)
 	res := clc.Run(args)
-	r.logger.Logf("Result received: %s", res)
+	t.Logf("Result received: %s", res)
 	if res == "" {
 		return nil
 	}
@@ -204,6 +153,79 @@ func (r *runner) TestCommand(cmd *commands.CommandBase) (err error) {
 		return fmt.Errorf(res)
 	}
 	return r.deepCompareObjects("", r.postModifyResExample(apiDef.ResExample), *obj)
+}
+
+func (r *runner) addServeMux() {
+	baseMux := http.NewServeMux()
+	r.serveMux = http.NewServeMux()
+	r.server = httptest.NewServer(baseMux)
+	connection.BaseUrl = r.server.URL + "/"
+
+	baseMux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		req.URL.Path = strings.ToLower(req.URL.Path)
+		r.serveMux.ServeHTTP(w, req)
+	}))
+}
+
+func (r *runner) addLoginHandler() error {
+	resModel := &authentication.LoginRes{AccountAlias: "ALIAS", BearerToken: "token"}
+	response, err := json.Marshal(resModel)
+	if err != nil {
+		return err
+	}
+	checker := func(req string) error {
+		reqModel := &authentication.LoginReq{}
+		err := json.Unmarshal([]byte(req), &reqModel)
+		if err != nil {
+			return err
+		}
+		if reqModel.Username != "user" || reqModel.Password != "password" {
+			return fmt.Errorf("Incorrect request model: %#v", reqModel)
+		}
+		return nil
+	}
+	r.addHandlerBase("/v2/authentication/login", string(response), checker)
+	return nil
+}
+
+func (r *runner) addHandler(url string, response string, checker func(string) error) error {
+	r.addServeMux()
+	err := r.addLoginHandler()
+	if err != nil {
+		return err
+	}
+	r.addHandlerBase(url, response, checker)
+	return nil
+}
+
+func (r *runner) addHandlerBase(url string, response string, checker func(string) error) {
+	url = strings.ToLower(url)
+	r.serveMux.HandleFunc(url, func(w http.ResponseWriter, req *http.Request) {
+		reqContent, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			panic(err)
+		}
+		if checker != nil {
+			err := checker(string(reqContent))
+			if err != nil {
+				panic(err)
+			}
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(response))
+	})
+}
+
+func (r *runner) findApiDef(url, method string) *ApiDef {
+	for _, apiDef := range r.api {
+		apiDef.Url = strings.Replace(apiDef.Url, "{sourceAccountAlias}", "{accountAlias}", -1)
+		apiURL := strings.Replace(apiDef.Url, "locationId", "DataCenter", -1)
+		apiURL = strings.Replace(apiURL, "Network", "NetworkId", -1)
+		if strings.EqualFold(apiURL, url) && apiDef.Method == method {
+			return apiDef
+		}
+	}
+	return nil
 }
 
 func (r *runner) postModifyResExample(obj interface{}) interface{} {
@@ -229,7 +251,7 @@ func (r *runner) postModifyResExample(obj interface{}) interface{} {
 }
 
 func (r *runner) modifyResExample(apiDef *ApiDef) {
-	additionalProperties := []AdditionalProperty{
+	additionalProperties := []additionalProperty{
 		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}", "serversCount", 1},
 		{"GET", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}", "os", "some-os"},
 	}
@@ -248,7 +270,7 @@ func (r *runner) modifyResExample(apiDef *ApiDef) {
 }
 
 func (r *runner) initialModifyContent(apiDef *ApiDef) {
-	additionalProperties := []AdditionalProperty{
+	additionalProperties := []additionalProperty{
 		{"POST", "https://api.ctl.io/v2/servers/{accountAlias}", "isManagedBackup", true},
 	}
 	for _, prop := range additionalProperties {
@@ -257,7 +279,7 @@ func (r *runner) initialModifyContent(apiDef *ApiDef) {
 		}
 	}
 
-	missedExamples := []MissedExample{
+	missedExamples := []missedExample{
 		{"POST", "https://api.ctl.io/v2/operations/{accountAlias}/servers/startMaintenance", []interface{}{"WA1ALIASWB01", "WA1ALIASWB02"}},
 		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/restore", map[string]interface{}{"targetGroupId": "WA1ALIASWB02"}},
 	}
@@ -281,6 +303,19 @@ func (r *runner) initialModifyContent(apiDef *ApiDef) {
 			apiDef.Url = strings.Replace(apiDef.Url, prop.OldName, prop.NewName, -1)
 		}
 	}
+}
+
+func (r *runner) isExecutePackageWrapper(cmd *commands.CommandBase) bool {
+	wrappers := []ExecutePackageWrapper{
+		{"os-patch", "apply"},
+	}
+
+	for _, wrapper := range wrappers {
+		if cmd.ExcInfo.Resource == wrapper.Resource && cmd.ExcInfo.Command == wrapper.Command {
+			return true
+		}
+	}
+	return false
 }
 
 func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
@@ -321,6 +356,7 @@ func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 		{"PUT", "https://api.ctl.io/v2/servers/{accountAlias}/{serverId}/cpuAutoscalePolicy", "id", "policyId"},
 		{"PUT", "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/horizontalAutoscalePolicy/", "loadBalancerPool", "loadBalancer"},
 		{"POST", "https://api.ctl.io/v2/groups/{accountAlias}/{groupId}/defaults", "memoryGB", "memoryGb"},
+		{"POST", "https://api.ctl.io/v2/operations/{accountAlias}/servers/executePackage", "servers", "serverIds"},
 	}
 	data, err := json.Marshal(contentExample)
 	if err != nil {
@@ -336,8 +372,6 @@ func (r *runner) postModifyContent(apiDef *ApiDef) (string, error) {
 }
 
 func (r *runner) compareJson(json1, json2 string) error {
-	r.logger.Logf("Json1: %s", json1)
-	r.logger.Logf("Json2: %s", json2)
 	if strings.TrimSpace(json1) == "" && strings.TrimSpace(json2) == "" {
 		return nil
 	}
@@ -365,12 +399,12 @@ func (r *runner) deepCompareObjects(prefix string, obj1 interface{}, obj2 interf
 		if array, ok := obj2.([]interface{}); ok && len(array) == 0 {
 			return nil
 		}
-		return fmt.Errorf("Mistmatch in property %s. Values: \n%v \n%v", prefix, obj1, obj2)
+		return fmt.Errorf("Mismatch in property %s. Values: \n%v \n%v", prefix, obj1, obj2)
 	}
 	switch obj1.(type) {
 	case string, float64, bool:
 		if fmt.Sprintf("%v", obj1) != fmt.Sprintf("%v", obj2) {
-			return fmt.Errorf("Mistmatch in property %s. Values: %v %v", prefix, obj1, obj2)
+			return fmt.Errorf("Mismatch in property %s. Values: %v %v", prefix, obj1, obj2)
 		}
 		return nil
 	case []interface{}:
@@ -426,12 +460,16 @@ type convertProperty struct {
 	Method, Url, OldName, NewName string
 }
 
-type AdditionalProperty struct {
+type additionalProperty struct {
 	Method, Url, Name string
 	Value             interface{}
 }
 
-type MissedExample struct {
+type missedExample struct {
 	Method, Url string
 	Example     interface{}
+}
+
+type ExecutePackageWrapper struct {
+	Resource, Command string
 }

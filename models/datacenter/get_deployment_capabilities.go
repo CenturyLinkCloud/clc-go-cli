@@ -5,7 +5,6 @@ type GetDCReq struct {
 }
 
 type GetDCRes struct {
-	SupportsPremiumStorage     bool
 	SupportsSharedLoadBalancer bool
 	SupportsBareMetalServers   bool
 	DeployableNetworks         []DeployableNetwork

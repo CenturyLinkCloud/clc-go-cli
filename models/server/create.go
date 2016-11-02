@@ -2,12 +2,13 @@ package server
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/centurylinkcloud/clc-go-cli/base"
 	"github.com/centurylinkcloud/clc-go-cli/models/affinity"
 	"github.com/centurylinkcloud/clc-go-cli/models/customfields"
 	"github.com/centurylinkcloud/clc-go-cli/models/group"
 	"github.com/centurylinkcloud/clc-go-cli/models/network"
-	"time"
 )
 
 type CreateReq struct {
@@ -27,11 +28,10 @@ type CreateReq struct {
 	IpAddress              string             `json:",omitempty"`
 	RootPassword           string             `json:"Password,omitempty"`
 	SourceServerPassword   string             `json:",omitempty"`
-	Cpu                    int64              `valid:"required"`
+	Cpu                    int64              `json:",omitempty`
 	CpuAutoscalePolicyId   string             `json:",omitempty"`
-	MemoryGb               int64              `valid:"required"`
+	MemoryGb               int64              `json:",omitempty`
 	Type                   string             `valid:"required" oneOf:"standard,hyperscale,bareMetal"`
-	StorageType            string             `json:",omitempty" oneOf:"standard,premium,hyperscale"`
 	AntiAffinityPolicyId   string             `json:",omitempty"`
 	AntiAffinityPolicyName string             `json:",omitempty"`
 	CustomFields           []customfields.Def `json:",omitempty"`
@@ -44,15 +44,24 @@ type CreateReq struct {
 }
 
 func (c *CreateReq) Validate() error {
-	serverIdValues := []string{c.SourceServerId, c.SourceServerName, c.TemplateName}
-	numNonEmpty := 0
-	for _, item := range serverIdValues {
-		if item != "" {
-			numNonEmpty++
+	if c.Type == "standard" || c.Type == "hyperscale" {
+		if c.Cpu == 0 {
+			return fmt.Errorf("Cpu: required for standard and hyperscale servers.")
 		}
-	}
-	if numNonEmpty > 1 || numNonEmpty == 0 {
-		return fmt.Errorf("Exactly one parameter from the following: source-server-id, source-server-name, template-name must be specified.")
+		if c.MemoryGb == 0 {
+			return fmt.Errorf("MemoryGb: required for standard and hyperscale servers.")
+		}
+
+		serverIdValues := []string{c.SourceServerId, c.SourceServerName, c.TemplateName}
+		numNonEmpty := 0
+		for _, item := range serverIdValues {
+			if item != "" {
+				numNonEmpty++
+			}
+		}
+		if numNonEmpty > 1 || numNonEmpty == 0 {
+			return fmt.Errorf("Exactly one parameter from the following: source-server-id, source-server-name, template-name must be specified.")
+		}
 	}
 
 	if (c.GroupName == "") == (c.GroupId == "") {
