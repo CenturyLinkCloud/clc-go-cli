@@ -194,14 +194,15 @@ func init() {
 					"--configuration-id",
 					[]string{
 						"Only required for bare metal servers. Specifies the identifier for the specific configuration type of bare metal server to deploy.",
-						"Ignored for standard and hyperscale servers.",
+						"The list of valid bare metal configuration id's can be found by calling the 'clc data-center get-baremetal-capabilities' command.",
+						"Ignored for standard and hyperscale servers. ",
 					},
 				},
 				{
 					"--os-type",
 					[]string{
-						"Only required for bare metal servers. Specifies the OS to provision with the bare metal server. Currently, the only supported OS types",
-						"are redHat6_64Bit, centOS6_64Bit, windows2012R2Standard_64Bit.",
+						"Only required for bare metal servers. Specifies the OS to provision with the bare metal server. The list of valid operating",
+						"systems can be found by calling the 'clc data-center get-baremetal-capabilities' command.",
 						"Ignored for standard and hyperscale servers.",
 					},
 				},
@@ -1375,6 +1376,24 @@ func init() {
 			},
 		},
 	})
+	registerCommandBase(&datacenter.GetBMCapReq{}, &datacenter.GetBMCapRes{}, commands.CommandExcInfo{
+		Verb:     "GET",
+		Url:      "https://api.ctl.io/v2/datacenters/{accountAlias}/{DataCenter}/bareMetalCapabilities",
+		Resource: "data-center",
+		Command:  "get-baremetal-capabilities",
+		Help: help.Command{
+			Brief: []string{
+				"Gets the list of bare metal capabilities that a specific data center supports for a given account,",
+				"including the list of configuration types and the list of supported operating systems.",
+			},
+			Arguments: []help.Argument{
+				{
+					"--data-center",
+					[]string{"Required. Short string representing the data center you are querying."},
+				},
+			},
+		},
+	})
 
 	registerCommandBase(&network.ListReq{}, &[]network.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
@@ -1924,7 +1943,7 @@ func init() {
 	})
 	registerCommandBase(&crossdc_firewall.ListReq{}, &[]crossdc_firewall.Entity{}, commands.CommandExcInfo{
 		Verb:     "GET",
-		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}?destinationAccount={DestinationAccountAlias}",
+		Url:      "https://api.ctl.io/v2-experimental/crossDcFirewallPolicies/{accountAlias}/{DataCenter}?destinationAccountId={DestinationAccountAlias}",
 		Resource: "crossdc-firewall-policy",
 		Command:  "list",
 		Help: help.Command{
