@@ -193,14 +193,15 @@ func init() {
 					"--configuration-id",
 					[]string{
 						"Only required for bare metal servers. Specifies the identifier for the specific configuration type of bare metal server to deploy.",
-						"Ignored for standard and hyperscale servers.",
+						"The list of valid bare metal configuration id's can be found by calling the 'clc data-center get-baremetal-capabilities' command.",
+						"Ignored for standard and hyperscale servers. ",
 					},
 				},
 				{
 					"--os-type",
 					[]string{
-						"Only required for bare metal servers. Specifies the OS to provision with the bare metal server. Currently, the only supported OS types",
-						"are redHat6_64Bit, centOS6_64Bit, windows2012R2Standard_64Bit.",
+						"Only required for bare metal servers. Specifies the OS to provision with the bare metal server. The list of valid operating",
+						"systems can be found by calling the 'clc data-center get-baremetal-capabilities' command.",
 						"Ignored for standard and hyperscale servers.",
 					},
 				},
