@@ -3,8 +3,9 @@ package formatters
 import (
 	"bytes"
 	"fmt"
-	table "github.com/ldmberman/tablewriter"
 	"strings"
+
+	table "github.com/ldmberman/tablewriter"
 )
 
 type TableFormatter struct{}
