@@ -185,6 +185,14 @@ clc group create --name "my group" --description "A group of mine" --parent-grou
 
 **Note:** Pay attention to how we set custom fields. According to the command help, the `--custom-fields` argument accepts an array of objects with 2 keys each: `id` and `value`. The tool interprets multiple space-separated values as an array and each object can be specified using the `key1=value1,key2=value2,..`-notation, which is described in more detail further in the document.
 
+####Open multiple ports to a public IP address:
+
+```
+clc server update-public-ip-address --server-name MyServerName --public-ip xxx.xxx.xxx.xxx --ports "port=80,protocol=tcp" "port=443,protocol=tcp"
+```
+
+**Note:** Pay attention to how we set custom fields. According to the command help, the `--custom-fields` argument accepts an array of objects with 2 keys each: `id` and `value`. The tool interprets multiple space-separated values as an array and each object can be specified using the `key1=value1,key2=value2,..`-notation, which is described in more detail further in the document.
+
 ####Create a server:
 
 ```
